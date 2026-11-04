@@ -10,11 +10,11 @@ Status markers: **present** (in the repo now) and **planned** (added in the firs
 
 ## Languages
 
-### HTML5 / CSS3 — planned
+### HTML5 / CSS3 — present
 - **Usage:** document structure and layout of every ad. Fixed-size stages, positioned with values from the asset audit.
 - **Rationale:** required by the brief. No preprocessor is needed at this size.
 
-### JavaScript (ES2020+, native ES modules) — planned
+### JavaScript (ES2020+, native ES modules) — present
 - **Usage:** game logic, animation timelines, audio, cross-frame messaging.
 - **Rationale:** required by the brief. Native modules need no bundler. TypeScript is not used because it would add a build step.
 
@@ -30,8 +30,10 @@ None, by rule — no React, Vue, Angular or Svelte.
 - Vendored as a minified file inside each variant folder, so every ad is self-contained and the library counts towards its weight.
 - Pinned to an exact version. 3.15.1 was skipped because it was released on the day the project started.
 
-### Game rendering — planned, decision at A1
-Canvas 2D for the scrolling gameplay, DOM for the overlays (logo bar, headline, tutorial, endcards, mute button). Phaser is avoided for weight. The final choice is recorded in DECISIONS.md.
+### Game rendering — static layers present, moving scene decided at A3
+- Static layers are DOM `<img>` elements on the scaled stage (A1).
+- The moving scene (gut, obstacles, player) will be canvas 2D or DOM transforms. The choice is made at A3 and recorded in DECISIONS.md.
+- Phaser is avoided for weight.
 
 ### Audio: Web Audio API — planned
 - Buffers decoded once.
@@ -39,8 +41,8 @@ Canvas 2D for the scrolling gameplay, DOM for the overlays (logo bar, headline, 
 - A gain node per sound and a master gain for mute.
 - `suspend()`/`resume()` on `visibilitychange`.
 
-### Testing: Playwright — planned, at A1
-- Viewport screenshots at 320×568, 375×667, 390×844 and 430×932, plus smoke checks.
+### Testing: Playwright — browser tools in use, npm package deferred
+- Viewport screenshots at 320×568, 375×667, 390×844 and 430×932, plus geometry checks, run with the Playwright MCP browser tools of the development environment (from A1). No npm dependency yet (D-002).
 - Real-device checks on iOS Safari and Android Chrome are done by hand.
 
 ## Database

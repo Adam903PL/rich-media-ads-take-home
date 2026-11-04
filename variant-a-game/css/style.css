@@ -1,0 +1,69 @@
+:root {
+  --navy: #0a1e49;
+  --bleed-top: #ffffff;
+  --bleed-bottom: #d89c95;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  background: var(--navy);
+}
+
+.ad {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--navy);
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 360px;
+  height: 640px;
+  transform: translate(-50%, -50%) scale(var(--stage-scale, 1));
+}
+
+/* Caps continue the stage's top and bottom edge colours into the spare strips.
+   They overlap the stage by 1px so its anti-aliased edge never lets the
+   layers underneath show through as a hairline. */
+.stage::before,
+.stage::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  z-index: 1;
+  width: 100%;
+  height: 500px;
+}
+
+.stage::before {
+  bottom: calc(100% - 1px);
+  background: var(--bleed-top);
+}
+
+.stage::after {
+  top: calc(100% - 1px);
+  background: var(--bleed-bottom);
+}
+
+.layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 360px;
+  height: 640px;
+  pointer-events: none;
+}

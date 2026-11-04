@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: **planned**. No ad code exists yet. Update this document as each stage lands.
+> Status: Variant A stage and scaling are **present** (A1). Everything else is **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -13,12 +13,15 @@ The repository holds two independent deliverables. Each variant folder (minus it
 ## System Structure
 
 ### Variant A — Game Ad (`variant-a-game/`)
-- **Stage:**
-  - 360×640 CSS px logical stage, scaled uniformly to the visible viewport (`dvh` / `visualViewport`).
-  - Extra height on tall phones is filled with the navy background.
+- **Stage (present, D-005):**
+  - `#ad` is a fixed `100dvh` root; `#stage` is a 360×640 CSS px logical stage, centred.
+  - `main.js` scales the stage with `min(W / 360, H / 640)` from a `ResizeObserver` on the root, so toolbar changes rescale it live. Strips under 1 px are closed by covering.
+  - `::before` / `::after` caps continue the stage's edge colours into the spare strips (white above, `#D89C95` below; navy for endcards from A5). They overlap the stage by 1 px to hide anti-aliased edges.
+  - Landscape shows the portrait stage centred, with navy sides.
 - **Layers, bottom → top:**
-  1. **Canvas:** background, texture, scrolling gut, obstacles, player, cloud borders. Clipped at y 168.5, below the headline band.
-  2. **DOM:** headline band (`tut.png`), logo bar, tutorial (`gesture.png`), endcards, mute button.
+  1. **Static DOM layers (present):** full-frame `<img>` at 360×640 (2x assets at 50%): `bg.jpg`, then `border.png` and `logo.png`. The texture and the headline band with `tut.png` are added in A2.
+  2. **Moving scene:** scrolling gut, obstacles, player. Renderer (canvas or DOM) decided at A3. It sits between the background layers and `border.png`, clipped at y 168.5 below the headline band.
+  3. **DOM overlays:** tutorial (`gesture.png`), endcards, mute button.
 - **Planned modules:**
 
   | Module | Responsibility |

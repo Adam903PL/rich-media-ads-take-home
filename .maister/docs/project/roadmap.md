@@ -14,9 +14,9 @@ Effort: planned hours / actual hours.
 - [x] **0.4 Maister docs + standards** — project docs, trimmed `global`, custom `ads` standards `[0.5 h / 0.7 h]`
 - [x] **0.5 Publish** — GitHub repository created as private for now (made public at F6), pushed `[0.1 h / 0.1 h]`
 
-## Stage A — Variant A, Game (~6–7 h)
+## Stage A — Variant A, Game (~6–7 h) · in progress · [log](../../../docs/stages/A-game.md)
 
-- [ ] **A1 Scaffold & scaling** — 360×640 stage, `dvh` / `visualViewport`, Playwright screenshots at 4 sizes `[1 h]`
+- [x] **A1 Scaffold & scaling** — 360×640 stage, `dvh` / `visualViewport`, Playwright screenshots at 4 sizes `[1 h / ~1 h]`
 - [ ] **A2 Static start screen** — layers in order, design overlay at 50% `[0.5 h]`
 - [ ] **A3 Game loop** — state machine, gravity, tap, gut scroll, playfield bounds `[1 h]`
 - [ ] **A4 Obstacles & collision** — 15 obstacles once each, alpha-mask collision, `?debug=1` `[1.5 h]`

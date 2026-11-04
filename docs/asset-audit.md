@@ -122,6 +122,9 @@ All files are 44.1 kHz stereo.
 | Navy | `#0A1E49` |
 | Gut tube | `#FDA090` |
 | Border strip | `#D89C95` |
+| Top edge of `logo.png` (rows 0–1) | `#FFFFFF`, opaque |
+| Bottom edge of `border.png` (rows 634–640) | `#D89C95`, opaque — used for the stage's bottom cap |
+| Bottom edge of the endcard mockups | `#0A1E49` |
 
 ---
 
