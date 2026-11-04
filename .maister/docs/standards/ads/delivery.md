@@ -9,7 +9,7 @@ Every CTA opens the landing page in a new window through the click tag (Variant 
     }
 
 ### 3 MB per Ad
-Each shipped ad stays under 3 MB, including vendored libraries, images and audio: Variant A as a whole, and each Variant B part (`top`, `left`, `right`) on its own. Re-check the weight after every asset change.
+Each shipped ad stays under 3 MB, including vendored libraries, images and audio. Variant A counts as one ad. Variant B counts as the whole fireplace: `top`, `left` and `right` together (D-004). Re-check the weight after every asset change.
 
 ### No Frameworks, No External Requests
 No UI frameworks; GSAP is the only animation library. A shipped ad makes no external runtime requests (CDNs, web fonts, analytics): everything it needs lives inside its variant folder.

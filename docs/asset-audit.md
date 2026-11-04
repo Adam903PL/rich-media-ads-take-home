@@ -169,7 +169,7 @@ All files are 44.1 kHz stereo.
 | Asset | "STARK BEI / HUSTENREIZ & / HALSSCHMERZEN." | line 1 smallest |
 | Layout | "NATÜRLICH STARK / BEI HUSTENREIZ & / HALSSCHMERZEN." | line 1 largest |
 
-**P3 — `bg-big.jpg` and the per-part `bg.jpg` files are different composites.**
+**P3 — `bg-big.jpg` and the per-part `bg.jpg` files do not match each other.**
 
 | | per-part `bg.jpg` | `bg-big.jpg` |
 |---|---|---|
@@ -179,6 +179,14 @@ All files are 44.1 kHz stereo.
 | Room for a continuous zoom across parts | no bleed outside each crop | yes |
 
 Mean luma of the whole file: big 84, left 98, top 93, right 105.
+
+How each part relates to `bg-big.jpg`, from template matching of moss and packshot crops:
+
+| Part | Relation | Evidence (mean abs. diff, grey) |
+|---|---|---|
+| left | the same image, cropped 4 / 12 px @2x off (**2 px right, 6 px down** in CSS) | moss 7.0, packshot 1.3 at scale 1.00 |
+| right | a zoomed-out version: in `bg-big` the packshot is **12% larger**, the moss ~16% | packshot 4.1 at scale 1.12, moss 10.1 at 1.16 |
+| top | **not cut from `bg-big.jpg`** — no match at scales 1.0–1.45, mirrored or not | ≥ 41 everywhere (noise level) |
 
 **P4 — Packshots are baked into the backgrounds.**
 There is no separate product layer, so "product slides in" cannot be done with the provided assets.

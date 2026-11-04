@@ -19,6 +19,12 @@
 - **Findings that change the plan:** missing transparency in four Variant B PNGs, top headline copy mismatch, the background-source conflict, packshots baked into the backgrounds, and the audio loop gap.
 - **AI:** two corrections logged ([ai-log #1, #2](../ai-log.md)).
 
+- **Revision (same day):** the questions were re-checked before sending.
+  - The email now holds 3 questions and 2 notes.
+  - Q4, Q5 and Q7 were dropped, because the brief answers them or they are our own design calls.
+  - Background facts were re-measured ([ai-log #3](../ai-log.md)).
+  - The weight rule was clarified (D-004).
+
 ## 0.4 Maister docs and standards
 - **Status:** ✅ done
 - **Commits:** `docs: initialize maister project docs and standards`, `docs: add rich media ad standards`

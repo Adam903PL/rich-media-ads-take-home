@@ -77,7 +77,7 @@ The repository holds two independent deliverables. Each variant folder (minus it
 - Static files. The shippable unit is a variant folder without `design/`.
 - Every ad stays under 3 MB:
   - Variant A: one ad.
-  - Variant B: each part on its own.
+  - Variant B: all three parts together (D-004).
 - Originals are committed unmodified; optimised assets replace them in separate commits.
 - All positions come from [docs/asset-audit.md](../../../docs/asset-audit.md).
 
