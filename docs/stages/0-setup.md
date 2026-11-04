@@ -33,4 +33,11 @@
   - The user also selected `vision.md`. It is kept short because the brief already covers the goals.
 
 ## 0.5 Publish
-- **Status:** ⏳ waiting for confirmation of the repository name
+- **Status:** ✅ done
+- **What was done:** created `Adam903PL/rich-media-ads-take-home` on GitHub as a **private** repository and pushed `main`.
+- **Follow-up:** switch the repository to public before sending the link (roadmap F6). Commits are authored with the global git identity, which becomes visible once the repository is public.
+
+## Stage summary
+- Stage 0 is complete: 7 commits, documentation and standards in place, no ad code yet.
+- Next step: A1 (scaffold and scaling).
+- The six recruiter questions are ready to send ([questions.md](../questions.md)).

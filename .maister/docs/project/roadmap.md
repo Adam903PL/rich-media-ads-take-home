@@ -6,13 +6,13 @@ Each step ends in a commit. When a step is done, tick its box here and update it
 
 Effort: planned hours / actual hours.
 
-## Stage 0 — Setup (~1 h) · in progress · [log](../../../docs/stages/0-setup.md)
+## Stage 0 — Setup (~1 h) · done · [log](../../../docs/stages/0-setup.md)
 
 - [x] **0.1 Repository skeleton** — gitignore, gitattributes, editorconfig, README, DECISIONS `[0.1 h]`
 - [x] **0.2 Import provided assets** — unmodified copy, verified identical `[0.1 h]`
 - [x] **0.3 Asset audit + recruiter questions** — measurements and P1–P5; email draft ready `[done during analysis]`
 - [x] **0.4 Maister docs + standards** — project docs, trimmed `global`, custom `ads` standards `[0.5 h / 0.7 h]`
-- [ ] **0.5 Publish** — new public GitHub repository, push `[0.1 h]`
+- [x] **0.5 Publish** — GitHub repository created as private for now (made public at F6), pushed `[0.1 h / 0.1 h]`
 
 ## Stage A — Variant A, Game (~6–7 h)
 
@@ -42,7 +42,7 @@ Effort: planned hours / actual hours.
 - [ ] **F3 Docs** — README (run, next steps, known issues, AI note) and DECISIONS assembled from `docs/`
 - [ ] **F4 Recording** — under 1 minute, stored in the repo
 - [ ] **F5 Review** — full code read-through, `/maister:reviews-pragmatic`, fixes
-- [ ] **F6 Submit** — reply to the task email with the repo link
+- [ ] **F6 Submit** — switch the repository to public, then reply to the task email with the repo link
 
 ## Day plan
 
