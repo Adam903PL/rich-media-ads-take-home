@@ -20,4 +20,17 @@
 - **AI:** two corrections logged ([ai-log #1, #2](../ai-log.md)).
 
 ## 0.4 Maister docs and standards
-- **Status:** ⏳ in progress
+- **Status:** ✅ done
+- **Commits:** `docs: initialize maister project docs and standards`, `docs: add rich media ad standards`
+- **What was done:**
+  - `/maister:init` with a reduced selection: vision, tech-stack, architecture and roadmap; built-in standards only from `global`.
+  - `standards-discover` scoped to config and docs. It found 29 standards, consolidated into `git-workflow`, `documentation`, `project-structure` and an EditorConfig rule in `coding-style`.
+  - `standards-update` created the custom `ads` category (`assets`, `delivery`, `animation`, `lifecycle`) from the brief and the asset audit.
+  - `CLAUDE.md` points to `.maister/docs/INDEX.md` and describes the reduced workflow.
+- **Decisions:** D-003 (reduced Maister setup).
+- **Deviations from plan:**
+  - `/maister:init` uses plugin version 2.1.8, which has no dashboard output, so no `config.yml` was needed.
+  - The user also selected `vision.md`. It is kept short because the brief already covers the goals.
+
+## 0.5 Publish
+- **Status:** ⏳ waiting for confirmation of the repository name

@@ -61,7 +61,17 @@ Self-contained variant folders (`variant-a-game/`, `variant-b-fireplace/`) with 
 
 Located in `.maister/docs/standards/ads/`
 
-*No standard files yet. Rich media ad standards will be added via `/maister:standards-update`.*
+#### Assets (`standards/ads/assets.md`)
+Render the provided 2x images at exactly 50% (never upscale, redraw or replace), with full-frame layers (720×1280, 640×1950, 2064×500) placed at 0,0 over the whole stage. Take every position and size from `docs/asset-audit.md` or a new `tools/audit/` measurement (CSS px unless marked @2x, inclusive ranges), treat the delivered asset as the source of truth and log mockup mismatches in `docs/questions.md`. Limit processing to compression, re-encoding, cropping and lossless repairs (one commit each, logged in `DECISIONS.md` with before/after weight), and set `transform-origin` of full-frame layers to their content bounding-box centre.
+
+#### Delivery (`standards/ads/delivery.md`)
+Every CTA (any click on a Variant B part) opens the landing page in a new window via `window.clickTag`, read at click time. Each shipped ad stays under 3 MB (Variant A as a whole, each Variant B part on its own), uses no UI frameworks (GSAP only) and makes no external runtime requests. Ads are built on a fixed logical stage (A: 360×640; B: top 1032×250, left/right 320×975) scaled as a whole with no breakpoints, Variant A filling the visible viewport (`dvh` / `visualViewport`) without distortion.
+
+#### Animation (`standards/ads/animation.md`)
+Animate only `transform` and `opacity` (never layout properties or filters), give every tween easing with linear motion only for continuous scrolling, and make the end state of every entrance the measured design layout by building the static layout first and animating with `gsap.from`. Under `prefers-reduced-motion: reduce` decorative timelines jump to `progress(1)` and ambient loops do not start (Variant A gameplay stays), and ambient loops stop or settle within 30 seconds.
+
+#### Lifecycle (`standards/ads/lifecycle.md`)
+Preload all images and audio before interaction, logging failed loads by file name and stopping the start with no silent fallback; create or resume the `AudioContext` only in the first user gesture, with a visible mute toggle on a master gain node. Pause the game loop, GSAP and audio when the page is hidden and resume with a reset frame clock, tear down everything from the previous run on replay (one owner per run with `destroy()`), and run the game loop on `requestAnimationFrame` with clamped delta time in seconds.
 
 ---
 

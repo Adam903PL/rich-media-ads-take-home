@@ -18,6 +18,13 @@ When you notice recurring patterns, fixes, or conventions during implementation 
 
 When this happens, briefly suggest the standard to the user. If approved, invoke `/maister:standards-update` with the identified pattern.
 
+## Project Workflow
+
+- **Where we are:** `.maister/docs/project/roadmap.md`. Read it at the start of a session to find the next step.
+- **How a step is done:** bigger steps with `/maister:quick-plan`, small ones with `/maister:quick-dev`. Roadmap steps do not go through `/maister:development` or `/maister:work` (D-003).
+- **How a step ends:** the code and its documentation update (stage log, roadmap tick, DECISIONS, AI log when relevant) go into one commit, per `.maister/docs/standards/global/documentation.md`.
+- **Language:** repository docs, code and commits are in English.
+
 ## Maister Workflows
 
 This project uses the maister plugin for structured development workflows. When any `/maister:*` command is invoked, execute it via the Skill tool immediately — do not skip workflows for "straightforward" tasks. The user chose the workflow intentionally; complexity assessment is the workflow's job.

@@ -11,7 +11,7 @@ Effort: planned hours / actual hours.
 - [x] **0.1 Repository skeleton** — gitignore, gitattributes, editorconfig, README, DECISIONS `[0.1 h]`
 - [x] **0.2 Import provided assets** — unmodified copy, verified identical `[0.1 h]`
 - [x] **0.3 Asset audit + recruiter questions** — measurements and P1–P5; email draft ready `[done during analysis]`
-- [ ] **0.4 Maister docs + standards** — project docs, trimmed `global`, custom `ads` standards `[0.5 h]`
+- [x] **0.4 Maister docs + standards** — project docs, trimmed `global`, custom `ads` standards `[0.5 h / 0.7 h]`
 - [ ] **0.5 Publish** — new public GitHub repository, push `[0.1 h]`
 
 ## Stage A — Variant A, Game (~6–7 h)
