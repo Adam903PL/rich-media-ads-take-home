@@ -1,0 +1,14 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+!.env.example
+
+# Playwright output
+test-results/
+playwright-report/
+
+# Local scratch output from tools/
+tools/out/
