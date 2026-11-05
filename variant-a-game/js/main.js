@@ -1,3 +1,5 @@
+import { startGame } from './game.js';
+
 const STAGE_WIDTH = 360;
 const STAGE_HEIGHT = 640;
 const MIN_VISIBLE_STRIP_PX = 1;
@@ -33,9 +35,11 @@ async function preloadImages(images) {
 
 const root = document.getElementById('ad');
 const stage = document.getElementById('stage');
+const gut = stage?.querySelector('.gut');
+const player = stage?.querySelector('.player');
 
-if (!root || !stage) {
-  throw new Error('Gut Run: #ad or #stage is missing from index.html');
+if (!root || !stage || !gut || !player) {
+  throw new Error('Gut Run: #ad, #stage, .gut or .player is missing from index.html');
 }
 
 fitStageToViewport(root, stage);
@@ -43,6 +47,7 @@ fitStageToViewport(root, stage);
 // The stage stays hidden until every layer is decoded, so it never appears half-loaded.
 await preloadImages([...stage.querySelectorAll('img')]);
 stage.classList.add('is-ready');
+startGame({ root, gut, player });
 
 if (new URLSearchParams(location.search).get('overlay') === '1') {
   const { showDesignOverlay } = await import('./debug.js');

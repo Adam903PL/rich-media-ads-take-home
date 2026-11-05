@@ -34,17 +34,23 @@ The repository holds two independent deliverables. Each variant folder (minus it
   | Module | Responsibility |
   |---|---|
   | `main.js` | bootstrap, scaling, image preload (present) |
-  | `game.js` | state machine: `start → ready → playing → fail \| win` |
+  | `game.js` | state machine `start → ready → playing → fail \| win` mirrored to `data-state` on `#ad`, physics, input, pause (present) |
   | `level.js` | obstacle schedule — every obstacle exactly once |
   | `collision.js` | alpha masks |
   | `audio.js` | Web Audio: gains, mute, suspend / resume |
   | `endcards.js` | GSAP timelines |
   | `debug.js` | dev aids loaded on demand: `?overlay=1` design overlay (present), `?debug=1` hitboxes (A4) |
 
-- **Loop:**
-  - `requestAnimationFrame` with clamped delta time.
-  - Paused on `visibilitychange`.
-  - On replay all timers, listeners and audio sources are torn down and rebuilt.
+- **Loop (present, A3):**
+  - `requestAnimationFrame` with delta time clamped to 1/30 s; physics in logical px and seconds (D-009).
+  - States:
+    - `ready`: 0.6 s eased glide to the playfield centre.
+    - `playing`: gravity and jump.
+    - `fail`: the player crossed the cloud limits 232.5 / 533.5 (D-008).
+    - `win`: scroll reached 2166 px.
+  - Input: `pointerdown` on `#ad` (`touch-action: none`), Space and ArrowUp without key repeat.
+  - Paused on `visibilitychange` and resumed with a reset frame clock.
+  - On replay (A5), all timers, listeners and audio sources are torn down and rebuilt. `startGame()` keeps every handle in one run object for that.
 
 ### Variant B — Fireplace Ad (`variant-b-fireplace/`)
 - **Documents:**

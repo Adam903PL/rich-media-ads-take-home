@@ -101,9 +101,21 @@ Most endcard layers are **full-frame 360×640 PNGs with the position baked in**.
   - In the mockup the hand matches the asset exactly (diff 0.01).
   - The text is rendered differently: same row, up to 1.5 px off horizontally, diff 19. As with the endcard headlines, the asset is the source of truth.
 - The start-screen mockup shows obstacles (bacterium, worm, "Stress", "Tabu"). They do not match any `bac*` sprite 1:1, and "Stress" sits 2 px in front of the player. This reads as illustrative and conflicts with "each obstacle once" plus a "get ready" phase.
-- Playfield bounds are not defined: is touching the cloud bands a fail, or only leaving the screen?
+- Playfield bounds are not defined: is touching the cloud bands a fail, or only leaving the screen? Decided in A3: the clouds are walls (D-008, §2.4a).
 - No assets for: mute toggle icon, "get ready" text, headline band. No fonts are provided (all copy is baked into PNGs).
 - Format: the mockup is 9:16, current phones are ~9:19.5 (390×844, 430×932). The scaling strategy must handle the extra height.
+
+### 2.4a Playfield limits at the player's columns
+
+The player's x is fixed at 55.5–97.5 (CSS), so only these columns of the static clouds matter.
+
+| Measurement (alpha ≥ 128) | CSS px |
+|---|---|
+| Lower edge of the top clouds over the player's columns | 224–234.5 (across the full width: 205–235.5) |
+| Upper edge of the bottom clouds over the player's columns | 573.5–585.5 (across the full width: 566.5–598) |
+| `player.png` opaque rows | 0–41, the full image height |
+| **Player top limits without touching the clouds** (mask vs mask, `tools/audit/cloud-limits.mjs`) | **232.5 … 533.5** |
+| Distance from the design start (258.5) | 26 above, 275 below, 301 in total |
 
 ### 2.5 Audio
 

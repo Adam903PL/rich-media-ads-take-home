@@ -69,3 +69,39 @@
   - Without `?overlay=1` there is no request for `debug.js` or `design/`; there are no external requests and no console messages.
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #6 and #7.
+
+## A3 Game loop
+- **Status:** ✅ done
+- **Commit:** `feat: add variant A game loop`
+- **Time:** 1 h planned / ~1 h actual
+- **What was done:**
+  - `js/game.js`: state machine `start → ready → playing → fail | win`, mirrored to `data-state` on `#ad`.
+  - `requestAnimationFrame` loop with the frame clamped to 1/30 s. Gravity, jump and maximum fall speed.
+  - The gut scrolls with `translateX` to 2166 px; the player moves with `translateY` from its measured start.
+  - Input: `pointerdown` anywhere on the ad (`touch-action: none`), Space and ArrowUp; key repeat ignored.
+  - The tutorial hand hides through CSS on `data-state`.
+  - The loop pauses on `visibilitychange` and resumes with a reset clock.
+  - `tools/audit/cloud-limits.mjs` computes the cloud limits.
+- **Decisions:**
+  - D-008: clouds as walls, exact limits 232.5 / 533.5 from alpha masks.
+  - D-009: physics values, a ~15 s run, and the glide to the playfield centre on the first tap.
+- **Findings that changed the plan:** at the player's columns the top clouds reach down to y 234.5, so the design start is only 26 px below the ceiling. The originally proposed lines (204.5 / 598.5) and a 63 px jump would have killed the player on the first tap; this led to the start glide ([ai-log #8](../ai-log.md)).
+- **Verification:** Playwright MCP against `npx serve`. Taps are dispatched `pointerdown` events; positions are read from `transform`.
+
+  | Scenario | Expected | Result |
+  |---|---|---|
+  | Before the first tap | `start`, no transforms, A2 unchanged | ✅ stage identical to A2 (77.5 dB) |
+  | Tap → glide | `playing` after 0.6 s game time at top 383 | ✅ top 383.0, scroll 87.2 px (= 0.6 s) |
+  | No further taps | `fail` ~0.43 s later at the floor, frozen | ✅ top 533.5, scroll 150.6–150.9 px (≈ 1.04 s), frozen |
+  | Same, 3 reloads | identical timing (no doubled loop) | ✅ scroll at fail within 0.3 px |
+  | Rapid tapping | `fail` at the ceiling | ✅ top 232.5 |
+  | Bot keeps the player alive | `win` at exactly 2166 px after ~14.9 s | ✅ `translateX(-2166px)` after 14.96 s |
+  | Hidden tab for 0.6 s | no movement, no jump on resume | ✅ 0 px while hidden, +2.2 px (one frame) on resume |
+  | Space / held Space | starts and jumps; repeats ignored | ✅ repeats did not stop the fall; a real press jumped |
+  | Console and network | no errors, no requests outside the variant | ✅ |
+
+  - Wall time is slightly longer than game time when the headless browser drops below 30 fps; the frame clamp slows the game rather than skipping (D-009).
+  - Mid-run screenshot: [a3-midrun.png](../img/a3-midrun.png).
+- **Manual check left for the user:** physics feel on a real phone. All values are in the constants at the top of `game.js`.
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #8 and #9.

@@ -11,3 +11,4 @@ Small Node scripts used to measure the provided assets for [docs/asset-audit.md]
 | `match2.mjs` | `node match2.mjs <big.jpg> <part.jpg> [scales]` | coarse-to-fine match of a photo crop inside a larger photo |
 | `bands.mjs` | `node bands.mjs <img> [alpha\|luma] [threshold]` | text-line bands (y ranges) for line-by-line reveals |
 | `stats.mjs` | `node stats.mjs <img> x y w h` | mean and standard deviation of RGB in a region (colour and opacity estimates) |
+| `cloud-limits.mjs` | `node cloud-limits.mjs [variant-a-game/assets]` | highest and lowest player top that does not touch the cloud bands, from the alpha masks of `border.png` and `player.png` (D-008) |
