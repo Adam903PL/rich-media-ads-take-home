@@ -26,6 +26,10 @@
 - `tools/audit/cloud-limits.mjs` computes them from `border.png` and `player.png`, so they are reproducible.
 - When the player crosses a limit, it is placed exactly at the touching point and the run fails.
 
+**Updated in A4 (D-011):**
+- With the game-wide 2 px collision tolerance, the same method gives **230 / 535.5**, and these are the values in `game.js`.
+- `cloud-limits.mjs` now uses the game's own `erodeMask` and `masksOverlap`. Without tolerance it still reproduces 232.5 / 533.5.
+
 ## Consequences
 - Cloud collision is pixel-exact without a runtime mask. A4 needs masks only for the moving obstacles.
 - The player can travel 301 px vertically.

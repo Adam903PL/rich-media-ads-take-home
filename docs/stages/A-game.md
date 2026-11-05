@@ -105,3 +105,43 @@
 - **Manual check left for the user:** physics feel on a real phone. All values are in the constants at the top of `game.js`.
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #8 and #9.
+
+## A4 Obstacles & collision
+- **Status:** ✅ done
+- **Commit:** `feat: add variant A obstacles and collision`
+- **Time:** 1.5 h planned / ~2.5 h actual. Most of it went into a passable layout and a bot able to prove it.
+- **What was done:**
+  - **Track:** `.track` (x −2) holds the gut and 15 obstacle images built from `js/level.js`, moved by one `translateX`.
+  - **Collision:** `js/collision.js` builds alpha masks on the 2x grid; the player's mask is eroded by 2 px. Each frame tests boxes, then pixels.
+  - **Passing and win:** passed obstacles are counted; `win` needs all 15 passed plus the end of the gut. The fail cause is kept.
+  - **Debug:** `?debug=1` draws masks, boxes and cloud limits through `startGame({ onFrame })`.
+  - **Tools:**
+    - `tools/audit/level-check.mjs` validates the layout.
+    - `cloud-limits.mjs` now uses the game's collision code; the limits are recomputed with the tolerance (230 / 535.5).
+- **Decisions:**
+  - D-010: fixed layout on the tubes, rules and final table.
+  - D-011: mask collision with 2 px tolerance.
+  - D-008 updated.
+- **Findings that changed the plan:**
+  - The first layout draft was partly off the tubes and impassable in one stretch.
+  - A 30 px corridor is not enough, because the player bobs 55 px while holding its height.
+  - Two pairs of obstacles act as gates and need reading ahead.
+  - bac4 "above" is a dead end ([ai-log #10–#11](../ai-log.md)).
+- **Verification:** `node tools/audit/level-check.mjs`, then Playwright MCP against `npx serve`.
+
+  | Check | Result |
+  |---|---|
+  | Layout rules (ids, tubes, band, start screen, gut end, corridor room, reachability) | ✅ all pass; winning sides in D-010 |
+  | Start screen unchanged (no obstacle visible) | ✅ identical to A2 (77.5 dB), 15 obstacles in DOM, 15 unique ids, 0 visible at start |
+  | Boxes overlap 6×6 px but shapes do not (virus vs player) | ✅ no collision |
+  | Penetration before a hit ("Stress", thin "Fertiggerichte", `bac2`) | ✅ exactly 2 px after the first visible contact |
+  | Hit on "Blut" | ✅ `fail`; the full visible shapes overlapped (4 px deep); debug shows it red ([screenshot](../img/a4-debug-hit.png)) |
+  | Planning bot, ≤ 1 tap per 150 ms | ✅ 2/2 wins, all 15 passed, track at −2166 px, 31 taps in ~15 s |
+  | Cloud limits with tolerance | ✅ floor 535.5, ceiling 230 |
+  | Collision cost, worst case | ✅ 5.5–9 µs per check |
+  | Without flags | ✅ no request for `debug.js` or `design/`; only local files; console clean |
+
+  Mid-run screenshot with words on the tubes: [a4-midrun.png](../img/a4-midrun.png).
+- **Manual check left for the user:** whether the two gates and the finale feel fair on a real phone.
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #10–#12.

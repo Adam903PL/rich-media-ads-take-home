@@ -85,13 +85,25 @@ body {
   clip-path: inset(172px 0 0 0);
 }
 
-/* The start-screen design places the gut 2px left of the frame origin. */
-.gut {
+/* The gut and the obstacles scroll together. The start-screen design places the
+   gut 2px left of the frame origin. */
+.track {
   position: absolute;
   left: -2px;
   top: 0;
+}
+
+.gut {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 2528px;
   height: 640px;
+  pointer-events: none;
+}
+
+.obstacle {
+  position: absolute;
   pointer-events: none;
 }
 
@@ -122,4 +134,14 @@ body {
 .design-overlay {
   z-index: 2;
   opacity: 0.5;
+}
+
+.debug-layer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  width: 360px;
+  height: 640px;
+  pointer-events: none;
 }

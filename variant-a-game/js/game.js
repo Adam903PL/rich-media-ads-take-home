@@ -1,17 +1,24 @@
-// All values are logical stage px (360×640) and seconds. Sources: docs/asset-audit.md, D-008, D-009.
-const PLAYER_START_TOP = 258.5;
-// Highest and lowest player top at which no opaque pixel touches the clouds
-// (tools/audit/cloud-limits.mjs).
-const PLAYER_TOP_MIN = 232.5;
-const PLAYER_TOP_MAX = 533.5;
-const READY_TOP = (PLAYER_TOP_MIN + PLAYER_TOP_MAX) / 2;
-const READY_SECONDS = 0.6;
+import { masksOverlap } from './collision.js';
+
+// All values are logical stage px (360×640) and seconds. Sources: docs/asset-audit.md,
+// D-008, D-009, D-011. Exported for tools/audit/level-check.mjs.
+// Positions mirror .player and .track in style.css.
+export const PLAYER_LEFT = 55.5;
+export const PLAYER_START_TOP = 258.5;
+export const TRACK_LEFT = -2;
+// Highest and lowest player top that does not touch the clouds with the 2 px collision
+// tolerance (tools/audit/cloud-limits.mjs --tolerance=2).
+export const PLAYER_TOP_MIN = 230;
+export const PLAYER_TOP_MAX = 535.5;
+export const COLLISION_TOLERANCE = 2;
+export const READY_TOP = (PLAYER_TOP_MIN + PLAYER_TOP_MAX) / 2;
+export const READY_SECONDS = 0.6;
 // Gut width 2528 − stage width 360 − the gut's 2 px start offset.
-const SCROLL_END = 2166;
-const SCROLL_SPEED = 145;
-const GRAVITY = 1600;
-const JUMP_VELOCITY = -420;
-const MAX_FALL_SPEED = 650;
+export const SCROLL_END = 2166;
+export const SCROLL_SPEED = 145;
+export const GRAVITY = 1600;
+export const JUMP_VELOCITY = -420;
+export const MAX_FALL_SPEED = 650;
 const MAX_FRAME_SECONDS = 1 / 30;
 const JUMP_KEYS = new Set(['Space', 'ArrowUp']);
 
@@ -19,13 +26,17 @@ function easeInOutCubic(progress) {
   return progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
 }
 
-export function startGame({ root, gut, player }) {
+// `obstacles` are sorted by x; `onFrame` (debug mode only) receives the frame's view.
+export function startGame({ root, track, player, playerMask, obstacles, onFrame }) {
+  const playerWidth = playerMask.width / 2;
   const run = {
     state: 'start',
     scroll: 0,
     top: PLAYER_START_TOP,
     velocity: 0,
     readyElapsed: 0,
+    passedCount: 0,
+    failCause: null,
     frameRequest: 0,
     lastTime: 0,
   };
@@ -49,6 +60,32 @@ export function startGame({ root, gut, player }) {
     }
   }
 
+  function obstacleLeft(obstacle) {
+    return obstacle.x + TRACK_LEFT - run.scroll;
+  }
+
+  // Counts obstacles behind the player and returns the one it touches, if any.
+  // Obstacles are sorted by x, so the scan stops at the first one still ahead.
+  function hitObstacle() {
+    while (run.passedCount < obstacles.length) {
+      const next = obstacles[run.passedCount];
+      if (obstacleLeft(next) + next.width >= PLAYER_LEFT) break;
+      run.passedCount++;
+    }
+    for (let index = run.passedCount; index < obstacles.length; index++) {
+      const obstacle = obstacles[index];
+      const left = obstacleLeft(obstacle);
+      if (left >= PLAYER_LEFT + playerWidth) break;
+      if (masksOverlap(playerMask, PLAYER_LEFT, run.top, obstacle.mask, left, obstacle.y)) return obstacle;
+    }
+    return null;
+  }
+
+  function fail(cause) {
+    run.failCause = cause;
+    setState('fail');
+  }
+
   function updatePlaying(seconds) {
     run.velocity = Math.min(run.velocity + GRAVITY * seconds, MAX_FALL_SPEED);
     run.top += run.velocity * seconds;
@@ -56,8 +93,14 @@ export function startGame({ root, gut, player }) {
     if (run.top < PLAYER_TOP_MIN || run.top > PLAYER_TOP_MAX) {
       // Stop exactly at the touching point instead of a frame's travel inside the clouds.
       run.top = Math.min(Math.max(run.top, PLAYER_TOP_MIN), PLAYER_TOP_MAX);
-      setState('fail');
-    } else if (run.scroll === SCROLL_END) {
+      fail('clouds');
+      return;
+    }
+
+    const obstacle = hitObstacle();
+    if (obstacle) {
+      fail(obstacle.id);
+    } else if (run.scroll === SCROLL_END && run.passedCount === obstacles.length) {
       setState('win');
     }
   }
@@ -72,9 +115,14 @@ export function startGame({ root, gut, player }) {
     }
   }
 
+  function notifyFrame() {
+    onFrame?.({ scroll: run.scroll, top: run.top, failCause: run.failCause });
+  }
+
   function render() {
-    gut.style.transform = `translateX(${-run.scroll}px)`;
+    track.style.transform = `translateX(${-run.scroll}px)`;
     player.style.transform = `translateY(${run.top - PLAYER_START_TOP}px)`;
+    notifyFrame();
   }
 
   function frame(time) {
@@ -123,4 +171,6 @@ export function startGame({ root, gut, player }) {
       startLoop();
     }
   });
+
+  notifyFrame();
 }

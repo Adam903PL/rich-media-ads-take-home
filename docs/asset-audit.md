@@ -114,8 +114,15 @@ The player's x is fixed at 55.5–97.5 (CSS), so only these columns of the stati
 | Lower edge of the top clouds over the player's columns | 224–234.5 (across the full width: 205–235.5) |
 | Upper edge of the bottom clouds over the player's columns | 573.5–585.5 (across the full width: 566.5–598) |
 | `player.png` opaque rows | 0–41, the full image height |
-| **Player top limits without touching the clouds** (mask vs mask, `tools/audit/cloud-limits.mjs`) | **232.5 … 533.5** |
-| Distance from the design start (258.5) | 26 above, 275 below, 301 in total |
+| **Player top limits without touching the clouds** (mask vs mask, `tools/audit/cloud-limits.mjs`) | **232.5 … 533.5** (exact), **230 … 535.5** with the game's 2 px tolerance (D-011) |
+| Distance from the design start (258.5) | 26 above, 275 below, 301 in total (exact) |
+
+### 2.4b Gut tubes along the track
+
+Measured on the alpha mask of `gameplay.png`:
+- The tube forms vertical runs about every 100–120 px, and the whole pattern repeats roughly every 1024 px.
+- Full-height runs, i.e. a tube from the top to the bottom clouds, sit at x ≈ 176–224, 720–767, 1200–1247, 1744–1791 and 2240–2271. Between them are partial runs from the top or from the bottom.
+- `tools/audit/level-check.mjs` checks every obstacle placement against this mask (box + 2 px fully opaque). The chosen positions are in D-010.
 
 ### 2.5 Audio
 

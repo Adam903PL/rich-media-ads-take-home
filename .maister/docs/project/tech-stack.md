@@ -41,6 +41,7 @@ None, by rule — no React, Vue, Angular or Svelte.
 - `suspend()`/`resume()` on `visibilitychange`.
 
 ### Testing: Playwright — browser tools in use, npm package deferred
+- `tools/audit/level-check.mjs` (Node) validates the obstacle layout offline. A planning bot in the browser proves the run can be won (D-010).
 - Viewport screenshots at 320×568, 375×667, 390×844 and 430×932, plus geometry checks, run with the Playwright MCP browser tools of the development environment (from A1). No npm dependency yet (D-002).
 - Real-device checks on iOS Safari and Android Chrome are done by hand.
 

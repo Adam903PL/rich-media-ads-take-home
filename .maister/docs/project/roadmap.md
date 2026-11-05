@@ -19,7 +19,7 @@ Effort: planned hours / actual hours.
 - [x] **A1 Scaffold & scaling** — 360×640 stage, `dvh` / `visualViewport`, Playwright screenshots at 4 sizes `[1 h / ~1 h]`
 - [x] **A2 Static start screen** — layers in order, design overlay at 50%, preload, renderer decision D-006 `[0.5 h / ~1.5 h]`
 - [x] **A3 Game loop** — state machine, gravity, tap, gut scroll (`translateX`), cloud walls from masks (D-008), start glide (D-009) `[1 h / ~1 h]`
-- [ ] **A4 Obstacles & collision** — 15 obstacles once each, alpha-mask collision for obstacles (clouds already exact, D-008), `?debug=1` `[1.5 h]`
+- [x] **A4 Obstacles & collision** — 15 obstacles once each (D-010), alpha-mask collision with 2 px tolerance incl. clouds (D-011), `?debug=1` `[1.5 h / ~2.5 h]`
 - [ ] **A5 Endcards** — static layout, GSAP entrances, CTA clickTag, clean replay `[1 h]`
 - [ ] **A6 Audio** — Web Audio unlock, gapless loop, per-sound gain, mute, `visibilitychange` `[1 h]`
 - [ ] **A7 Polish** — intro animation, difficulty ramp, `prefers-reduced-motion`; the "get ready" glide already exists (D-009) `[0.5–1 h]`
