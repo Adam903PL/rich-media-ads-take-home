@@ -28,15 +28,17 @@ Largest single files: `bg-big.jpg` 1.995 MB, `applause.mp3` 602 KB, `top/bg.jpg`
 | `bg.jpg` | flat navy `#0A1D49` (design: `#0A1E49`) | full frame |
 | `01_game/bg_texture.png` | light bacteria pattern, static (one screen only) | content y 104.5–561 |
 | `01_game/gameplay.png` | the gut tube on transparent background | **2528×640**, content y 112–640 |
-| `border.png` | top and bottom "cloud" bands | top 168.5–235.5 (opaque strip starts at 168.5), bottom 566.5–640 |
+| `border.png` | top and bottom "cloud" bands | top 168.5–235.5, bottom 566.5–640; rows opaque across the full width: **169–204.5** and **598.5–640** (row 168.5–169 is anti-aliased) |
 | *(no asset)* | headline band, flat navy | y 58–168.5 — gut and texture extend under it, so the scrolling scene must be clipped at y 168.5 or covered |
 | `01_game/tut.png` | **the headline** "Bringe Poo durch / den Darm ans Ziel." (not a tutorial overlay) | line 1 y 90.5–115 (x 67.5–293), line 2 y 121–141 (x 58.5–301) |
 | `logo.png` | white logo bar | y 0–58 |
 | `gesture.png` | hand **and the text "tab to run"** (typo baked in) | 86.5×96 at (147.5, 452) |
 | `01_game/player.png` | poo emoji | 42×41 at (55.5, 258.5) — exact pixel match with `01-start.png` |
 
-- Gut scroll distance to the end: 2528 − 360 = **2168 px**. The image does not tile seamlessly, so a run is finite.
-- Its left edge matches the start-screen design at scroll offset 0.
+- **The start-screen design places the gut at x −2, y 0** (−4, 0 @2x), not at the frame origin.
+  - Measured in A2 by compositing all layers at 2x with candidate gut offsets and comparing the playfield with `01-start.png`: (0, 0) gives 19.8 dB, (−4, 0) @2x gives 24.9 dB, and every neighbouring offset is lower.
+  - Small crops are unreliable here, because flat tube interiors and vertical tube walls match at many positions.
+- Gut scroll distance to the end, from that start: 2528 − 360 − 2 = **2166 px**. The image does not tile seamlessly, so a run is finite.
 
 ### 2.2 Obstacles (each must appear once per run)
 
@@ -96,6 +98,8 @@ Most endcard layers are **full-frame 360×640 PNGs with the position baked in**.
 ### 2.4 Design vs assets — open points
 
 - `gesture.png` says "tab to run"; the brief says "tap to run". The typo is baked into the asset.
+  - In the mockup the hand matches the asset exactly (diff 0.01).
+  - The text is rendered differently: same row, up to 1.5 px off horizontally, diff 19. As with the endcard headlines, the asset is the source of truth.
 - The start-screen mockup shows obstacles (bacterium, worm, "Stress", "Tabu"). They do not match any `bac*` sprite 1:1, and "Stress" sits 2 px in front of the player. This reads as illustrative and conflicts with "each obstacle once" plus a "get ready" phase.
 - Playfield bounds are not defined: is touching the cloud bands a fail, or only leaving the screen?
 - No assets for: mute toggle icon, "get ready" text, headline band. No fonts are provided (all copy is baked into PNGs).

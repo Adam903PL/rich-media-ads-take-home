@@ -26,7 +26,7 @@ These were dropped from the email because the brief already answers them, or bec
 | Former # | Topic | Why we don't ask | Decision | Where |
 |---|---|---|---|---|
 | Q4 | Are the cloud bands walls? | Game rules are our design | decided and recorded at A3 | A3 |
-| Q5 | Obstacles on the start screen | The brief lists the start screen contents (logo bar, headline, tutorial); obstacles are not on that list | start screen without obstacles; they arrive after "get ready" | A2, A7 |
+| Q5 | Obstacles on the start screen | The brief lists the start screen contents (logo bar, headline, tutorial); obstacles are not on that list | start screen without obstacles; they arrive after "get ready" — **decided, D-007** | A2 ✅, A7 |
 | Q7 | Landscape orientation | The brief says "portrait mobile" and lists only portrait viewports | portrait layout, letterboxed with navy sides in landscape | A1 |
 | — | "Get ready" moment without an asset | Nice-to-have; no new copy needed | short pause with the animated tutorial hand | A7 |
 

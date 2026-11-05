@@ -18,21 +18,28 @@ The repository holds two independent deliverables. Each variant folder (minus it
   - `main.js` scales the stage with `min(W / 360, H / 640)` from a `ResizeObserver` on the root, so toolbar changes rescale it live. Strips under 1 px are closed by covering.
   - `::before` / `::after` caps continue the stage's edge colours into the spare strips (white above, `#D89C95` below; navy for endcards from A5). They overlap the stage by 1 px to hide anti-aliased edges.
   - Landscape shows the portrait stage centred, with navy sides.
-- **Layers, bottom → top:**
-  1. **Static DOM layers (present):** full-frame `<img>` at 360×640 (2x assets at 50%): `bg.jpg`, then `border.png` and `logo.png`. The texture and the headline band with `tut.png` are added in A2.
-  2. **Moving scene:** scrolling gut, obstacles, player. Renderer (canvas or DOM) decided at A3. It sits between the background layers and `border.png`, clipped at y 168.5 below the headline band.
-  3. **DOM overlays:** tutorial (`gesture.png`), endcards, mute button.
+- **Layers, bottom → top (present, A2):** all DOM `<img>`; renderer decision D-006.
+  1. `bg.jpg`, full frame. Above the scene clip it also forms the navy headline band.
+  2. `.scene`, clipped with `clip-path: inset(172px 0 0 0)` inside `border.png`'s opaque strip:
+     - `bg_texture.png`, full frame, static
+     - `.gut` (`gameplay.png`, 2528×640) at x −2. Scrolls with `translateX` from A3.
+     - obstacles (A4)
+  3. `border.png`, `tut.png` (headline), `logo.png`, full frame.
+  4. `.player` at (55.5, 258.5), above the clouds so it is always visible. Moves with `translateY` from A3.
+  5. `.gesture` at (147.5, 452).
+  6. Later overlays: endcards (A5), mute button (A6). `?overlay=1` adds the design overlay on top.
+- **Startup (present):** `main.js` fits the stage, awaits `preloadImages()` (every `<img>` decoded, otherwise it throws with the file names), then adds `.is-ready`, which reveals the stage.
 - **Planned modules:**
 
   | Module | Responsibility |
   |---|---|
-  | `main.js` | bootstrap, scaling |
+  | `main.js` | bootstrap, scaling, image preload (present) |
   | `game.js` | state machine: `start → ready → playing → fail \| win` |
   | `level.js` | obstacle schedule — every obstacle exactly once |
   | `collision.js` | alpha masks |
   | `audio.js` | Web Audio: gains, mute, suspend / resume |
   | `endcards.js` | GSAP timelines |
-  | `debug.js` | `?debug=1` hitbox drawing |
+  | `debug.js` | dev aids loaded on demand: `?overlay=1` design overlay (present), `?debug=1` hitboxes (A4) |
 
 - **Loop:**
   - `requestAnimationFrame` with clamped delta time.

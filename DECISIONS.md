@@ -14,3 +14,5 @@ Format: **D-XXX Topic:** decision — why ([details](docs/decisions/D-XXX-topic.
 ## Variant A
 
 - **D-005 Viewport scaling:** contain-fit the 360×640 stage to the visible `100dvh` area and fill the spare strips with the stage's measured edge colours. The whole design is always visible and gameplay is identical on every phone ([details](docs/decisions/D-005-viewport-scaling.md)).
+- **D-006 Renderer:** the moving scene (gut, obstacles, player) is DOM `<img>` elements moved with `transform`, not canvas or Phaser. It shares one scaling model with the static layers and stays crisp at every pixel ratio, and collision uses alpha masks that do not depend on the renderer ([details](docs/decisions/D-006-moving-scene-renderer.md)).
+- **D-007 Start screen without obstacles:** the brief lists the start screen as logo bar, headline and tutorial, so the obstacles shown in the mockup are treated as illustration. They first appear during the run.

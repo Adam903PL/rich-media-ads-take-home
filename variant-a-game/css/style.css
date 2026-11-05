@@ -59,6 +59,10 @@ body {
   background: var(--bleed-bottom);
 }
 
+.stage:not(.is-ready) {
+  visibility: hidden;
+}
+
 .layer {
   position: absolute;
   left: 0;
@@ -66,4 +70,51 @@ body {
   width: 360px;
   height: 640px;
   pointer-events: none;
+}
+
+/* Clipping the scene leaves the navy bg.jpg showing above it, which forms the
+   headline band. The clip edge sits inside border.png's fully opaque strip
+   (y 169–204.5), so it is never visible. */
+.scene {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 360px;
+  height: 640px;
+  clip-path: inset(172px 0 0 0);
+}
+
+/* The start-screen design places the gut 2px left of the frame origin. */
+.gut {
+  position: absolute;
+  left: -2px;
+  top: 0;
+  width: 2528px;
+  height: 640px;
+  pointer-events: none;
+}
+
+/* Sprite positions and sizes: docs/asset-audit.md, section 2.1 */
+.sprite {
+  position: absolute;
+  pointer-events: none;
+}
+
+.player {
+  left: 55.5px;
+  top: 258.5px;
+  width: 42px;
+  height: 41px;
+}
+
+.gesture {
+  left: 147.5px;
+  top: 452px;
+  width: 86.5px;
+  height: 96px;
+}
+
+.design-overlay {
+  z-index: 2;
+  opacity: 0.5;
 }

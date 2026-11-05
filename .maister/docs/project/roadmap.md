@@ -17,8 +17,8 @@ Effort: planned hours / actual hours.
 ## Stage A — Variant A, Game (~6–7 h) · in progress · [log](../../../docs/stages/A-game.md)
 
 - [x] **A1 Scaffold & scaling** — 360×640 stage, `dvh` / `visualViewport`, Playwright screenshots at 4 sizes `[1 h / ~1 h]`
-- [ ] **A2 Static start screen** — layers in order, design overlay at 50% `[0.5 h]`
-- [ ] **A3 Game loop** — state machine, gravity, tap, gut scroll, playfield bounds `[1 h]`
+- [x] **A2 Static start screen** — layers in order, design overlay at 50%, preload, renderer decision D-006 `[0.5 h / ~1.5 h]`
+- [ ] **A3 Game loop** — state machine, gravity, tap, gut scroll (`translateX`), playfield bounds and player z-order vs clouds `[1 h]`
 - [ ] **A4 Obstacles & collision** — 15 obstacles once each, alpha-mask collision, `?debug=1` `[1.5 h]`
 - [ ] **A5 Endcards** — static layout, GSAP entrances, CTA clickTag, clean replay `[1 h]`
 - [ ] **A6 Audio** — Web Audio unlock, gapless loop, per-sound gain, mute, `visibilitychange` `[1 h]`

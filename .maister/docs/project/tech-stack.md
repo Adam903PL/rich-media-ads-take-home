@@ -30,10 +30,9 @@ None, by rule — no React, Vue, Angular or Svelte.
 - Vendored as a minified file inside each variant folder, so every ad is self-contained and the library counts towards its weight.
 - Pinned to an exact version. 3.15.1 was skipped because it was released on the day the project started.
 
-### Game rendering — static layers present, moving scene decided at A3
-- Static layers are DOM `<img>` elements on the scaled stage (A1).
-- The moving scene (gut, obstacles, player) will be canvas 2D or DOM transforms. The choice is made at A3 and recorded in DECISIONS.md.
-- Phaser is avoided for weight.
+### Game rendering: DOM + `transform` — present (D-006)
+- Static layers and the moving scene (gut, obstacles, player) are DOM `<img>` elements on the scaled stage. Moving elements change only `transform`.
+- Canvas 2D and Phaser were considered and rejected; the reasons are in D-006.
 
 ### Audio: Web Audio API — planned
 - Buffers decoded once.

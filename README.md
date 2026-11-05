@@ -15,6 +15,12 @@ npx serve .
 
 Then open `http://localhost:3000/variant-a-game/` or `http://localhost:3000/variant-b-fireplace/preview.html`.
 
+### Dev flags
+
+| Flag | Effect |
+|---|---|
+| `?overlay=1` | Variant A: lays the start-screen design over the stage at 50% opacity, to check alignment (needs the `design/` folder, which is not shipped) |
+
 ## Repository layout
 
 | Path | Contents |

@@ -32,3 +32,40 @@
   - Screenshots: [a1-viewports.png](../img/a1-viewports.png).
 - **Standards checklist:** all items passed; preload is not applicable yet (see the A1 plan).
 - **AI:** ai-log #5.
+
+## A2 Static start screen
+- **Status:** ✅ done
+- **Commit:** `feat: compose variant A start screen`
+- **Time:** 0.5 h planned / ~1.5 h actual (most of it went into measuring the gut offset)
+- **What was done:**
+  - All start-screen layers placed at measured positions. The texture and the gut sit in a `.scene` clipped below the headline band. The player and the hand sit above the clouds.
+  - Preload: the stage stays hidden until every `<img>` is decoded. A failed file throws `Gut Run: failed to load <src>` and the stage stays hidden.
+  - `?overlay=1` lazily loads `js/debug.js`, which lays `design/01-start.png` over the stage at 50%.
+- **Decisions:**
+  - D-006: DOM + `transform` renderer, chosen with the user and brought forward from A3.
+  - D-007: start screen without obstacles.
+- **Findings that changed the build:**
+  - **The design's gut sits 2 px left of the frame origin** (`.gut { left: -2px }`), not at 0,0 as assumed for full-frame layers.
+  - **The scene clip moved from 168.5 to 172 px.** At 168.5 the clip edge fell on `border.png`'s anti-aliased row, and the middle tube showed through as a line; 172 lies inside the fully opaque strip (169–204.5).
+  - The "tab to run" text in the mockup is rendered differently from the asset; the asset is kept (audit §2.4).
+- **Verification:** Playwright MCP against `npx serve`.
+  - Every image renders at exactly 50% of its pixel size, e.g. the gut 5056×1280 → 2528×640 and the hand 173×192 → 86.5×96.
+  - Pixel diff of the stage at scale 1 against `01-start.png` scaled to 360×640:
+
+    | Band | Before the fixes | After |
+    |---|---|---|
+    | whole frame | 21.8 dB | **26.3 dB** |
+    | logo | 47.7 | 47.7 |
+    | headline band | 41.1 | 41.1 |
+    | headline + clouds | 35.7 | **41.5** |
+    | top clouds | 30.3 | **38.7** |
+    | playfield | 19.0 | **23.4** |
+    | bottom clouds | 29.2 | **37.5** |
+
+    The remaining playfield difference is the mockup's obstacles (D-007), the differently rendered "tab to run" text and resampling at the tube edges ([diff](../img/a2-diff.png)).
+  - Overlay at 50% shows no double edges except the intentional ones ([overlay](../img/a2-overlay.png)).
+  - 320×568, 375×667, 390×844 and 430×932 all render the full screen ([viewports](../img/a2-viewports.png)).
+  - Preload failure: a routed 404 on `tut.png` produced `Gut Run: failed to load assets/01_game/tut.png`, and the stage stayed `visibility: hidden`.
+  - Without `?overlay=1` there is no request for `debug.js` or `design/`; there are no external requests and no console messages.
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #6 and #7.
