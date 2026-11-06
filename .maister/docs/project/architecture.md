@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1) and its three static part documents (B2); the preview page and the animation are **planned**. Update this document as each stage lands.
+> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1) and its three static part documents (B2) and the preview page (B3); the animation and the sync are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -84,7 +84,7 @@ The repository holds two independent deliverables. Each variant folder (minus it
   | `top.html` | 1032×250 | standalone ad (present, B2) |
   | `left.html` | 320×975 | standalone ad (present, B2) |
   | `right.html` | 320×975 | standalone ad (present, B2) |
-  | `preview.html` | 1680×975 | places the three parts in iframes (planned, B3) |
+  | `preview.html` | 1680×975 | places the three parts in iframes (present, B3, D-024) |
 
   Each part has its own layers, its own GSAP timeline and a clickout on its whole area.
 - **Part documents (present, B2, D-022):**
@@ -100,7 +100,13 @@ The repository holds two independent deliverables. Each variant folder (minus it
   | Module | Responsibility |
   |---|---|
   | `main.js` | shared entry of the three parts: part check, image preload, overlay flag, reveal (present) |
-  | `debug.js` | `?overlay=1`: `design/layout.png` at 50% over the part, scaled by 1 / 0.973 and shifted by the part's position in the fireplace (present) |
+  | `debug.js` | `?overlay=1`: `design/layout.png` at 50% over the part, scaled by 1 / 0.973 and shifted by the part's position in the fireplace (present); also used by the preview for the whole fireplace |
+  | `preview.js` | preview page only: fits the fireplace to the window and handles its `?overlay=1` (present, B3) |
+- **Preview (present, B3, D-024):**
+  - `#fireplace` (1680×975) holds three iframes at x 0, 324 and 1360 on the layout's background `#282828`; the website area in the middle stays empty.
+  - `preview.js` scales `#fireplace` as a whole with `min(1, W / 1680, H / 975)` from a `ResizeObserver` on the root, with whole-pixel offsets, so at full size the parts render exactly as on their own.
+  - `css/preview.css` is separate from `css/style.css`, which stays with the shipped parts.
+  - The preview is a review tool; the ad is the three parts.
 - **Shared coordinate system:**
   - The full fireplace is 1680×975. The parts sit at x 0, 324 and 1360, with 4 px gaps.
   - Background crops and zoom `transform-origin` are expressed in these global coordinates, so the moss stays continuous across parts during the zoom.

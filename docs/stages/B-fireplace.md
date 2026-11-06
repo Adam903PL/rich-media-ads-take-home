@@ -73,3 +73,29 @@
   The three parts side by side: [b2-parts.jpg](../img/b2-parts.jpg).
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #21 and #22.
+
+## B3 Preview page
+- **Status:** ✅ done
+- **Commit:** `feat: add variant B preview page`
+- **Time:** 0.5 h planned / ~0.75 h actual (most of it went into two verification artefacts, see Findings)
+- **What was done:**
+  - `preview.html`: `#fireplace` (1680×975) with three iframes at x 0, 324 and 1360 (`left.html`, `top.html`, `right.html`, each with a `title`), on the layout's background `#282828` (measured: rgb 40, 40, 40); the website area stays empty.
+  - `js/preview.js`: fits the fireplace to the window as a whole, never above 1:1, with whole-pixel offsets; `?overlay=1` lays one `layout.png` over the whole fireplace through the existing `showDesignOverlay` in `js/debug.js`.
+  - `css/preview.css`, separate from the shipped parts' `css/style.css`.
+- **Decisions:** D-024 (preview page).
+- **Findings:**
+  - **The test browser draws every bottom edge about 0.4 px too low.** One row below the top banner shows ~40% of its content, in the preview and on the standalone `top` page. A plain red `div` of height 250 shows the same row at `255,153,153`, so it is the headless browser (it reports a device pixel ratio of 1.0000000149), not the ad. Vertical edges are exact. Checked again on real screens in F2.
+  - Inside the preview at full size, a part renders exactly as on its own page (75.9 dB for the left part's iframe against `left`). The first comparison said otherwise because of a wrong reference ([ai-log #23](../ai-log.md)).
+- **Verification:** Playwright MCP against `npx serve`.
+
+  | Check | Result |
+  |---|---|
+  | 1920×1080 | ✅ scale 1, fireplace at (120, 53); iframes relative to it at (0, 0) 320×975, (324, 0) 1032×250, (1360, 0) 320×975; all parts `is-ready` |
+  | Pixels at 1:1 against the B2 part screenshots composed in RGB | ✅ left 83.5, top 68.4, right 70.9 dB; gaps identical to the background. The middle scores 46.2 dB only because of the bottom-edge row above |
+  | 1440×900 and 1366×768 | ✅ scale 0.857 and 0.788, the whole fireplace visible, no scrollbars on the page; every part's document stays at its slot size (320×975, 1032×250), so no scrollbars inside the iframes ([1440×900](../img/b3-preview.jpg)) |
+  | Live resize 1920 → 1440 → 1366 → 1920 | ✅ rescaled each time, back to scale 1 at (120, 53) |
+  | `/variant-b-fireplace/preview?overlay=1` | ✅ overlay at (−28.78, −51.39) 1730.7×1046.25; the layout's frames fall into the 4 px gaps; logos, panels, copy and CTAs coincide; packshots and the top headline differ as expected (P3, P2) ([overlay](../img/b3-preview-overlay.jpg)) |
+  | Console and network | ✅ no messages from the ad; only files under `variant-b-fireplace/`; `debug.js` and `design/layout.png` only with the flag |
+  | Parts | ✅ unchanged files; the shipped weight stays 1 473 443 B (the preview adds 2 852 B of its own, not shipped) |
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #23.
