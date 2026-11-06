@@ -56,7 +56,7 @@ Not applicable. Static ads, no backend or persistence.
 ## Asset pipeline
 - `ffmpeg` / `ffprobe` (present): audio analysis, and the A8 re-encode of the Variant A sound effects with `libmp3lame` (D-018).
 - A scripted, lossless `tRNS` fix for the four Variant B palette PNGs that lost transparency (planned, B1).
-- The PNG/JPEG optimiser is chosen at A8/B7. Originals stay in history and optimised files replace them in separate commits.
+- PNG optimiser: `ffmpeg`'s own PNG encoder, lossless. For each file it tries three predictors at zlib level 9 and keeps the result only if it is smaller and its decoded RGBA frames hash the same (`framemd5`). It was chosen in A8 because no dedicated optimiser (oxipng, optipng, pngquant) was installed, and `ffmpeg` adds no new dependency (D-019). Originals stay in history and optimised files replace them in separate commits.
 
 ## Infrastructure
 - **Hosting:** public GitHub repository (the deliverable). The ads are opened through a local static server.

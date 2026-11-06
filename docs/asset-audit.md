@@ -10,7 +10,7 @@ Measured on 2026-11-04, before writing any ad code. Tools: `ffprobe`/`ffmpeg` (d
 
 | Folder | Size | Notes |
 |---|---|---|
-| `variant-a-game/assets` | 2.02 MB | audio is 1.37 MB of it; 0.81 MB after the A8 re-encode (D-018) |
+| `variant-a-game/assets` | 2.02 MB | audio is 1.37 MB of it; 0.81 MB after the A8 re-encode (D-018). PNGs 640 055 → 574 516 B after the lossless A8 recompression (D-019) |
 | `variant-a-game/design` | 0.59 MB | reference only, not shipped |
 | `variant-b-fireplace/assets` | 3.64 MB | includes both background options; a build ships only one |
 | `variant-b-fireplace/design` | 1.77 MB | reference only, not shipped |

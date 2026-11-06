@@ -315,3 +315,38 @@
   | Regression | ✅ music loop, crash and fail sounds; fail endcard; `level-check.mjs` passes; console clean; only local requests; 2.031 MB |
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #17; #14 resolved.
+
+## A8 Compression & weight
+- **Status:** ✅ done; Stage A is complete.
+- **Commits:** `chore: re-encode variant A sound effects`, `chore: recompress variant A PNGs losslessly`
+- **Time:** 0.5 h planned / ~0.5 h actual
+- **What was done:**
+  - **Sound effects (D-018):**
+    - LAME re-encode; crash and cheer to mono 96 kbps, fail and applause to stereo 128 kbps. Mono or stereo was decided by the measured side/mid energy.
+    - The gains in `audio.js` follow the measured loudness change (≤ 0.4 LU).
+    - The music stays as delivered.
+  - **PNGs (D-019):**
+    - lossless `ffmpeg` re-encode; the smallest of three predictors is kept only if it is smaller and pixel-identical;
+    - the malformed `pHYs` chunk added by `ffmpeg` is stripped.
+  - The scripts ran from the scratchpad; the exact commands are in D-018 and D-019. `tools/` stays read-only.
+- **Weight:**
+
+  | | Before | After |
+  |---|---|---|
+  | Audio | 1 369 577 B | 814 881 B |
+  | PNGs | 640 055 B | 574 516 B |
+  | **Shipped ad** (`variant-a-game` without `design/`) | **2 129 475 B (2.03 MB)** | **1 509 240 B (1.44 MB)**, 48% of 3 MB |
+
+- **Verification:**
+
+  | Check | Result |
+  |---|---|
+  | Audio in the browser | ✅ all five decode. Crash and cheer have 1 channel, fail and applause 2. Durations are unchanged. The crash plays at the hit, fail 1055 ms later, cheer and applause 756 ms after the win. The music loop is unchanged (`loopStart` 0.06934, `loopEnd` 57.66871) |
+  | Loudness after the gain correction | ✅ on target (−14 / −18 LUFS); highest true peak −2.8 dBFS (crash) |
+  | PNG pixels | ✅ all 37 decode to the same RGBA hash as at `HEAD`, checked independently of the script |
+  | PNG structure | ✅ IHDR/IDAT/IEND only, as in the originals |
+  | Rendering | ✅ start (after the intro), fail and win endcards identical to the pre-A8 screenshots (PSNR ∞); obstacle natural sizes unchanged |
+  | Regression | ✅ `level-check.mjs` passes; console clean |
+- **Manual check left for the user:** listen to the re-encoded effects on a phone (F2).
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #18 and #19.

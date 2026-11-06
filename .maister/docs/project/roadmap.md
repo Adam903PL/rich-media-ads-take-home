@@ -14,7 +14,7 @@ Effort: planned hours / actual hours.
 - [x] **0.4 Maister docs + standards** — project docs, trimmed `global`, custom `ads` standards `[0.5 h / 0.7 h]`
 - [x] **0.5 Publish** — GitHub repository created as private for now (made public at F6), pushed `[0.1 h / 0.1 h]`
 
-## Stage A — Variant A, Game (~6–7 h) · in progress · [log](../../../docs/stages/A-game.md)
+## Stage A — Variant A, Game (~6–7 h) · done · [log](../../../docs/stages/A-game.md)
 
 - [x] **A1 Scaffold & scaling** — 360×640 stage, `dvh` / `visualViewport`, Playwright screenshots at 4 sizes `[1 h / ~1 h]`
 - [x] **A2 Static start screen** — layers in order, design overlay at 50%, preload, renderer decision D-006 `[0.5 h / ~1.5 h]`
@@ -23,7 +23,7 @@ Effort: planned hours / actual hours.
 - [x] **A5 Endcards** — static layout, GSAP entrances, CTA clickTag, clean replay `[1 h / ~1.5 h]`
 - [x] **A6 Audio** — Web Audio unlock, gapless loop, per-sound gain, mute, `visibilitychange` `[1 h / ~1 h]`
 - [x] **A7 Polish** — intro animation with a tapping hand, `prefers-reduced-motion`; the "get ready" glide already exists (D-009); the stage is revealed only once the game listens (`?debug=1` gap, ai-log #14). Speed ramp cut (cut list #1): the D-010 layout already ramps (D-017) `[0.5–1 h / ~0.5 h]`
-- [ ] **A8 Compression & weight** — audio re-encode, image optimisation, weight check < 3 MB `[0.5 h]`
+- [x] **A8 Compression & weight** — effects re-encoded (D-018), PNGs recompressed losslessly (D-019); 2.03 → 1.44 MB `[0.5 h / ~0.5 h]`
 
 ## Stage B — Variant B, Fireplace (~5–6 h)
 
