@@ -35,9 +35,9 @@ Effort: planned hours / actual hours.
 - [x] **B6 Idle & a11y** — moss breath to 1.025 and five CTA pulses, all at rest at 25.5 s; whole-part button clickout with keyboard and label (D-027) `[0.5 h / ~0.5 h]`
 - [x] **B7 Compression & performance** — PNGs recompressed losslessly (D-028); 1.65 MB as three packages, 1.48 MB counted once (D-029); trace: no layout or paint per frame `[0.5 h / ~0.75 h]`
 
-## Stage F — Final (~2 h)
+## Stage F — Final (~2 h) · in progress · [log](../../../docs/stages/F-final.md)
 
-- [ ] **F1 Brief checklist** — every requirement of both variants checked
+- [x] **F1 Brief checklist** — every requirement of both variants checked: [brief-checklist.md](../../../docs/brief-checklist.md), open items assigned to F2–F6 `[~0.5 h]`
 - [ ] **F2 Real-device test** — iOS Safari (autoplay, toolbars), Android Chrome
 - [ ] **F3 Docs** — README (run, next steps, known issues, AI note) and DECISIONS assembled from `docs/`
 - [ ] **F4 Recording** — under 1 minute, stored in the repo
