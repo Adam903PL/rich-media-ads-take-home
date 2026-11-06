@@ -33,27 +33,62 @@ body {
 }
 
 /* Background crops of bg-big.jpg with extra moss on the side facing the fireplace
-   centre, clipped by the stage: docs/asset-audit.md, section 3.5 (D-020). */
+   centre, clipped by the stage: docs/asset-audit.md, section 3.5 (D-020). Every part
+   zooms its crop around that centre, (840, 487.5) in the fireplace, so the moss stays
+   continuous across the parts. */
 .bg {
   top: 0;
   left: 0;
   width: 368px;
   height: 975px;
+  transform-origin: 840px 487.5px;
 }
 
 .stage[data-part="top"] .bg {
   left: -4px;
   width: 1040px;
   height: 272px;
+  transform-origin: 520px 487.5px;
 }
 
 .stage[data-part="right"] .bg {
   left: -48px;
+  transform-origin: -472px 487.5px;
 }
 
-/* The layout shows the text panel about 90% opaque (docs/questions.md, Q2; D-023). */
+/* The logo scales around the centre of its artwork: docs/asset-audit.md, section 3.2. */
+.logo {
+  transform-origin: 160.25px 125px;
+}
+
+/* The top headline builds line by line from three copies of hl.png, each masked to one
+   line. Its soft shadow runs through the gaps between the lines, so the masks fade over
+   the gaps (y 78–92 and 145.5–159.5) instead of cutting the shadow with a straight edge:
+   docs/asset-audit.md, section 3.3. The copies only show while the headline builds. */
+.headline-line {
+  visibility: hidden;
+}
+
+.line-1 {
+  -webkit-mask-image: linear-gradient(to bottom, #000 78px, transparent 92px);
+  mask-image: linear-gradient(to bottom, #000 78px, transparent 92px);
+}
+
+.line-2 {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 78px, #000 92px, #000 145.5px, transparent 159.5px);
+  mask-image: linear-gradient(to bottom, transparent 78px, #000 92px, #000 145.5px, transparent 159.5px);
+}
+
+.line-3 {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 145.5px, #000 159.5px);
+  mask-image: linear-gradient(to bottom, transparent 145.5px, #000 159.5px);
+}
+
+/* The layout shows the text panel about 90% opaque (docs/questions.md, Q2; D-023). It
+   opens upwards from its bottom edge (y 913.5, docs/asset-audit.md, section 3.2). */
 .panel {
   opacity: 0.9;
+  transform-origin: 160px 913.5px;
 }
 
 /* Centred, at the measured position: docs/asset-audit.md, section 3.2. The radius

@@ -222,6 +222,12 @@ Durations are unchanged in Chromium's decoder (2.14, 4.21, 1.28 and 15.05 s). Af
 | `top/bg.jpg` | moss and rock | full frame; replaced in B1 by a crop of `bg-big.jpg` (§3.5) |
 | `top/hl.png` | 3-line headline with soft drop shadow (RGBA) | text cores: 40.5–76 (x 300.5–483), 94–143.5 (x 324.5–686), 161–210.5 (x 299.5–740); the shadow spans the full height |
 
+- **Shadow between the lines (B4).** Measured over the shadow's width (x 256.5–773.5), per CSS row:
+  - between lines 1 and 2 (rows 77–93): mean alpha 51–69, lowest at row 88 (51, max 101);
+  - between lines 2 and 3 (rows 144–160): mean alpha 77–120, lowest at row 157 (77, max 109).
+
+  So a straight cut anywhere between the lines crosses a shadow of 20–30% opacity. The line-by-line reveal uses masks that fade over y 78–92 and 145.5–159.5 instead, inside the gaps with 2 px to spare on each side (D-025).
+
 ### 3.4 Problems found
 
 **P1 — Four PNGs lost their transparency.**

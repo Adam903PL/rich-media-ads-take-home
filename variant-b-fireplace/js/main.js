@@ -1,4 +1,7 @@
 // Shared entry of the three fireplace parts (top, left, right); #stage names its part.
+import { setupIntro } from './intro.js';
+import { gsap, reducedMotion } from './motion.js';
+
 const PARTS = ['top', 'left', 'right'];
 
 const stage = document.getElementById('stage');
@@ -26,4 +29,21 @@ if (new URLSearchParams(location.search).get('overlay') === '1') {
   showDesignOverlay(stage);
 }
 
+// Built before the reveal, so the stage first appears at the intro's first frame.
+const intro = setupIntro(stage, part);
 stage.classList.add('is-ready');
+
+if (reducedMotion.matches) {
+  intro.progress(1, true);
+} else {
+  intro.play();
+}
+
+// Animations pause with the page.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    gsap.globalTimeline.pause();
+  } else {
+    gsap.globalTimeline.resume();
+  }
+});

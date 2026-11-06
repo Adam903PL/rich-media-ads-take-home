@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1) and its three static part documents (B2) and the preview page (B3); the animation and the sync are **planned**. Update this document as each stage lands.
+> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1) and its three part documents (B2), the preview page (B3) and the intro (B4); the shared start, the idle loop and the clickout are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -91,15 +91,20 @@ The repository holds two independent deliverables. Each variant folder (minus it
   - One `#stage` per document with `data-part="top|left|right"`, rendered 1:1 at the slot size: the ad server's iframe has exactly that size, so there is no scaling. `overflow: hidden` clips the background crop's extra moss.
   - Layers, bottom → top, all `<img>` at 50% of their 2x size:
     - left / right: `bg` crop, `logo.png`, `box.png` as `.panel` at opacity 0.9, `hl.png` as `.copy`, `cta.png` at (73.75, 838.5) with 7 px corners (D-023);
-    - top: `bg` crop, `hl.png` as `.headline`.
+    - top: `bg` crop, `hl.png` as `.headline`, and three more copies of `hl.png` as `.headline-line`, each with a static gradient mask for one line; they are hidden except while the headline builds (B4, D-025).
   - The three documents share `css/style.css` and `js/main.js`; per-part values are keyed on `data-part`.
-  - The static markup is the end state of the intro, so B4 animates towards it with `gsap.from`.
-- **Startup (present, B2):** `js/main.js` checks `#stage` and its part, decodes every `<img>` (a failed file throws `Fireplace <part>: failed to load <src>` and the stage stays hidden), loads `js/debug.js` only for `?overlay=1`, then adds `.is-ready`, which reveals the stage.
+  - The static markup is the end state of the intro, which animates towards it with `gsap.from`.
+  - `transform-origin`: the background at the fireplace centre in the crop's own coordinates (D-020), the logo at the centre of its artwork (160.25, 125), the panel at its bottom edge (160, 913.5).
+- **Startup (present, B2, B4):** `js/main.js` checks `#stage` and its part, decodes every `<img>` (a failed file throws `Fireplace <part>: failed to load <src>` and the stage stays hidden), loads `js/debug.js` only for `?overlay=1`, builds the paused intro (its first frame renders at once), adds `.is-ready`, which reveals the stage, and then plays the intro, or jumps to its end with `prefers-reduced-motion: reduce`. A `visibilitychange` listener pauses and resumes `gsap.globalTimeline`.
+- **Intro (present, B4, D-025):** 3.5 s on beats shared by all parts — background fade and settle 1.08 → 1 (0–3.5 s), headline lines (0.35 / 0.70 / 1.05 s, then the copies give way to the full image at 1.65 s), logo (0.45 s), panel (1.2 s), copy (1.6 s), CTA (2.2 s). Each part starts on its own after its preload; a shared start is B5.
 - **Modules:**
 
   | Module | Responsibility |
   |---|---|
-  | `main.js` | shared entry of the three parts: part check, image preload, overlay flag, reveal (present) |
+  | `main.js` | shared entry of the three parts: part check, image preload, overlay flag, intro start, reveal, pause when hidden (present) |
+  | `intro.js` | `setupIntro(stage, part)`: the paused intro timeline of one part on the shared beats (present, B4) |
+  | `motion.js` | the vendored global `gsap`, checked once, and the `prefers-reduced-motion` query (present, B4) |
+  | `dom.js` | `find` / `findAll` lookups that throw with the missing selector (present, B4) |
   | `debug.js` | `?overlay=1`: `design/layout.png` at 50% over the part, scaled by 1 / 0.973 and shifted by the part's position in the fireplace (present); also used by the preview for the whole fireplace |
   | `preview.js` | preview page only: fits the fireplace to the window and handles its `?overlay=1` (present, B3) |
 - **Preview (present, B3, D-024):**

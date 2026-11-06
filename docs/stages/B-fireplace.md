@@ -99,3 +99,47 @@
   | Parts | ✅ unchanged files; the shipped weight stays 1 473 443 B (the preview adds 2 852 B of its own, not shipped) |
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #23.
+
+## B4 Intro timelines
+- **Status:** ✅ done
+- **Commits:** `chore: vendor GSAP 3.15.0 for variant B`, `feat: add variant B intro timelines`
+- **Time:** 1.5 h planned / ~1.25 h actual
+- **What was done:**
+  - **GSAP:** `vendor/gsap.min.js`, byte-identical to the Variant A copy (same SHA-512), loaded by a `defer` script before the module in each part (D-012).
+  - **`js/intro.js`:** `setupIntro(stage, part)` builds one paused 3.5 s timeline per part on beats shared by all parts (D-025):
+
+    | t (s) | Part | What |
+    |---|---|---|
+    | 0–3.5 | all | moss fades in (0.8 s) and settles from scale 1.08 to 1 around the fireplace centre |
+    | 0.35 / 0.70 / 1.05 | top | headline lines rise 14 px and fade in; at 1.65 s the copies give way to the full image |
+    | 0.45 | left, right | logo pops in from 0.8 |
+    | 1.2 | left, right | panel opens upwards from its bottom edge |
+    | 1.6 | left, right | copy rises 10 px |
+    | 2.2–2.7 | left, right | CTA pops in last |
+
+  - **Headline line by line:** three more copies of `top/hl.png` with static gradient masks fading over y 78–92 and 145.5–159.5, because the shadow between the lines is 20–30% opaque (audit §3.3).
+  - **`js/main.js`:** builds the intro before the reveal, so the first frame appears first; plays it, or jumps to its end with reduced motion; pauses `gsap.globalTimeline` while the page is hidden.
+  - `js/motion.js` and `js/dom.js` follow the Variant A modules (no shared runtime between variants).
+- **Decisions:** D-025 (intro).
+- **Findings:**
+  - **The background settles instead of zooming in.** The brief's "background slowly zooms in" would end away from the layout; it can come back in B6 as a slow idle zoom that returns to 1.
+  - **After the scale animation, Chrome draws the moss from a different decoded size.** The end state scores 57–59 dB against the static B2 screenshot, only in the moss, while every element is back at its exact position. It stays the same after 8 s and after removing the inline transform. With reduced motion, which never scales, the end state is identical to B2.
+- **Verification:** Playwright MCP against `npx serve`.
+
+  | Check | Result |
+  |---|---|
+  | Duration and end | ✅ 3.5 s in every part; afterwards 0 active tweens |
+  | End state vs B2 | ✅ geometry unchanged; pixels 57–59 dB in the moss, see Findings; the top headline ends as the single full image (`.headline` visible, the copies hidden) |
+  | Reduced motion | ✅ `progress` 1 at the reveal, 0 active tweens; identical to B2 (∞ / 71.8 dB) |
+  | Shared zoom in the preview, all parts held at the same time (0, 0.4 … 3.5 s) | ✅ each background's rectangle in fireplace coordinates equals O + s (crop − O) to 0.001 px in all three parts, so the moss stays one surface; at scale 1.08 every crop still covers its whole part |
+  | Headline build (0.6, 1.0, 1.3 s) | ✅ the shadow fades out softly below each new line, no straight edge |
+  | Animated properties | ✅ inline styles hold only transform properties, `opacity` and `visibility` (from `autoAlpha`) |
+  | Hidden page | ✅ the intro holds at 0.549 s for 0.8 s; after the page is shown again it continues (+0.216 s in 200 ms), no jump |
+  | Smoothness in the preview (headless, orientation only) | ✅ 3.5 s of the intro without a frame over 20 ms (longest 13.2 ms) |
+  | Console and network | ✅ no messages; only local files, now including `vendor/gsap.min.js` |
+  | Weight (the shipped parts: `variant-b-fireplace` without `design/` and the preview files) | ✅ 1 552 278 B (1.48 MB, 52% of 3 MB) |
+
+  Filmstrip at 0, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4 and 3.5 s, read left to right and top to bottom: [b4-intro.jpg](../img/b4-intro.jpg). The parts still start on their own after their own preload; B5 adds the shared start.
+- **Manual check left for the user:** the timing and the feel of the intro on a real laptop (F2).
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #24.
