@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). All of Variant B is **planned**. Update this document as each stage lands.
+> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1); its documents and animation are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -90,6 +90,11 @@ The repository holds two independent deliverables. Each variant folder (minus it
 - **Shared coordinate system:**
   - The full fireplace is 1680×975. The parts sit at x 0, 324 and 1360, with 4 px gaps.
   - Background crops and zoom `transform-origin` are expressed in these global coordinates, so the moss stays continuous across parts during the zoom.
+- **Background (present, B1, D-020):**
+  - Each part's bottom layer is its own crop of `bg-big.jpg`: `left/bg-crop.jpg` (x 0–368), `top/bg-crop.jpg` (x 320–1360, y 0–272) and `right/bg-crop.jpg` (x 1312–1680), placed in the part at (0, 0), (−4, 0) and (−48, 0) and clipped to the part.
+  - The crops carry extra moss on the side facing the fireplace centre, so every part can scale its background around **O = (840, 487.5)** with `transform-origin` left (840, 487.5), top (520, 487.5), right (−472, 487.5) in the crop's own coordinates.
+  - Limits: scale 1–1.10, never below 1, no translation (the outer edges have no extra moss).
+  - The packshots are part of these backgrounds (audit P4), so they zoom with the moss.
 
 ## Data Flow
 - **Variant A:**

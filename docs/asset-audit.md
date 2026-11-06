@@ -12,7 +12,7 @@ Measured on 2026-11-04, before writing any ad code. Tools: `ffprobe`/`ffmpeg` (d
 |---|---|---|
 | `variant-a-game/assets` | 2.02 MB | audio is 1.37 MB of it; 0.81 MB after the A8 re-encode (D-018). PNGs 640 055 → 574 516 B after the lossless A8 recompression (D-019) |
 | `variant-a-game/design` | 0.59 MB | reference only, not shipped |
-| `variant-b-fireplace/assets` | 3.64 MB | includes both background options; a build ships only one |
+| `variant-b-fireplace/assets` | 3.64 MB | includes both background options; a build ships only one. 1 468 094 B after B1: the four delivered backgrounds (3 406 018 B) are replaced by three crops of `bg-big.jpg` (1 235 592 B, D-020, §3.5) |
 | `variant-b-fireplace/design` | 1.77 MB | reference only, not shipped |
 
 Largest single files: `bg-big.jpg` 1.995 MB, `applause.mp3` 602 KB, `top/bg.jpg` 556 KB, `Funny Game Loop.mp3` 463 KB, `right/bg.jpg` 455 KB, `left/bg.jpg` 400 KB, `gameplay.png` 268 KB, `top/hl.png` 195 KB.
@@ -203,7 +203,7 @@ Durations are unchanged in Chromium's decoder (2.14, 4.21, 1.28 and 15.05 s). Af
 
 | Asset | Content | Position |
 |---|---|---|
-| `left/bg.jpg`, `right/bg.jpg` | moss **with the product packshot baked in** | full frame |
+| `left/bg.jpg`, `right/bg.jpg` | moss **with the product packshot baked in** | full frame; replaced in B1 by crops of `bg-big.jpg` (§3.5) |
 | `box.png` (shared) | text panel `#0F6CA1` | full width, y 744.5–913.5 |
 | `left/hl.png`, `right/hl.png` | copy, white | y 771.5–816 (right: lines 771.5–788 and 794.5–816) |
 | `left/logo.png`, `right/logo.png` | logo (identical files, byte for byte) | x 66.5–254, y 60–190 |
@@ -213,7 +213,7 @@ Durations are unchanged in Chromium's decoder (2.14, 4.21, 1.28 and 15.05 s). Af
 
 | Asset | Content | Position |
 |---|---|---|
-| `top/bg.jpg` | moss and rock | full frame |
+| `top/bg.jpg` | moss and rock | full frame; replaced in B1 by a crop of `bg-big.jpg` (§3.5) |
 | `top/hl.png` | 3-line headline with soft drop shadow (RGBA) | text cores: 40.5–76 (x 300.5–483), 94–143.5 (x 324.5–686), 161–210.5 (x 299.5–740); the shadow spans the full height |
 
 ### 3.4 Problems found
@@ -253,6 +253,8 @@ How each part relates to `bg-big.jpg`, from template matching of moss and packsh
 | right | a zoomed-out version: in `bg-big` the packshot is **12% larger**, the moss ~16% | packshot 4.1 at scale 1.12, moss 10.1 at 1.16 |
 | top | **not cut from `bg-big.jpg`** — no match at scales 1.0–1.45, mirrored or not | ≥ 41 everywhere (noise level) |
 
+**Resolved in B1 (D-020):** every part uses its own crop of `bg-big.jpg` (§3.5); the packshot deviation from the layout is still open with the client (Q3).
+
 **P4 — Packshots are baked into the backgrounds.**
 There is no separate product layer, so "product slides in" cannot be done with the provided assets.
 
@@ -260,3 +262,27 @@ There is no separate product layer, so "product slides in" cannot be done with t
 - CTA: `#B80000` in the asset vs ≈`#A82217` in the layout.
 - Text panel: in the layout it is ≈90% opaque (the moss texture shows through) and redder than `#0F6CA1`.
 - The logo teal `#146E78` matches exactly, so this is not a colour-management artefact.
+
+### 3.5 Background crops (B1, D-020)
+
+Measured on 2026-11-06. Coordinates are fireplace CSS px (1680×975) unless marked @2x.
+
+**Room for the shared zoom.** Each background scales around O = (840, 487.5), the centre of `bg-big.jpg`, with a scale s in [1, 1.10]. At scale s, a part's rectangle shows the source rectangle O + (rect − O) / s, so a part only needs extra moss on the side facing O:
+
+| Part | Rectangle | Source reach at s = 1.10 | Crop | Margin left over |
+|---|---|---|---|---|
+| left | x 0–320, y 0–975 | x 76.4–367.3, y 44.3–930.7 | x 0–368, y 0–975 | 0.73 px on the right |
+| top | x 324–1356, y 0–250 | x 370.9–1309.1, y 44.3–271.6 | x 320–1360, y 0–272 | 0.41 px at the bottom |
+| right | x 1360–1680, y 0–975 | x 1312.7–1603.6, y 44.3–930.7 | x 1312–1680, y 0–975 | 0.73 px on the left |
+
+**Crops.** Edges on the 16 px @2x grid of the source's 4:2:0 chroma blocks:
+
+| File | Source @2x | Size | Position in the part | PSNR vs `bg-big.jpg` (Y / U / V, average) |
+|---|---|---|---|---|
+| `left/bg-crop.jpg` | x 0, y 0, 736×1950 | 411 728 B | (0, 0) | 48.8 / 50.4 / 51.4, 49.4 dB |
+| `top/bg-crop.jpg` | x 640, y 0, 2080×544 | 432 880 B | (−4, 0) | 48.2 / 48.0 / 49.9, 48.4 dB |
+| `right/bg-crop.jpg` | x 2624, y 0, 736×1950 | 390 984 B | (−48, 0) | 49.2 / 50.3 / 51.3, 49.7 dB |
+
+- Source: the original `bg-big.jpg` (3360×1950, 4:2:0, quality ≈ 86 from its luma quantisation table), in git history at `085fb62`.
+- Off the grid, at x 648 @2x, the top crop scores 41.5 / 43.4 dB in the chroma planes and weighs 478 470 B.
+- **Seams after cropping** (mean luma of the 20 px strips either side of each gap, y 0–250): 103.2 | 103.6 and 72.1 | 69.2, against 103.2 | 103.6 and 72.0 | 69.1 in `bg-big.jpg` (§3.1).
