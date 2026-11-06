@@ -31,6 +31,7 @@ The repository holds two independent deliverables. Each variant folder (minus it
   6. `.endcard` sections `#endcard-fail` and `#endcard-win` (present, A5, D-013), hidden until shown:
      - z-index 2, so they cover the stage and its caps;
      - full-frame layers in the audit's order, plus their own `logo.png` and a navy bottom cap;
+     - on the win endcard, a second `konfetti.png` above the poo clipped to the party cone, so the cone sits in front of the poo as in the mockup (D-015);
      - CTA and replay are `<button>`s at the measured positions.
   7. `.mute` toggle (present, A6, D-014): an inline SVG button on the logo bar at (314, 9.75), 40×40, z-index 3, so it stays above the endcards. `?overlay=1` adds the design overlay on top.
 - **Startup (present):**

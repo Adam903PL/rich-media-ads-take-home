@@ -86,7 +86,7 @@ Most endcard layers are **full-frame 360×640 PNGs with the position baked in**.
 | Layer | Content | Bounding box (x / y) |
 |---|---|---|
 | `bubble` | dark cloud | 35–324 / 84–406 |
-| `konfetti` | party hat **and** confetti in one layer | 0–258 / 82–372 |
+| `konfetti` | party hat **and** confetti in one layer | 0–258 / 82–372; one piece, the small green party cone at 157–169.5 / 333–353, lies **in front of** the happy poo in the mockup, while the rest of the layer (e.g. the white streamer at the poo's right) lies behind it |
 | `happy` | happy poo | 138–221 / 324–405.5 |
 | `hl` | 3 lines | 433–458.5, 467–492.5, 501.5–523 (x 28.5–323) |
 | `cta.png` (cropped) | "Jetzt mehr erfahren" | 214×45.5 at (28, 560) |
@@ -99,7 +99,7 @@ Most endcard layers are **full-frame 360×640 PNGs with the position baked in**.
 
   | Band | Fail | Win |
   |---|---|---|
-  | Graphics (below the logo bar, above the headline) | 53.5 dB | 40.3 dB |
+  | Graphics (below the logo bar, above the headline) | 53.5 dB | 40.3 dB in the table's order; 50.5 dB with the party cone above the poo (D-015) |
   | Headline | 10.4 dB | 10.3 dB |
   | Buttons | 21.6 dB | 19.8 dB |
 

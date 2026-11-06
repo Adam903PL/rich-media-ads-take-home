@@ -202,6 +202,14 @@ body {
 .win-bubble { transform-origin: 179.5px 245px; }
 .confetti { transform-origin: 129px 227px; }
 
+/* In the design the party cone on the happy poo's head lies in front of the poo, while
+   the rest of the confetti stays behind it, but both are in one layer. A second copy of
+   the layer above the poo is clipped to the cone (x 157–169.5, y 333–353 plus 2px;
+   docs/asset-audit.md, section 2.3). The clip moves with the layer's transform. */
+.party-cone {
+  clip-path: inset(331px 188.5px 285px 155px);
+}
+
 /* Mute toggle on the white logo bar, centred on the logo's height (logo content
    y 17–42.5, docs/asset-audit.md, section 2.1). It stays above the endcards.
    No asset was provided for it (docs/questions.md, N2). */

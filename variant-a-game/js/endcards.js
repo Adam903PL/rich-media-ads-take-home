@@ -59,7 +59,7 @@ function buildFailEntrance(endcard, onCue) {
 function buildWinEntrance(endcard, onCue) {
   return buildEntrance(endcard, (timeline) => timeline
     .call(onCue, ['win'], 0.35)
-    .from(find(endcard, '.confetti'), { autoAlpha: 0, scale: 0.4, rotation: -12, duration: 0.9, ease: 'back.out(1.4)' }, 0.35)
+    .from(findAll(endcard, '.confetti'), { autoAlpha: 0, scale: 0.4, rotation: -12, duration: 0.9, ease: 'back.out(1.4)' }, 0.35)
     .from(find(endcard, '.endcard-poo'), { ...POO_DROP }, 0.6));
 }
 

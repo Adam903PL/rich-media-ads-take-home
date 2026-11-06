@@ -251,3 +251,21 @@
   - It did not recur in 16 later runs with the same steps and input logging (12 on the routed layout, 4 on the real one). Each showed exactly the test's own taps and failed on the floor as expected.
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #15.
+
+### Fix after A6: party cone on the win endcard
+- **Commit:** `fix: put the party cone in front of the win endcard poo`
+- **Reported by the user:** the happy poo on the win endcard looked wrong.
+- **Cause:**
+  - In the mockup the small green party cone sits on the poo's head, in front of it, while the rest of the confetti layer (the white streamer) stays behind the poo.
+  - A5 stacked the whole `konfetti.png` behind the poo, so the poo hid its own cone.
+  - Putting the whole layer on top instead would pull the streamer in front too (36.9 dB, worse than 40.3).
+- **Fix (D-015):** a second copy of `konfetti.png` above the poo, clipped with `clip-path` to the cone's measured box plus 2 px (no other confetti within 3 px). The burst tween targets both copies, so the cone moves with the layer; the transforms of both copies were identical at 0.5, 0.7 and 1.75 s.
+- **Verification:** a real win (routed `level.js`, hover bot), final state vs `03-win-endcard.png`:
+
+  | Band | Before | After |
+  |---|---|---|
+  | Graphics | 40.8 dB | **53.4 dB** |
+  | Around the poo | 29.3 dB | **42.1 dB** |
+
+- **A5's finding corrected:** the win graphics did not match the mockup at 40.3 dB; with the cone in front they do (50.5 dB as a 2x composite, audit §2.3).
+- **AI:** ai-log #16.
