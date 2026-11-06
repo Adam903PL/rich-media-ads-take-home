@@ -227,6 +227,8 @@ Durations are unchanged in Chromium's decoder (2.14, 4.21, 1.28 and 15.05 s). Af
 | `left/hl.png`, `right/hl.png` | black + 10 × `#FFFFFF` | indices 1–9 sit on glyph edges (97–100% touch the background) → they were the anti-aliasing alpha levels, now pure white |
 | `cta.png` | black + red/white ramps | 168 black corner pixels (≈42 per corner, radius ≈7 px); indices 1–6 are corner anti-aliasing |
 
+**Repaired in B1 (D-021):** a `tRNS` chunk makes index 0 transparent in all four files; the decoded RGB is unchanged. The anti-aliasing levels of the other indices stay lost.
+
 **P2 — Top headline copy differs from the layout.**
 
 | Source | Copy | Hierarchy |

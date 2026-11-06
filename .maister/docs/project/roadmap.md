@@ -25,9 +25,9 @@ Effort: planned hours / actual hours.
 - [x] **A7 Polish** — intro animation with a tapping hand, `prefers-reduced-motion`; the "get ready" glide already exists (D-009); the stage is revealed only once the game listens (`?debug=1` gap, ai-log #14). Speed ramp cut (cut list #1): the D-010 layout already ramps (D-017) `[0.5–1 h / ~0.5 h]`
 - [x] **A8 Compression & weight** — effects re-encoded (D-018), PNGs recompressed losslessly (D-019); 2.03 → 1.44 MB `[0.5 h / ~0.5 h]`
 
-## Stage B — Variant B, Fireplace (~5–6 h)
+## Stage B — Variant B, Fireplace (~5–6 h) · in progress · [log](../../../docs/stages/B-fireplace.md)
 
-- [ ] **B1 Background & asset prep** — decision D on background source, `tRNS` fix, own crops with zoom bleed `[1 h]`
+- [x] **B1 Background & asset prep** — crops of `bg-big.jpg` with room for a zoom around one point (D-020), `tRNS` fix (D-021) `[1 h / ~1 h]`
 - [ ] **B2 Static parts** — `top`/`left`/`right.html` matching the measured layout, debug overlay `[1.5 h]`
 - [ ] **B3 Preview page** — three iframes with 4 px gaps `[0.5 h]`
 - [ ] **B4 Intro timelines** — 3–6 s, shared-origin zoom, line-by-line headline, CTA last `[1.5 h]`

@@ -2,15 +2,15 @@
 
 Only questions that the client alone can answer go to the recruiter. Each one has a **default**: what gets built if no answer arrives, so no question blocks the work. Points the brief already settles are decided by us and listed separately. Evidence is in [asset-audit.md](asset-audit.md).
 
-**Email status:** final text approved (2026-11-04), to be sent by Adam as a reply in the task email thread.
+**Email status:** sent by Adam on 2026-11-04 as a reply in the task email thread. No answer as of 2026-11-06, so the defaults are being built.
 
 ## Asked
 
 | # | Topic | Why only the client can answer | Default if unanswered | Blocks | Status |
 |---|---|---|---|---|---|
 | Q1 | Top banner headline: `top/hl.png` copy ≠ `layout.png` copy (audit P2) | Ad copy is the client's call; in health advertising wording such as "natürlich" can be changed on purpose. The asset cannot be edited. | use `top/hl.png` as delivered | B2, B4 | open |
-| Q2 | Four palette PNGs without transparency data (`tRNS`), plus the text panel's opacity (audit P1, P5) | The black background can be removed losslessly, but the lost anti-aliasing can only come from the original exports. The layout shows the panel ~90% opaque, while `box.png` is flat — probably lost with the same `tRNS` chunk. | lossless `tRNS` fix for index 0, CTA corners clipped, panel at the layout's ~90% opacity (opacity only, the asset colour is kept); copy edges slightly harder than in the layout | B1, B2 | open |
-| Q3 | Background: we choose `bg-big.jpg`. Is the packshot deviation from the layout acceptable? Are packshots available as layers? (audit P3, P4) | The brief asks us to decide (done), but accepting a product shown differently from the approved layout is the client's decision. | `bg-big.jpg` cut into three parts; background animated as a whole; intro focuses on logo, panel, copy and CTA | B1, B4 | open |
+| Q2 | Four palette PNGs without transparency data (`tRNS`), plus the text panel's opacity (audit P1, P5) | The black background can be removed losslessly, but the lost anti-aliasing can only come from the original exports. The layout shows the panel ~90% opaque, while `box.png` is flat — probably lost with the same `tRNS` chunk. | lossless `tRNS` fix for index 0, CTA corners clipped, panel at the layout's ~90% opacity (opacity only, the asset colour is kept); copy edges slightly harder than in the layout | B1, B2 | open — `tRNS` fix built in B1 (D-021); corners and panel opacity in B2 |
+| Q3 | Background: we choose `bg-big.jpg`. Is the packshot deviation from the layout acceptable? Are packshots available as layers? (audit P3, P4) | The brief asks us to decide (done), but accepting a product shown differently from the approved layout is the client's decision. | `bg-big.jpg` cut into three parts; background animated as a whole; intro focuses on logo, panel, copy and CTA | B1, B4 | open — default built in B1 (D-020) |
 
 ## Notes sent (no reply needed)
 
@@ -34,7 +34,7 @@ These were dropped from the email because the brief already answers them, or bec
 
 ## Answers log
 
-_No answers yet._ When an answer arrives, record the date, the answer and the resulting change here, then mark the row above `answered` and link the decision it affected.
+_No answers yet (checked 2026-11-06)._ When an answer arrives, record the date, the answer and the resulting change here, then mark the row above `answered` and link the decision it affected.
 
 ## Email (final, reply in the task email thread)
 

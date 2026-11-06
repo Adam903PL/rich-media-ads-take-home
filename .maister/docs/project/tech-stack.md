@@ -55,7 +55,8 @@ Not applicable. Static ads, no backend or persistence.
 
 ## Asset pipeline
 - `ffmpeg` / `ffprobe` (present): audio analysis, and the A8 re-encode of the Variant A sound effects with `libmp3lame` (D-018).
-- A scripted, lossless `tRNS` fix for the four Variant B palette PNGs that lost transparency (planned, B1).
+- A scripted, lossless `tRNS` fix for the four Variant B palette PNGs that lost transparency (present, B1, D-021): a one-off Node script, run from a scratch folder like the A8 commands, inserts a one-entry `tRNS` chunk after `PLTE` with its CRC from `zlib.crc32`.
+- Variant B background crops (present, B1, D-020): `ffmpeg` `crop` plus the `mjpeg` encoder at `-q:v 2`, on the 16 px @2x chroma grid; PSNR against the source checked with `ffmpeg`'s `psnr` filter.
 - PNG optimiser: `ffmpeg`'s own PNG encoder, lossless. For each file it tries three predictors at zlib level 9 and keeps the result only if it is smaller and its decoded RGBA frames hash the same (`framemd5`). It was chosen in A8 because no dedicated optimiser (oxipng, optipng, pngquant) was installed, and `ffmpeg` adds no new dependency (D-019). Originals stay in history and optimised files replace them in separate commits.
 
 ## Infrastructure
