@@ -101,6 +101,23 @@ body {
   border-radius: 7px;
 }
 
+/* The whole part is one button that opens the click tag (D-027). The focus ring sits
+   inside the part, white with a dark shadow so it shows on light and dark moss. */
+.clickout {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.clickout:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: -6px;
+  box-shadow: inset 0 0 0 9px rgba(0, 0, 0, 0.45);
+}
+
 /* layout.png is a 0.973-scale screenshot whose fireplace starts at (28, 50); it is
    scaled by 1 / 0.973 and shifted by the part's x in the fireplace (0, 324, 1360):
    docs/asset-audit.md, section 3.1. */

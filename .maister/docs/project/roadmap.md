@@ -32,7 +32,7 @@ Effort: planned hours / actual hours.
 - [x] **B3 Preview page** — three iframes with 4 px gaps, fitted to the window up to 1:1, whole-fireplace overlay (D-024) `[0.5 h / ~0.75 h]`
 - [x] **B4 Intro timelines** — 3.5 s on shared beats, moss settling from 1.08 around the fireplace centre, masked line-by-line headline, CTA last (D-025) `[1.5 h / ~1.25 h]`
 - [x] **B5 Sync** — `postMessage` ready / hold / start on a shared clock, intros within 0–4 ms; standalone start at once or after 300 ms in a silent frame (D-026) `[0.5 h / ~0.5 h]`
-- [ ] **B6 Idle & a11y** — calm loop stopping at 30 s, reduced motion, clickout `[0.5 h]`
+- [x] **B6 Idle & a11y** — moss breath to 1.025 and five CTA pulses, all at rest at 25.5 s; whole-part button clickout with keyboard and label (D-027) `[0.5 h / ~0.5 h]`
 - [ ] **B7 Compression & performance** — weight per part, only `transform`/`opacity` animated `[0.5 h]`
 
 ## Stage F — Final (~2 h)

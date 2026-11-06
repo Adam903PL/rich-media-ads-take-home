@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1), its three part documents (B2), the preview page (B3), the intro (B4) and the shared start (B5); the idle loop and the clickout are **planned**. Update this document as each stage lands.
+> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1), its three part documents (B2), the preview page (B3), the intro (B4), the shared start (B5) and the idle motion with the clickout (B6); compression and performance (B7) are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -94,15 +94,20 @@ The repository holds two independent deliverables. Each variant folder (minus it
     - top: `bg` crop, `hl.png` as `.headline`, and three more copies of `hl.png` as `.headline-line`, each with a static gradient mask for one line; they are hidden except while the headline builds (B4, D-025).
   - The three documents share `css/style.css` and `js/main.js`; per-part values are keyed on `data-part`.
   - The static markup is the end state of the intro, which animates towards it with `gsap.from`.
+  - Last in each stage, a transparent `<button class="clickout">` covers the whole part (B6, D-027).
   - `transform-origin`: the background at the fireplace centre in the crop's own coordinates (D-020), the logo at the centre of its artwork (160.25, 125), the panel at its bottom edge (160, 913.5).
 - **Startup (present, B2, B4):** `js/main.js` checks `#stage` and its part, decodes every `<img>` (a failed file throws `Fireplace <part>: failed to load <src>` and the stage stays hidden), loads `js/debug.js` only for `?overlay=1`, builds the paused intro (its first frame renders at once), adds `.is-ready`, which reveals the stage, and then plays the intro, or jumps to its end with `prefers-reduced-motion: reduce`. A `visibilitychange` listener pauses and resumes `gsap.globalTimeline`.
 - **Intro (present, B4, D-025):** 3.5 s on beats shared by all parts — background fade and settle 1.08 → 1 (0–3.5 s), headline lines (0.35 / 0.70 / 1.05 s, then the copies give way to the full image at 1.65 s), logo (0.45 s), panel (1.2 s), copy (1.6 s), CTA (2.2 s). In the preview the three parts start together (B5, below).
+- **Idle (present, B6, D-027):** the same timeline continues from 3.5 s: the moss zooms in to 1.025 and back over 22 s around the fireplace centre, and the CTAs pulse to 1.05 five times (at 5.0, 9.5, 14.0, 18.5 and 23.0 s). Everything is at rest, in the layout, at 25.5 s; reduced motion skips it with the intro.
+- **Clickout (present, B6, D-027):** `clickout.js` opens `window.clickTag` (read at click time) or `https://example.com/landing` in a new window on a click anywhere on the part, or on Enter / Space when the button is focused.
 - **Modules:**
 
   | Module | Responsibility |
   |---|---|
-  | `main.js` | shared entry of the three parts: part check, image preload, overlay flag, intro start, reveal, pause when hidden (present) |
+  | `main.js` | shared entry of the three parts: part check, image preload, overlay flag, clickout, timeline (intro + idle) start, reveal, pause when hidden (present) |
   | `intro.js` | `setupIntro(stage, part)`: the paused intro timeline of one part on the shared beats (present, B4) |
+  | `idle.js` | `addIdle(timeline, stage, part)`: the calm phase appended after the intro (present, B6) |
+  | `clickout.js` | `setupClickout(stage)`: the click tag on the part's button (present, B6) |
   | `motion.js` | the vendored global `gsap`, checked once, and the `prefers-reduced-motion` query (present, B4) |
   | `dom.js` | `find` / `findAll` lookups that throw with the missing selector (present, B4) |
   | `debug.js` | `?overlay=1`: `design/layout.png` at 50% over the part, scaled by 1 / 0.973 and shifted by the part's position in the fireplace (present); also used by the preview for the whole fireplace |

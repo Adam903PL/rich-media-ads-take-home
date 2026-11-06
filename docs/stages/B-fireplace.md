@@ -169,3 +169,34 @@
   | Weight (the shipped parts) | ✅ 1 554 778 B (1.48 MB, 52% of 3 MB) |
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #25.
+
+## B6 Idle & a11y
+- **Status:** ✅ done
+- **Commit:** `feat: add variant B idle motion and clickout`
+- **Time:** 0.5 h planned / ~0.5 h actual
+- **What was done:**
+  - **`js/idle.js`:** `addIdle()` appends a calm phase to each part's timeline, from the intro's end (3.5 s). The parts started together, so they stay in step (D-027):
+    - the moss zooms in to 1.025 and back over 22 s (`sine.inOut`) around the fireplace centre;
+    - the CTAs pulse to 1.05 and back (1.2 s) at 5.0, 9.5, 14.0, 18.5 and 23.0 s;
+    - all motion ends at 25.5 s, in the layout.
+  - **`js/clickout.js`:** the part's transparent `.clickout` button over its whole area opens `window.clickTag`, read at click time, or `https://example.com/landing`, in a new window.
+  - **Markup and CSS:** the button is the last element of each stage, with a German `aria-label` (CTA plus the part's copy). An inset white focus ring with a dark shadow shows on any moss ([focus](../img/b6-focus.jpg)).
+  - **`js/main.js`:** sets up the clickout, then builds one timeline from `setupIntro()` and `addIdle()`, and runs it as in B5.
+- **Decisions:** D-027 (idle motion and clickout).
+- **Verification:** Playwright MCP against `npx serve`.
+
+  | Check | Result |
+  |---|---|
+  | Timeline | ✅ 25.5 s in all three parts |
+  | Shared breath, the three parts held at 3.5, 9, 14.5, 20 and 25.5 s in the preview | ✅ background scale 1 / 1.0125 / 1.025 / 1.0125 / 1, identical in all parts; each background's rectangle matches the shared zoom to 0.0001 px |
+  | CTA pulses | ✅ 1.05 at 5.6, 10.1, 14.6, 19.1 and 23.6 s; 1 between them, at 24.2 s and at the end |
+  | Real-time run with 2 s hidden in the idle phase | ✅ held at 8.138 s while hidden, +0.305 s in the 300 ms after; at 29.8 s wall time `progress` 1, 0 active tweens, background and CTA at scale 1 |
+  | End state | ✅ the same as after B4 (58.7 dB against the static B2 screenshot, only in the moss; the CTA area 82.5 dB) |
+  | Reduced motion | ✅ at the end at once, 0 active tweens, no breath and no pulse |
+  | Clickout with `window.open` stubbed in every frame | ✅ clicks at corners, the middle and the CTA of every part open `https://example.com/landing` with `_blank`; a `window.clickTag` set after load is used on the next click; in the preview each frame opens it, and a click on the empty website area opens nothing |
+  | Keyboard and name | ✅ Tab focuses the button with the visible ring; Enter and Space open it; `getByRole('button', { name })` finds it by its label |
+  | Console and network | ✅ no messages; only local files |
+  | Weight (the shipped parts) | ✅ 1 557 312 B (1.49 MB, 52% of 3 MB) |
+- **Manual check left for the user:** whether the breath and the pulses feel calm enough next to real website content (F2).
+- **Standards checklist:** all items passed.
+- **AI:** no corrections in this step.

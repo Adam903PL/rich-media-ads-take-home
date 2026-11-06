@@ -46,3 +46,8 @@ Format: **D-XXX Topic:** decision — why ([details](docs/decisions/D-XXX-topic.
   - A part only accepts messages from its parent, and the preview only from its own frames and origin. Parts post with `targetOrigin '*'`, because an ad server's origin is not known in advance, and the message carries no data.
   - With reduced motion there is nothing to start together, so the parts show their end state at once and send nothing.
   - If a part fails to load, it reports the file and the preview keeps the others waiting, rather than starting an incomplete fireplace.
+- **D-027 Idle motion and clickout:** after the intro, the same timeline carries a calm phase, so the parts stay in step.
+  - **The moss slowly zooms in to 1.025 and back** over 22 s (`sine.inOut`) around the fireplace centre. That is the brief's "background slowly zooms in", and it still ends at the layout. A sideways drift is not possible, because the outer edges of the crops have no extra moss (D-020).
+  - **The CTAs pulse gently five times** (scale 1.05, 1.2 s each, 4.5 s apart).
+  - All motion ends 25.5 s after the start, inside the brief's ~30 s. A hidden page holds the timeline, and with reduced motion none of it plays.
+  - **Each part is one transparent `<button>` over its whole area.** A click anywhere, or Enter / Space, opens `window.clickTag`, read at click time, or `https://example.com/landing` in a new window. Its German `aria-label` repeats the CTA and the part's copy, and an inset white focus ring with a dark shadow shows on light and dark moss. A button rather than a link, because the URL is only known at click time; Variant A's CTAs work the same way.

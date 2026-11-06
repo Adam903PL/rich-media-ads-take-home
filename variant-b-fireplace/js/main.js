@@ -1,4 +1,6 @@
 // Shared entry of the three fireplace parts (top, left, right); #stage names its part.
+import { setupClickout } from './clickout.js';
+import { addIdle } from './idle.js';
 import { setupIntro } from './intro.js';
 import { gsap, reducedMotion } from './motion.js';
 import { sharedNow, waitForStart } from './sync.js';
@@ -30,14 +32,14 @@ if (new URLSearchParams(location.search).get('overlay') === '1') {
   showDesignOverlay(stage);
 }
 
-// Starts the intro at the shared start time, or at once without one. A part that gets
-// the time late starts that much into the intro, so the parts stay on the same moment.
-function playAt(intro, startAt) {
+// Starts the timeline at the shared start time, or at once without one. A part that gets
+// the time late starts that much into it, so the parts stay on the same moment.
+function playAt(timeline, startAt) {
   const waitSeconds = startAt === undefined ? 0 : (startAt - sharedNow()) / 1000;
   if (waitSeconds > 0) {
-    gsap.delayedCall(waitSeconds, () => intro.play(0));
+    gsap.delayedCall(waitSeconds, () => timeline.play(0));
   } else {
-    intro.play(-waitSeconds);
+    timeline.play(-waitSeconds);
   }
 }
 
@@ -50,14 +52,18 @@ document.addEventListener('visibilitychange', () => {
   }
 });
 
-// Built before the reveal, so the stage first appears at the intro's first frame. With
-// reduced motion it appears at the last one, and there is nothing to start together.
-const intro = setupIntro(stage, part);
+setupClickout(stage);
+
+// The intro and the calm motion after it form one timeline. It is built before the reveal,
+// so the stage first appears at the intro's first frame. With reduced motion it appears at
+// the end, with no motion and nothing to start together.
+const timeline = setupIntro(stage, part);
+addIdle(timeline, stage, part);
 
 if (reducedMotion.matches) {
-  intro.progress(1, true);
+  timeline.progress(1, true);
   stage.classList.add('is-ready');
 } else {
   stage.classList.add('is-ready');
-  playAt(intro, await waitForStart(part));
+  playAt(timeline, await waitForStart(part));
 }
