@@ -26,8 +26,9 @@ Status markers: **present** (in the repo now) and **planned** (added in the firs
 ### Frontend
 None, by rule — no React, Vue, Angular or Svelte.
 
-### Animation: GSAP 3.15.0 — planned
+### Animation: GSAP 3.15.0 — present in Variant A
 - Vendored as a minified file inside each variant folder, so every ad is self-contained and the library counts towards its weight.
+- Variant A: `variant-a-game/vendor/gsap.min.js` (72.9 KB), `dist/gsap.min.js` from the npm tarball, which was checked against the registry's sha512 integrity before copying. It is kept byte-identical to the release, licence header included.
 - Pinned to an exact version. 3.15.1 was skipped because it was released on the day the project started.
 
 ### Game rendering: DOM + `transform` — present (D-006)
@@ -68,7 +69,7 @@ Not applicable. Static ads, no backend or persistence.
 ## Key Dependencies
 | Dependency | Version | Where | Status |
 |---|---|---|---|
-| GSAP | 3.15.0 | vendored per variant | planned |
+| GSAP | 3.15.0 | vendored per variant | present (Variant A) |
 | Playwright | pinned when added | dev only | planned |
 | Node.js | 18+ | tooling only | present |
 | ffmpeg / ffprobe | 8.x | tooling only | present |
