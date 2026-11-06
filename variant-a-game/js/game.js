@@ -26,10 +26,10 @@ function easeInOutCubic(progress) {
   return progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
 }
 
-// Starts one run on the start screen. `obstacles` are sorted by x; `onEnd` receives
-// 'fail' or 'win'; `onFrame` (debug mode only) receives the frame's view.
+// Starts one run on the start screen. `obstacles` are sorted by x; `onStateChange`
+// receives every new state; `onFrame` (debug mode only) receives the frame's view.
 // The returned `destroy()` removes everything the run registered.
-export function startGame({ root, track, player, playerMask, obstacles, onEnd, onFrame }) {
+export function startGame({ root, track, player, playerMask, obstacles, onStateChange, onFrame }) {
   const playerWidth = playerMask.width / 2;
   const listeners = new AbortController();
   const run = {
@@ -47,6 +47,7 @@ export function startGame({ root, track, player, playerMask, obstacles, onEnd, o
   function setState(state) {
     run.state = state;
     root.dataset.state = state;
+    onStateChange(state);
   }
 
   function isRunning() {
@@ -55,11 +56,6 @@ export function startGame({ root, track, player, playerMask, obstacles, onEnd, o
 
   function hasEnded() {
     return run.state === 'fail' || run.state === 'win';
-  }
-
-  function finish(state) {
-    setState(state);
-    onEnd(state);
   }
 
   function updateReady(seconds) {
@@ -95,7 +91,7 @@ export function startGame({ root, track, player, playerMask, obstacles, onEnd, o
 
   function fail(cause) {
     run.failCause = cause;
-    finish('fail');
+    setState('fail');
   }
 
   function updatePlaying(seconds) {
@@ -113,7 +109,7 @@ export function startGame({ root, track, player, playerMask, obstacles, onEnd, o
     if (obstacle) {
       fail(obstacle.id);
     } else if (run.scroll === SCROLL_END && run.passedCount === obstacles.length) {
-      finish('win');
+      setState('win');
     }
   }
 

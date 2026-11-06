@@ -1,3 +1,4 @@
+import { loadSounds, setupAudio } from './audio.js';
 import { createMask, erodeMask } from './collision.js';
 import { setupEndcards } from './endcards.js';
 import { COLLISION_TOLERANCE, startGame } from './game.js';
@@ -63,23 +64,30 @@ function prepareObstacles(obstacles) {
   });
 }
 
+const ENDCARD_SOUNDS = { fail: ['fail'], win: ['cheer', 'applause'] };
+
 const root = document.getElementById('ad');
 const stage = document.getElementById('stage');
 const track = stage?.querySelector('.track');
 const player = stage?.querySelector('.player');
+const muteButton = stage?.querySelector('.mute');
 
-if (!root || !stage || !track || !player) {
-  throw new Error('Gut Run: #ad, #stage, .track or .player is missing from index.html');
+if (!root || !stage || !track || !player || !muteButton) {
+  throw new Error('Gut Run: #ad, #stage, .track, .player or .mute is missing from index.html');
 }
 
 fitStageToViewport(root, stage);
 const obstacleImages = addObstacleImages(track);
 
-// The stage stays hidden until every layer is decoded, so it never appears half-loaded.
-await preloadImages([...stage.querySelectorAll('img')]);
+// The stage stays hidden until every layer and sound is decoded, so it never appears half-loaded.
+const [, sounds] = await Promise.all([preloadImages([...stage.querySelectorAll('img')]), loadSounds()]);
 const obstacles = prepareObstacles(obstacleImages);
 const playerMask = erodeMask(createMask(player), COLLISION_TOLERANCE);
-const endcards = setupEndcards(stage, { onReplay: replay });
+const audio = setupAudio(sounds, muteButton);
+const endcards = setupEndcards(stage, {
+  onReplay: replay,
+  onCue: (outcome) => ENDCARD_SOUNDS[outcome].forEach((name) => audio.play(name)),
+});
 stage.classList.add('is-ready');
 
 const params = new URLSearchParams(location.search);
@@ -91,23 +99,36 @@ const onFrame = params.get('debug') === '1' ? debug.showHitboxes(stage, { obstac
 
 let game = null;
 
+function handleStateChange(state) {
+  if (state === 'ready') {
+    audio.startMusic();
+  } else if (state === 'fail' || state === 'win') {
+    audio.stopMusic();
+    if (state === 'fail') audio.play('crash');
+    endcards.show(state);
+  }
+}
+
 function startRun() {
-  game = startGame({ root, track, player, playerMask, obstacles, onEnd: endcards.show, onFrame });
+  game = startGame({ root, track, player, playerMask, obstacles, onStateChange: handleStateChange, onFrame });
 }
 
 // The previous run is torn down completely before the next one starts on the start screen.
 function replay() {
   game.destroy();
   endcards.hide();
+  audio.stopAll();
   startRun();
 }
 
-// `gsap` is the global from vendor/gsap.min.js (D-012); its animations pause with the page.
+// `gsap` is the global from vendor/gsap.min.js (D-012). Animations and sound pause with the page.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     gsap.globalTimeline.pause();
+    audio.suspend();
   } else {
     gsap.globalTimeline.resume();
+    audio.resume();
   }
 });
 

@@ -31,7 +31,7 @@ Largest single files: `bg-big.jpg` 1.995 MB, `applause.mp3` 602 KB, `top/bg.jpg`
 | `border.png` | top and bottom "cloud" bands | top 168.5–235.5, bottom 566.5–640; rows opaque across the full width: **169–204.5** and **598.5–640** (row 168.5–169 is anti-aliased) |
 | *(no asset)* | headline band, flat navy | y 58–168.5 — gut and texture extend under it, so the scrolling scene must be clipped at y 168.5 or covered |
 | `01_game/tut.png` | **the headline** "Bringe Poo durch / den Darm ans Ziel." (not a tutorial overlay) | line 1 y 90.5–115 (x 67.5–293), line 2 y 121–141 (x 58.5–301) |
-| `logo.png` | white logo bar | y 0–58 |
+| `logo.png` | white logo bar | y 0–58, opaque; the logo box spans x 126–234.5, y 17–42.5, and the rest of the bar is plain white (the mute toggle sits at x 314–354, y 9.75–49.75) |
 | `gesture.png` | hand **and the text "tab to run"** (typo baked in) | 86.5×96 at (147.5, 452) |
 | `01_game/player.png` | poo emoji | 42×41 at (55.5, 258.5) — exact pixel match with `01-start.png` |
 
@@ -147,6 +147,24 @@ Measured on the alpha mask of `gameplay.png`:
 All files are 44.1 kHz stereo.
 - The four 320 kbps files are the obvious compression target.
 - Levels need per-sound gain.
+
+**Measured in A6** (`ffmpeg` `ebur128` with true peak; envelopes and silence from the decoded PCM):
+
+| File | Integrated | True peak | Audible (above −60 dBFS) | Envelope | Gain in `audio.js` |
+|---|---|---|---|---|---|
+| music | −11.9 LUFS | +0.4 dBFS | 0.069–57.697 s | steady (LRA 1.0 LU) | −6.1 dB → −18 LUFS |
+| crash | −9.2 LUFS | −0.6 dBFS | 0.10–1.74 s | loud until ~1.0 s, −16 dB at 1.0–1.2 s, then decays | −4.8 dB → −14 LUFS |
+| fail | −7.7 LUFS | +0.1 dBFS | 0.03–3.73 s | | −6.3 dB → −14 LUFS |
+| cheer | −9.7 LUFS | −3.3 dBFS | 0.06–1.07 s | | −4.3 dB → −14 LUFS |
+| applause | −18.6 LUFS | −4.0 dBFS | 0.03–14.94 s | | +0.6 dB → −18 LUFS, a bed under the cheer |
+
+After these gains every true peak is at or below −3.4 dBFS.
+
+**The music loop:**
+- **Tempo:** the autocorrelation of the onset envelope peaks at 0.4, 0.8 and 1.6 s, i.e. 150 BPM in 1.6 s bars. **57.6 s is exactly 36 bars.** The content above −60 dBFS lasts 57.627 s; the extra 27 ms is the last note's decay.
+- **Silence:** the decoded file starts with 1153 zero samples (26 ms, the encoder delay as `ffmpeg` decodes it) and noise below −60 dBFS up to 69.3 ms. It ends with 139 ms below −60 dBFS. Looping the whole file leaves a **208 ms silent gap** (measured in an `OfflineAudioContext` render).
+- **Seam:** a hard cut at onset + 57.6 s falls on the decaying note (~0.14, −20 dBFS RMS) and jumps to ~0.001 at the start, a 0.147 step that clicks. The quietest frame within ±2 ms, 0.63 ms earlier, reduces the step to 0.0136, inside the music's normal sample-to-sample range (median 0.008, p99 0.074).
+- `audio.js` computes the loop from the decoded buffer (first frame above −60 dBFS, plus 57.6 s, moved to the quietest frame within ±2 ms), so it survives decoders that trim the encoder delay differently and the re-encode in A8. In Chromium: `loopStart` 0.06934 s, `loopEnd` 57.66871 s.
 
 ### 2.6 Colours
 

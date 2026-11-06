@@ -17,7 +17,7 @@ Only questions that the client alone can answer go to the recruiter. Each one ha
 | # | Note | What we do |
 |---|---|---|
 | N1 | `gesture.png` says "tab to run", the brief says "tap to run" | keep the asset as delivered (the brief forbids editing assets) |
-| N2 | No mute icon among the assets, but the brief requires a mute toggle | add a small SVG icon in the campaign colours |
+| N2 | No mute icon among the assets, but the brief requires a mute toggle | add a small SVG icon in the campaign colours — **done in A6**: inline SVG in the campaign navy on the logo bar (D-014) |
 
 ## Decided without asking
 

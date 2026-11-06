@@ -202,3 +202,52 @@
 - **Manual check left for the user:** the hold and entrance timing on a real phone, and tapping the buttons with a thumb.
 - **Standards checklist:** all items passed. The vendored `gsap.min.js` has trailing whitespace in its licence header and is deliberately kept byte-identical to the release.
 - **AI:** ai-log #13 and #14.
+
+## A6 Audio
+- **Status:** ✅ done
+- **Commit:** `feat: add variant A audio`
+- **Time:** 1 h planned / ~1 h actual
+- **What was done:**
+  - **`js/audio.js`:**
+    - `loadSounds()` decodes all five files during the preload on an `OfflineAudioContext`.
+    - `findLoop()` finds the music loop in the decoded buffer.
+    - `setupAudio()` handles:
+      - the context unlock on the first `pointerup` / `touchend` / `click` / `keydown`;
+      - one looping music source;
+      - one-shot sounds with per-sound gain;
+      - mute on a master gain;
+      - `suspend` / `resume`;
+      - `stopAll()`.
+  - **`game.js`:** a single `onStateChange(state)` hook replaces `onEnd`.
+  - **`main.js`:**
+    - `ready` starts the music; `fail` / `win` fade it out, `fail` plays the crash;
+    - replay calls `audio.stopAll()`;
+    - the visibility listener also suspends and resumes the audio.
+  - **`endcards.js`:** a cue in each timeline plays the endcard's sound: fail when the sad poo starts to drop (0.45 s), cheer and applause when the confetti bursts (0.35 s).
+  - **Mute:** an inline SVG toggle (speaker with waves or a cross, campaign navy) on the logo bar at (314, 9.75). It is centred on the measured logo height and stays above the endcards. `pointerdown` on it does not reach the game.
+- **Decisions:** D-014 (audio, with a detailed record).
+- **Findings that changed the plan:**
+  - On touch screens `pointerdown` does not grant user activation, so unlocking audio in the game's tap handler would have failed on phones. The unlock listens to `pointerup`, `touchend`, `click` and `keydown` instead.
+  - **The loop length is musical.** The file is 36 bars at 150 BPM (57.6 s) plus silence. A hard cut at 57.6 s would click, so the seam goes to the quietest frame within ±2 ms (audit §2.5).
+- **Verification:** Playwright MCP against `npx serve`. An init script wrapped `AudioContext`, `AudioBufferSourceNode.start/stop` and `suspend/resume` to log every audio event.
+
+  | Check | Result |
+  |---|---|
+  | No audio before a gesture | ✅ no `AudioContext` after load; created on the first `pointerup` with user activation, `running`; no console warning |
+  | Music loop | ✅ one source, `loop`, `loopStart` 0.06934 s, `loopEnd` 57.66871 s (0.63 ms before 57.6 s, at a zero crossing) |
+  | Loop seam (`OfflineAudioContext` render of 1 s across it) | ✅ longest quiet run 0.5 ms; step at the seam 0.0136 vs median 0.008 / p99 0.074. A hard cut at 57.6 s steps 0.147; the whole file loops with a 208 ms gap |
+  | Fail | ✅ music fades in 0.3 s and the crash starts at the hit; fail starts 1055 ms later |
+  | Win (routed `level.js` with obstacles off the playfield, hover bot) | ✅ the music fades at `win`; cheer and applause start 756 ms later |
+  | Replay ×8 | ✅ during each run 1 music source; on the endcard crash + fail; after replay 0 playing sources; 1 `AudioContext` in total |
+  | Mute | ✅ tapping it before the first run sets `aria-pressed` and keeps `start` (no game start); the context is created muted. Tapping it while playing does not jump (the player kept falling, 165 → 235 px); it toggles back |
+  | Hidden tab | ✅ `suspend` from `running`, then `resume` back to `running` |
+  | Reduced motion | ✅ the cue still plays fail (0.6 s after the crash, when the entrance jumps to its end); nothing fires again on replay |
+  | Preload failure (routed 404 on `Fail.mp3`) | ✅ `Gut Run: failed to load assets/music/endcard_fail/Fail.mp3`; stage stays hidden |
+  | Regression | ✅ fail endcard, CTA clickout, replay to `start`; `level-check.mjs` passes; console clean; only local requests (5 MP3s); weight 2.027 MB |
+- **Manual check:** the user played runs to the end with sound on (2026-11-06). Still left: the loop seam and levels on real phones, and the unlock on iOS Safari and Android Chrome (F2).
+- **Observation for F5:**
+  - One test run ended in `win` without taps. It ran in a page where the browser served a cached `level.js` with the obstacles moved off the playfield (ai-log #15).
+  - Input was not logged in that run, so its cause is unknown.
+  - It did not recur in 16 later runs with the same steps and input logging (12 on the routed layout, 4 on the real one). Each showed exactly the test's own taps and failed on the floor as expected.
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #15.

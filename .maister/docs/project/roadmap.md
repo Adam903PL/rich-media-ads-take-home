@@ -21,7 +21,7 @@ Effort: planned hours / actual hours.
 - [x] **A3 Game loop** — state machine, gravity, tap, gut scroll (`translateX`), cloud walls from masks (D-008), start glide (D-009) `[1 h / ~1 h]`
 - [x] **A4 Obstacles & collision** — 15 obstacles once each (D-010), alpha-mask collision with 2 px tolerance incl. clouds (D-011), `?debug=1` `[1.5 h / ~2.5 h]`
 - [x] **A5 Endcards** — static layout, GSAP entrances, CTA clickTag, clean replay `[1 h / ~1.5 h]`
-- [ ] **A6 Audio** — Web Audio unlock, gapless loop, per-sound gain, mute, `visibilitychange` `[1 h]`
+- [x] **A6 Audio** — Web Audio unlock, gapless loop, per-sound gain, mute, `visibilitychange` `[1 h / ~1 h]`
 - [ ] **A7 Polish** — intro animation, difficulty ramp, `prefers-reduced-motion`; the "get ready" glide already exists (D-009); reveal the stage only once the game listens (`?debug=1` gap, ai-log #14) `[0.5–1 h]`
 - [ ] **A8 Compression & weight** — audio re-encode, image optimisation, weight check < 3 MB `[0.5 h]`
 

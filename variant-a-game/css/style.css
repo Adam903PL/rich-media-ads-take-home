@@ -202,6 +202,50 @@ body {
 .win-bubble { transform-origin: 179.5px 245px; }
 .confetti { transform-origin: 129px 227px; }
 
+/* Mute toggle on the white logo bar, centred on the logo's height (logo content
+   y 17–42.5, docs/asset-audit.md, section 2.1). It stays above the endcards.
+   No asset was provided for it (docs/questions.md, N2). */
+.mute {
+  position: absolute;
+  left: 314px;
+  top: 9.75px;
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--navy);
+  cursor: pointer;
+}
+
+.mute svg {
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mute .mute-speaker {
+  fill: currentColor;
+}
+
+.mute[aria-pressed="true"] .mute-waves,
+.mute[aria-pressed="false"] .mute-cross {
+  display: none;
+}
+
+.mute:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: -2px;
+}
+
 .design-overlay {
   z-index: 2;
   opacity: 0.5;

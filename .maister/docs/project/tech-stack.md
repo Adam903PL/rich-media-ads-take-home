@@ -35,9 +35,9 @@ None, by rule — no React, Vue, Angular or Svelte.
 - Static layers and the moving scene (gut, obstacles, player) are DOM `<img>` elements on the scaled stage. Moving elements change only `transform`.
 - Canvas 2D and Phaser were considered and rejected; the reasons are in D-006.
 
-### Audio: Web Audio API — planned
-- Buffers decoded once.
-- Gapless loop via `loopStart`/`loopEnd`, which works around the silence in the provided loop.
+### Audio: Web Audio API — present in Variant A (D-014)
+- Buffers decoded once during the preload, on an `OfflineAudioContext`.
+- Gapless loop via `loopStart`/`loopEnd`, found in the decoded buffer, which works around the silence in the provided loop.
 - A gain node per sound and a master gain for mute.
 - `suspend()`/`resume()` on `visibilitychange`.
 

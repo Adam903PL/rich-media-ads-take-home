@@ -40,8 +40,11 @@ function buildEntrance(endcard, addBeats) {
     .from(findAll(endcard, '.endcard-button'), { autoAlpha: 0, scale: 0.6, duration: 0.5, ease: 'back.out(2)', stagger: 0.15 }, 1.25);
 }
 
-function buildFailEntrance(endcard) {
+// `onCue` marks the moment for the endcard's sound: the sad poo starting to drop, and
+// the confetti bursting.
+function buildFailEntrance(endcard, onCue) {
   return buildEntrance(endcard, (timeline) => timeline
+    .call(onCue, ['fail'], 0.45)
     .from(find(endcard, '.endcard-poo'), { ...POO_DROP }, 0.45)
     .from(findAll(endcard, '.bacterium'), {
       autoAlpha: 0,
@@ -53,20 +56,21 @@ function buildFailEntrance(endcard) {
     }, 0.55));
 }
 
-function buildWinEntrance(endcard) {
+function buildWinEntrance(endcard, onCue) {
   return buildEntrance(endcard, (timeline) => timeline
+    .call(onCue, ['win'], 0.35)
     .from(find(endcard, '.confetti'), { autoAlpha: 0, scale: 0.4, rotation: -12, duration: 0.9, ease: 'back.out(1.4)' }, 0.35)
     .from(find(endcard, '.endcard-poo'), { ...POO_DROP }, 0.6));
 }
 
 // `show('fail' | 'win')` plays that endcard's entrance after a short hold, or jumps to
-// its end with reduced motion. `hide()` returns both to their hidden start, so nothing
-// keeps running into the next run.
-export function setupEndcards(stage, { onReplay }) {
+// its end with reduced motion; the sound cue fires either way. `hide()` returns both to
+// their hidden start without firing cues, so nothing keeps running into the next run.
+export function setupEndcards(stage, { onReplay, onCue }) {
   const failCard = find(stage, '#endcard-fail');
   const entrances = {
-    fail: buildFailEntrance(failCard),
-    win: buildWinEntrance(find(stage, '#endcard-win')),
+    fail: buildFailEntrance(failCard, onCue),
+    win: buildWinEntrance(find(stage, '#endcard-win'), onCue),
   };
   let hold = null;
 
@@ -78,7 +82,7 @@ export function setupEndcards(stage, { onReplay }) {
       const entrance = entrances[outcome];
       hold = gsap.delayedCall(HOLD_SECONDS[outcome], () => {
         if (reducedMotion.matches) {
-          entrance.progress(1);
+          entrance.progress(1, false);
         } else {
           entrance.play(0);
         }
@@ -87,7 +91,7 @@ export function setupEndcards(stage, { onReplay }) {
     hide() {
       hold?.kill();
       hold = null;
-      Object.values(entrances).forEach((entrance) => entrance.pause(0));
+      Object.values(entrances).forEach((entrance) => entrance.pause(0, true));
     },
   };
 }
