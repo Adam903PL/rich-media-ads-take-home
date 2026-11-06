@@ -25,7 +25,7 @@ Effort: planned hours / actual hours.
 - [x] **A7 Polish** — intro animation with a tapping hand, `prefers-reduced-motion`; the "get ready" glide already exists (D-009); the stage is revealed only once the game listens (`?debug=1` gap, ai-log #14). Speed ramp cut (cut list #1): the D-010 layout already ramps (D-017) `[0.5–1 h / ~0.5 h]`
 - [x] **A8 Compression & weight** — effects re-encoded (D-018), PNGs recompressed losslessly (D-019); 2.03 → 1.44 MB `[0.5 h / ~0.5 h]`
 
-## Stage B — Variant B, Fireplace (~5–6 h) · in progress · [log](../../../docs/stages/B-fireplace.md)
+## Stage B — Variant B, Fireplace (~5–6 h) · done · [log](../../../docs/stages/B-fireplace.md)
 
 - [x] **B1 Background & asset prep** — crops of `bg-big.jpg` with room for a zoom around one point (D-020), `tRNS` fix (D-021) `[1 h / ~1 h]`
 - [x] **B2 Static parts** — `top`/`left`/`right.html` matching the measured layout (D-022, D-023), `?overlay=1` design overlay `[1.5 h / ~1 h]`
@@ -33,7 +33,7 @@ Effort: planned hours / actual hours.
 - [x] **B4 Intro timelines** — 3.5 s on shared beats, moss settling from 1.08 around the fireplace centre, masked line-by-line headline, CTA last (D-025) `[1.5 h / ~1.25 h]`
 - [x] **B5 Sync** — `postMessage` ready / hold / start on a shared clock, intros within 0–4 ms; standalone start at once or after 300 ms in a silent frame (D-026) `[0.5 h / ~0.5 h]`
 - [x] **B6 Idle & a11y** — moss breath to 1.025 and five CTA pulses, all at rest at 25.5 s; whole-part button clickout with keyboard and label (D-027) `[0.5 h / ~0.5 h]`
-- [ ] **B7 Compression & performance** — weight per part, only `transform`/`opacity` animated `[0.5 h]`
+- [x] **B7 Compression & performance** — PNGs recompressed losslessly (D-028); 1.65 MB as three packages, 1.48 MB counted once (D-029); trace: no layout or paint per frame `[0.5 h / ~0.75 h]`
 
 ## Stage F — Final (~2 h)
 

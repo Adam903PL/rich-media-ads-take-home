@@ -34,7 +34,7 @@
   | PNG structure (`tools/audit/pngchunks.mjs`) | ✅ `IHDR PLTE tRNS IDAT IEND`, index 0 at alpha 0 |
   | PNG pixels vs `HEAD`, decoded independently | ✅ RGB identical; alpha 0 exactly on the formerly black pixels and 255 elsewhere (CTA: 168 corner pixels) |
   | All layers composited at their audit positions | ✅ no black areas; the moss runs on across the gaps ([preview](../img/b1-fireplace.jpg)) |
-  | Weight (`variant-b-fireplace/assets`, the shipped folder so far) | ✅ 3 638 520 → **1 468 146 B** (1.40 MB, 49% of 3 MB) |
+  | Weight (`variant-b-fireplace/assets`, the shipped folder so far) | ✅ 3 638 520 → **1 468 146 B** (1.40 MB, 47% of 3 MB) |
 
   The browser rendering is checked in B2, when the parts exist.
 - **Standards checklist:** all items passed.
@@ -68,7 +68,7 @@
   | CTA corners at DPR 2 | ✅ smooth anti-aliased curve, no steps and no black |
   | Preload failure (routed 404 on `left/logo.png`) | ✅ `Fireplace left: failed to load assets/left/logo.png`; the stage stays `visibility: hidden` |
   | Console and network | ✅ no messages; only files under `variant-b-fireplace/`; no request for `debug.js` or `design/` without the flag |
-  | Weight (`variant-b-fireplace` without `design/`) | ✅ 1 473 443 B (1.41 MB, 49% of 3 MB): assets 1 468 146 B, HTML / CSS / JS 5 297 B |
+  | Weight (`variant-b-fireplace` without `design/`) | ✅ 1 473 443 B (1.41 MB, 47% of 3 MB): assets 1 468 146 B, HTML / CSS / JS 5 297 B |
 
   The three parts side by side: [b2-parts.jpg](../img/b2-parts.jpg).
 - **Standards checklist:** all items passed.
@@ -137,7 +137,7 @@
   | Hidden page | ✅ the intro holds at 0.549 s for 0.8 s; after the page is shown again it continues (+0.216 s in 200 ms), no jump |
   | Smoothness in the preview (headless, orientation only) | ✅ 3.5 s of the intro without a frame over 20 ms (longest 13.2 ms) |
   | Console and network | ✅ no messages; only local files, now including `vendor/gsap.min.js` |
-  | Weight (the shipped parts: `variant-b-fireplace` without `design/` and the preview files) | ✅ 1 552 278 B (1.48 MB, 52% of 3 MB) |
+  | Weight (the shipped parts: `variant-b-fireplace` without `design/` and the preview files) | ✅ 1 552 278 B (1.48 MB, 49% of 3 MB) |
 
   Filmstrip at 0, 0.4, 0.8, 1.2, 1.6, 2.0, 2.4 and 3.5 s, read left to right and top to bottom: [b4-intro.jpg](../img/b4-intro.jpg). The parts still start on their own after their own preload; B5 adds the shared start.
 - **Manual check left for the user:** the timing and the feel of the intro on a real laptop (F2).
@@ -166,7 +166,7 @@
   | Part hidden for 1 s while waiting for a start 2 s ahead | ✅ started 1 014 ms after the start time, at intro time 0, so no jump |
   | Reduced motion, standalone and in the preview | ✅ end state at once, no `ready` sent |
   | Console and network | ✅ no messages; only local files |
-  | Weight (the shipped parts) | ✅ 1 554 778 B (1.48 MB, 52% of 3 MB) |
+  | Weight (the shipped parts) | ✅ 1 554 778 B (1.48 MB, 49% of 3 MB) |
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #25.
 
@@ -196,7 +196,68 @@
   | Clickout with `window.open` stubbed in every frame | ✅ clicks at corners, the middle and the CTA of every part open `https://example.com/landing` with `_blank`; a `window.clickTag` set after load is used on the next click; in the preview each frame opens it, and a click on the empty website area opens nothing |
   | Keyboard and name | ✅ Tab focuses the button with the visible ring; Enter and Space open it; `getByRole('button', { name })` finds it by its label |
   | Console and network | ✅ no messages; only local files |
-  | Weight (the shipped parts) | ✅ 1 557 312 B (1.49 MB, 52% of 3 MB) |
+  | Weight (the shipped parts) | ✅ 1 557 312 B (1.49 MB, 50% of 3 MB) |
 - **Manual check left for the user:** whether the breath and the pulses feel calm enough next to real website content (F2).
 - **Standards checklist:** all items passed.
 - **AI:** no corrections in this step.
+
+## B7 Compression & performance
+- **Status:** ✅ done; Stage B is complete.
+- **Commits:** `chore: recompress variant B PNGs losslessly`, `chore: add a package weight report`
+- **Time:** 0.5 h planned / ~0.75 h actual
+- **What was done:**
+  - **PNGs (D-028):** `top/hl.png` and both logos re-encoded losslessly with the D-019 method, and the `pHYs` chunk that `ffmpeg` adds stripped: 220 634 → 216 667 B. The pixels are identical to `HEAD` (RGBA `framemd5`) and the dimensions are unchanged. The palette PNGs do not shrink and stay as they are.
+  - **`tools/audit/weight.mjs`:** lists what each page loads statically, follows the static ES imports, and reports each package, their sum, every file once, and the files no page loads.
+  - **Weight (D-029):** measured both ways, as in the table below.
+  - **Rendering:** measured with a Chrome trace in the preview, with no code change needed.
+- **Decisions:** D-028 (PNG recompression), D-029 (Variant B weight).
+- **Weight** (`node tools/audit/weight.mjs variant-b-fireplace/top.html variant-b-fireplace/left.html variant-b-fireplace/right.html`):
+
+  | Package | Files | Weight |
+  |---|---|---|
+  | top | 12 | 713 440 B (0.68 MB) |
+  | left | 15 | 517 091 B (0.49 MB) |
+  | right | 15 | 495 791 B (0.47 MB) |
+  | **All three packages** | | **1 726 322 B (1.65 MB), 55% of 3 MB** |
+  | Every file once | | 1 553 059 B (1.48 MB) |
+  | Not loaded by any part (review tools) | 4 | `preview.html`, `css/preview.css`, `js/preview.js`, `js/debug.js`: 4 164 B |
+
+- **Rendering** (Chrome trace over 4 s of the intro and 4 s of the idle phase, in the preview at 1920×1080):
+
+  | | Intro | Intro, CPU 4× slower | Idle | Idle, CPU 4× slower |
+  |---|---|---|---|---|
+  | `Layout` | 13 events, 0.48 ms in all | 13, 3.05 ms | 0 | 0 |
+  | `Paint` | 43 events, 3.68 ms | 42, 18.0 ms | 7, 0.38 ms | 7, 1.01 ms |
+  | Style recalculation | 917 events, 40.4 ms | 1 023, 204 ms | 562, 31.7 ms | 551, 107 ms |
+  | Frames over 20 ms / over 34 ms | 7 / 0 (longest 21.2 ms) | 1 / 0 | 0 / 0 (longest 8.6 ms) | 0 / 0 |
+
+  - **Layout and paint run only when an element first appears,** never every frame. They come in four clusters, at the logos, the copy, the headline swap and the CTAs, when `autoAlpha` switches `visibility`; each layout takes at most 0.09 ms.
+  - **Every other frame only recalculates style** for the inline `transform` and `opacity` that GSAP writes.
+  - The longer frames are a steady ~20.8 ms, three refreshes of the headless browser's 144 Hz; on a 60 Hz display that is one frame.
+- **Verification:**
+
+  | Check | Result |
+  |---|---|
+  | PNG pixels vs `HEAD`, decoded independently | ✅ identical |
+  | PNG structure | ✅ IHDR / IDAT / IEND only (`pngchunks.mjs`) |
+  | `weight.mjs` vs `wc -c` | ✅ every file once plus the unloaded files equals the folder without `design/` |
+  | `weight.mjs` error paths | ✅ a missing page and an empty call fail with a message |
+  | Only `transform` and `opacity` animated | ✅ inline styles (B4) and the trace: no layout or paint while elements move |
+  | Regression | ✅ intro, shared start, idle phase and clickout as before; console clean; only local requests |
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #26 and #27.
+
+## Stage summary
+- Stage B is complete: 10 commits (B1–B7), ~5.75 h against 5–6 h planned.
+- **The fireplace:**
+  - three standalone parts on one continuous moss surface cut from `bg-big.jpg` (D-020);
+  - a 3.5 s intro on shared beats, started together in the preview (D-025, D-026);
+  - a calm phase at rest by 25.5 s, a whole-part clickout (D-027);
+  - 1.65 MB as three packages (D-029).
+- **Open for Stage F:**
+  - Q1–Q3 are still unanswered; the defaults are built.
+  - F2 checks on a real laptop:
+    - the feel of the intro and the idle motion;
+    - the bottom-edge row the headless browser draws (B3);
+    - the moss after the scale animation (B4).
+  - F3: `docs/task-brief.md` follows the updated upstream brief.

@@ -12,7 +12,7 @@ Measured on 2026-11-04, before writing any ad code. Tools: `ffprobe`/`ffmpeg` (d
 |---|---|---|
 | `variant-a-game/assets` | 2.02 MB | audio is 1.37 MB of it; 0.81 MB after the A8 re-encode (D-018). PNGs 640 055 → 574 516 B after the lossless A8 recompression (D-019) |
 | `variant-a-game/design` | 0.59 MB | reference only, not shipped |
-| `variant-b-fireplace/assets` | 3.64 MB | includes both background options; a build ships only one. 1 468 094 B after B1: the four delivered backgrounds (3 406 018 B) are replaced by three crops of `bg-big.jpg` (1 235 592 B, D-020, §3.5) |
+| `variant-b-fireplace/assets` | 3.64 MB | includes both background options; a build ships only one. 1 468 094 B after B1: the four delivered backgrounds (3 406 018 B) are replaced by three crops of `bg-big.jpg` (1 235 592 B, D-020, §3.5). 1 464 141 B after B7: `top/hl.png` and the logos recompressed losslessly (D-028) |
 | `variant-b-fireplace/design` | 1.77 MB | reference only, not shipped |
 
 Largest single files: `bg-big.jpg` 1.995 MB, `applause.mp3` 602 KB, `top/bg.jpg` 556 KB, `Funny Game Loop.mp3` 463 KB, `right/bg.jpg` 455 KB, `left/bg.jpg` 400 KB, `gameplay.png` 268 KB, `top/hl.png` 195 KB.

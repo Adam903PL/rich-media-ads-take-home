@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1), its three part documents (B2), the preview page (B3), the intro (B4), the shared start (B5) and the idle motion with the clickout (B6); compression and performance (B7) are **planned**. Update this document as each stage lands.
+> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1), its three part documents (B2), the preview page (B3), the intro (B4), the shared start (B5), the idle motion with the clickout (B6), and compression with a performance check (B7): Variant B is **complete**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -159,7 +159,10 @@ The repository holds two independent deliverables. Each variant folder (minus it
 - Static files. The shippable unit is a variant folder without `design/`.
 - Every ad stays under 3 MB:
   - Variant A: one ad.
-  - Variant B: all three parts together (D-004).
+  - Variant B: all three parts together (D-004). Delivered as three separate ads, each part is its own package (D-022, D-029):
+    - the part's HTML, `css/style.css`, the statically imported modules (`main`, `intro`, `idle`, `clickout`, `sync`, `motion`, `dom`), `vendor/gsap.min.js` and its assets (top: its crop and headline; left / right: crop, logo, copy, `box.png`, `cta.png`);
+    - not shipped: `design/`, `preview.html` with `css/preview.css` and `js/preview.js`, and `js/debug.js` (review tools);
+    - `tools/audit/weight.mjs` lists each package and its weight.
 - Originals are committed unmodified; optimised assets replace them in separate commits.
 - All positions come from [docs/asset-audit.md](../../../docs/asset-audit.md).
 
