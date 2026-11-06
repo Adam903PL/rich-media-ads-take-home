@@ -143,3 +143,29 @@
 - **Manual check left for the user:** the timing and the feel of the intro on a real laptop (F2).
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #24.
+
+## B5 Sync
+- **Status:** ✅ done
+- **Commit:** `feat: start the variant B parts together`
+- **Time:** 0.5 h planned / ~0.5 h actual
+- **What was done:**
+  - **`js/sync.js`**, shared by the parts and the preview and free of GSAP (the preview does not load it): message types, `sharedNow()` (`performance.timeOrigin + performance.now()`), and `waitForStart(part)`. It resolves at once for a top-level page; in a frame it posts `fireplace:ready` and resolves with the preview's start time, or on its own after 300 ms without an answer.
+  - **`js/main.js`:** with reduced motion the intro jumps to its end before the reveal and nothing is sent. Otherwise the reveal comes first, then `playAt()`: `gsap.delayedCall` until the shared start time, or a late start that far into the intro.
+  - **`js/preview.js`:** `startPartsTogether()` answers each `ready` from its own frames with `hold` and, once all three are ready, sends them one `start` time 150 ms ahead. It fails fast if the three frames are missing.
+- **Decisions:** D-026 (shared start).
+- **Verification:** Playwright MCP against `npx serve`. An init script logged every message in every frame.
+
+  | Check | Result |
+  |---|---|
+  | Preview, 6 loads (a fresh context, then 5 reloads) | ✅ every time all three parts got `hold` then `start` and none started on its own; the start time arrived 149–150 ms ahead; the intros ran within **0–4 ms** of each other |
+  | Live frame 0.4 s into the shared start, nothing paused | ✅ the moss is one surface across the parts during the zoom; logos and the first headline line come in together ([b5-live.jpg](../img/b5-live.jpg)) |
+  | Part as a top-level page | ✅ playing at the reveal |
+  | Part in a frame whose parent never answers | ✅ starts on its own 306 ms after its `ready` |
+  | A fake `start` posted from inside the part | ✅ ignored: the part still started on its own (310 ms) instead of waiting 5 s |
+  | Fake `ready` messages posted by the preview window itself | ✅ ignored: no message reached any part |
+  | Part hidden for 1 s while waiting for a start 2 s ahead | ✅ started 1 014 ms after the start time, at intro time 0, so no jump |
+  | Reduced motion, standalone and in the preview | ✅ end state at once, no `ready` sent |
+  | Console and network | ✅ no messages; only local files |
+  | Weight (the shipped parts) | ✅ 1 554 778 B (1.48 MB, 52% of 3 MB) |
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #25.

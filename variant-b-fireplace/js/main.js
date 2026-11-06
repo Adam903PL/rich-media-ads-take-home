@@ -1,6 +1,7 @@
 // Shared entry of the three fireplace parts (top, left, right); #stage names its part.
 import { setupIntro } from './intro.js';
 import { gsap, reducedMotion } from './motion.js';
+import { sharedNow, waitForStart } from './sync.js';
 
 const PARTS = ['top', 'left', 'right'];
 
@@ -29,17 +30,18 @@ if (new URLSearchParams(location.search).get('overlay') === '1') {
   showDesignOverlay(stage);
 }
 
-// Built before the reveal, so the stage first appears at the intro's first frame.
-const intro = setupIntro(stage, part);
-stage.classList.add('is-ready');
-
-if (reducedMotion.matches) {
-  intro.progress(1, true);
-} else {
-  intro.play();
+// Starts the intro at the shared start time, or at once without one. A part that gets
+// the time late starts that much into the intro, so the parts stay on the same moment.
+function playAt(intro, startAt) {
+  const waitSeconds = startAt === undefined ? 0 : (startAt - sharedNow()) / 1000;
+  if (waitSeconds > 0) {
+    gsap.delayedCall(waitSeconds, () => intro.play(0));
+  } else {
+    intro.play(-waitSeconds);
+  }
 }
 
-// Animations pause with the page.
+// Animations, and a start still waiting for its time, pause with the page.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     gsap.globalTimeline.pause();
@@ -47,3 +49,15 @@ document.addEventListener('visibilitychange', () => {
     gsap.globalTimeline.resume();
   }
 });
+
+// Built before the reveal, so the stage first appears at the intro's first frame. With
+// reduced motion it appears at the last one, and there is nothing to start together.
+const intro = setupIntro(stage, part);
+
+if (reducedMotion.matches) {
+  intro.progress(1, true);
+  stage.classList.add('is-ready');
+} else {
+  stage.classList.add('is-ready');
+  playAt(intro, await waitForStart(part));
+}

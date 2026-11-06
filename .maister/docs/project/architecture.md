@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1) and its three part documents (B2), the preview page (B3) and the intro (B4); the shared start, the idle loop and the clickout are **planned**. Update this document as each stage lands.
+> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1), its three part documents (B2), the preview page (B3), the intro (B4) and the shared start (B5); the idle loop and the clickout are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -96,7 +96,7 @@ The repository holds two independent deliverables. Each variant folder (minus it
   - The static markup is the end state of the intro, which animates towards it with `gsap.from`.
   - `transform-origin`: the background at the fireplace centre in the crop's own coordinates (D-020), the logo at the centre of its artwork (160.25, 125), the panel at its bottom edge (160, 913.5).
 - **Startup (present, B2, B4):** `js/main.js` checks `#stage` and its part, decodes every `<img>` (a failed file throws `Fireplace <part>: failed to load <src>` and the stage stays hidden), loads `js/debug.js` only for `?overlay=1`, builds the paused intro (its first frame renders at once), adds `.is-ready`, which reveals the stage, and then plays the intro, or jumps to its end with `prefers-reduced-motion: reduce`. A `visibilitychange` listener pauses and resumes `gsap.globalTimeline`.
-- **Intro (present, B4, D-025):** 3.5 s on beats shared by all parts — background fade and settle 1.08 → 1 (0–3.5 s), headline lines (0.35 / 0.70 / 1.05 s, then the copies give way to the full image at 1.65 s), logo (0.45 s), panel (1.2 s), copy (1.6 s), CTA (2.2 s). Each part starts on its own after its preload; a shared start is B5.
+- **Intro (present, B4, D-025):** 3.5 s on beats shared by all parts — background fade and settle 1.08 → 1 (0–3.5 s), headline lines (0.35 / 0.70 / 1.05 s, then the copies give way to the full image at 1.65 s), logo (0.45 s), panel (1.2 s), copy (1.6 s), CTA (2.2 s). In the preview the three parts start together (B5, below).
 - **Modules:**
 
   | Module | Responsibility |
@@ -106,7 +106,8 @@ The repository holds two independent deliverables. Each variant folder (minus it
   | `motion.js` | the vendored global `gsap`, checked once, and the `prefers-reduced-motion` query (present, B4) |
   | `dom.js` | `find` / `findAll` lookups that throw with the missing selector (present, B4) |
   | `debug.js` | `?overlay=1`: `design/layout.png` at 50% over the part, scaled by 1 / 0.973 and shifted by the part's position in the fireplace (present); also used by the preview for the whole fireplace |
-  | `preview.js` | preview page only: fits the fireplace to the window and handles its `?overlay=1` (present, B3) |
+  | `preview.js` | preview page only: fits the fireplace to the window, starts the parts together and handles its `?overlay=1` (present, B3, B5) |
+  | `sync.js` | shared start (D-026): message types, the shared clock, `waitForStart(part)`; used by the parts and the preview, without GSAP (present, B5) |
 - **Preview (present, B3, D-024):**
   - `#fireplace` (1680×975) holds three iframes at x 0, 324 and 1360 on the layout's background `#282828`; the website area in the middle stays empty.
   - `preview.js` scales `#fireplace` as a whole with `min(1, W / 1680, H / 975)` from a `ResizeObserver` on the root, with whole-pixel offsets, so at full size the parts render exactly as on their own.
@@ -131,11 +132,14 @@ The repository holds two independent deliverables. Each variant folder (minus it
      - `fail` fades the music, plays the crash and shows the fail endcard;
      - `win` fades the music and shows the win endcard.
   5. A cue in each endcard timeline plays its sound: fail when the sad poo drops, cheer and applause when the confetti bursts.
-- **Variant B:**
-  1. Each iframe posts `ready`.
-  2. `preview.html` posts `start` with a shared start time to all three.
-  3. Each part plays its timeline.
-  4. A part opened on its own starts by itself after a short timeout.
+- **Variant B (present, B5, D-026):**
+  1. Each part preloads, builds its intro at the first frame and reveals the stage.
+  2. In a frame, it posts `fireplace:ready` to its parent (`targetOrigin '*'`).
+  3. `preview.html` answers `fireplace:hold` at once; once all three are ready, it posts `fireplace:start` with `startAt` = shared clock (`performance.timeOrigin + performance.now()`) + 150 ms to all three.
+  4. Each part waits for `startAt` with `gsap.delayedCall` (held while the page is hidden), then plays its intro; a late part starts that far into it.
+  5. Without a partner a part starts on its own: at once as a top-level page, after 300 ms in a frame that does not answer (an ad server's).
+  6. With reduced motion a part shows its end state at once and sends nothing.
+  7. Parts accept messages only from their parent; the preview only from its own frames and origin.
 
 ## External Integrations
 - `window.clickTag`, provided by the ad server. Fallback: `https://example.com/landing`, opened in a new window.
