@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A stage and scaling are **present** (A1). Everything else is **planned**. Update this document as each stage lands.
+> Status: Variant A is **present** up to A5 (stage, start screen, game loop, obstacles, collision, endcards, replay). Audio (A6), polish (A7) and all of Variant B are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -16,7 +16,7 @@ The repository holds two independent deliverables. Each variant folder (minus it
 - **Stage (present, D-005):**
   - `#ad` is a fixed `100dvh` root; `#stage` is a 360×640 CSS px logical stage, centred.
   - `main.js` scales the stage with `min(W / 360, H / 640)` from a `ResizeObserver` on the root, so toolbar changes rescale it live. Strips under 1 px are closed by covering.
-  - `::before` / `::after` caps continue the stage's edge colours into the spare strips (white above, `#D89C95` below; navy for endcards from A5). They overlap the stage by 1 px to hide anti-aliased edges.
+  - `::before` / `::after` caps continue the stage's edge colours into the spare strips (white above, `#D89C95` below). They overlap the stage by 1 px to hide anti-aliased edges. Endcards reuse the same rule with a navy bottom cap (A5).
   - Landscape shows the portrait stage centred, with navy sides.
 - **Layers, bottom → top (present, A2):** all DOM `<img>`; renderer decision D-006.
   1. `bg.jpg`, full frame. Above the scene clip it also forms the navy headline band.
@@ -28,24 +28,29 @@ The repository holds two independent deliverables. Each variant folder (minus it
   3. `border.png`, `tut.png` (headline), `logo.png`, full frame.
   4. `.player` at (55.5, 258.5), above the clouds so it is always visible. Moves with `translateY` from A3.
   5. `.gesture` at (147.5, 452).
-  6. Later overlays: endcards (A5), mute button (A6). `?overlay=1` adds the design overlay on top.
+  6. `.endcard` sections `#endcard-fail` and `#endcard-win` (present, A5, D-013), hidden until shown:
+     - z-index 2, so they cover the stage and its caps;
+     - full-frame layers in the audit's order, plus their own `logo.png` and a navy bottom cap;
+     - CTA and replay are `<button>`s at the measured positions.
+  7. Later: mute button (A6). `?overlay=1` adds the design overlay on top.
 - **Startup (present):**
   1. `main.js` fits the stage and adds the obstacle images.
   2. It awaits `preloadImages()`: every `<img>` must decode, otherwise it throws with the file names.
   3. It sizes the obstacles from their images and builds the collision masks: the player's eroded by 2 px (D-011).
-  4. It adds `.is-ready`, which reveals the stage.
-  5. It loads `debug.js` only for `?overlay=1` / `?debug=1`.
-  6. It calls `startGame()`.
+  4. It builds the endcard timelines with `setupEndcards()`; missing markup or a missing GSAP stops the start here.
+  5. It adds `.is-ready`, which reveals the stage.
+  6. It loads `debug.js` only for `?overlay=1` / `?debug=1`.
+  7. It starts the first run with `startGame()`.
 - **Planned modules:**
 
   | Module | Responsibility |
   |---|---|
-  | `main.js` | bootstrap, scaling, image preload (present) |
-  | `game.js` | state machine `start → ready → playing → fail \| win` mirrored to `data-state` on `#ad`, physics, input, pause (present) |
+  | `main.js` | bootstrap, scaling, image preload, run ownership and replay, GSAP pause when hidden (present) |
+  | `game.js` | one run per `startGame()`: state machine `start → ready → playing → fail \| win` mirrored to `data-state` on `#ad`, physics, input, pause, `onEnd`, `destroy()` (present) |
   | `level.js` | obstacle layout `{ id, x, y }`, every obstacle exactly once; checked by `tools/audit/level-check.mjs` (present) |
   | `collision.js` | `createMask`, `erodeMask`, `masksOverlap` on the 2x pixel grid; also used by `tools/audit/cloud-limits.mjs` (present) |
   | `audio.js` | Web Audio: gains, mute, suspend / resume |
-  | `endcards.js` | GSAP timelines |
+  | `endcards.js` | fail and win entrance timelines (built once, rewound on replay), hold before the entrance, reduced motion, clickTag, replay button (present) |
   | `debug.js` | dev aids loaded on demand: `?overlay=1` design overlay, `?debug=1` collision masks, boxes and cloud limits drawn through `startGame({ onFrame })` (present) |
 
 - **Loop (present, A3):**
@@ -58,7 +63,12 @@ The repository holds two independent deliverables. Each variant folder (minus it
   - Collision per frame: obstacles behind the player are counted as passed. Only those within the player's width are tested: boxes first, then pixels.
   - Input: `pointerdown` on `#ad` (`touch-action: none`), Space and ArrowUp without key repeat.
   - Paused on `visibilitychange` and resumed with a reset frame clock.
-  - On replay (A5), all timers, listeners and audio sources are torn down and rebuilt. `startGame()` keeps every handle in one run object for that.
+- **Replay (present, A5, D-013):**
+  1. `main.js` calls `game.destroy()`, which aborts the run's listeners through one `AbortController` and cancels its frame.
+  2. `endcards.hide()` kills the pending hold and rewinds both entrance timelines.
+  3. A new `startGame()` sets `start` and renders zero transforms, so the start screen returns.
+  - The obstacle images and the collision masks are built once and reused.
+  - Audio sources join this teardown in A6.
 
 ### Variant B — Fireplace Ad (`variant-b-fireplace/`)
 - **Documents:**
@@ -79,8 +89,8 @@ The repository holds two independent deliverables. Each variant folder (minus it
 - **Variant A:**
   1. `pointerdown` changes the game state.
   2. Physics updates the player and the scroll.
-  3. The canvas is rendered.
-  4. State transitions fire audio cues and endcard timelines.
+  3. The track and player `transform`s are written (D-006).
+  4. The end of a run calls `onEnd`, which shows the endcard. Audio cues are added in A6.
 - **Variant B:**
   1. Each iframe posts `ready`.
   2. `preview.html` posts `start` with a shared start time to all three.

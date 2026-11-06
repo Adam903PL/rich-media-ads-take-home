@@ -1,4 +1,5 @@
 import { createMask, erodeMask } from './collision.js';
+import { setupEndcards } from './endcards.js';
 import { COLLISION_TOLERANCE, startGame } from './game.js';
 import { OBSTACLES, obstacleSource } from './level.js';
 
@@ -78,6 +79,7 @@ const obstacleImages = addObstacleImages(track);
 await preloadImages([...stage.querySelectorAll('img')]);
 const obstacles = prepareObstacles(obstacleImages);
 const playerMask = erodeMask(createMask(player), COLLISION_TOLERANCE);
+const endcards = setupEndcards(stage, { onReplay: replay });
 stage.classList.add('is-ready');
 
 const params = new URLSearchParams(location.search);
@@ -87,4 +89,26 @@ if (params.get('overlay') === '1') {
 }
 const onFrame = params.get('debug') === '1' ? debug.showHitboxes(stage, { obstacles, playerMask }) : undefined;
 
-startGame({ root, track, player, playerMask, obstacles, onFrame });
+let game = null;
+
+function startRun() {
+  game = startGame({ root, track, player, playerMask, obstacles, onEnd: endcards.show, onFrame });
+}
+
+// The previous run is torn down completely before the next one starts on the start screen.
+function replay() {
+  game.destroy();
+  endcards.hide();
+  startRun();
+}
+
+// `gsap` is the global from vendor/gsap.min.js (D-012); its animations pause with the page.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    gsap.globalTimeline.pause();
+  } else {
+    gsap.globalTimeline.resume();
+  }
+});
+
+startRun();

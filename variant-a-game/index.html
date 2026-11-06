@@ -22,8 +22,38 @@
       <img class="layer" src="assets/logo.png" width="360" height="640" alt="Logo" draggable="false">
       <img class="sprite player" src="assets/01_game/player.png" alt="" draggable="false">
       <img class="sprite gesture" src="assets/gesture.png" alt="tab to run" draggable="false">
+
+      <section class="endcard" id="endcard-fail">
+        <img class="layer endcard-bubble fail-bubble" src="assets/02_endcard/fail/bubble.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer bacterium fail-bac1" src="assets/02_endcard/fail/bac1.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer bacterium fail-bac2" src="assets/02_endcard/fail/bac2.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer bacterium fail-bac3" src="assets/02_endcard/fail/bac3.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer bacterium fail-bac4" src="assets/02_endcard/fail/bac4.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer bacterium fail-bac5" src="assets/02_endcard/fail/bac5.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer endcard-poo" src="assets/02_endcard/fail/sad.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer endcard-headline" src="assets/02_endcard/fail/hl.png" width="360" height="640" alt="Poo, das tat weh! Erfahre jetzt, was deinem Darm guttut." draggable="false">
+        <img class="layer" src="assets/logo.png" width="360" height="640" alt="Logo" draggable="false">
+        <button class="endcard-button endcard-cta fail-cta" type="button">
+          <img src="assets/02_endcard/fail/cta.png" alt="Jetzt informieren!" draggable="false">
+        </button>
+        <button class="endcard-button endcard-replay fail-replay" type="button">
+          <img src="assets/02_endcard/fail/replay.png" alt="Nochmal spielen" draggable="false">
+        </button>
+      </section>
+
+      <section class="endcard" id="endcard-win">
+        <img class="layer endcard-bubble win-bubble" src="assets/02_endcard/win/bubble.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer confetti" src="assets/02_endcard/win/konfetti.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer endcard-poo" src="assets/02_endcard/win/happy.png" width="360" height="640" alt="" draggable="false">
+        <img class="layer endcard-headline" src="assets/02_endcard/win/hl.png" width="360" height="640" alt="Poo, tut das gut! Wenn du weißt, was dein Darm braucht." draggable="false">
+        <img class="layer" src="assets/logo.png" width="360" height="640" alt="Logo" draggable="false">
+        <button class="endcard-button endcard-cta win-cta" type="button">
+          <img src="assets/02_endcard/win/cta.png" alt="Jetzt mehr erfahren" draggable="false">
+        </button>
+      </section>
     </div>
   </div>
+  <script defer src="vendor/gsap.min.js"></script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

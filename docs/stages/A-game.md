@@ -145,3 +145,60 @@
 - **Manual check left for the user:** whether the two gates and the finale feel fair on a real phone.
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #10–#12.
+
+## A5 Endcards
+- **Status:** ✅ done
+- **Commits:** `chore: vendor GSAP 3.15.0 for variant A`, `feat: add variant A endcards and clean replay`
+- **Time:** 1 h planned / ~1.5 h actual
+- **What was done:**
+  - **GSAP:** `vendor/gsap.min.js` 3.15.0, copied unchanged from the npm tarball after checking its sha512 against the registry. Loaded by a `defer` script before the modules (D-012).
+  - **Markup:** `#endcard-fail` and `#endcard-win` in `index.html`, with the layers in the audit's order and the buttons at their measured positions (audit §2.3). Their images go through the existing preload.
+  - **Covering the game:** each endcard sits above the stage and its caps (z-index 2). It has its own `logo.png` and a navy bottom cap (`--bleed-bottom`), reusing the stage's cap rule.
+  - **`js/endcards.js`:**
+    - one paused entrance timeline per endcard, built at startup, so a missing element stops the start;
+    - `show()` holds the crash or finish for 0.6 s / 0.4 s, then plays the entrance, or jumps to its end with `prefers-reduced-motion: reduce`;
+    - `hide()` kills the hold and rewinds both timelines;
+    - CTAs open `window.clickTag`, read at click time; replay calls back into `main.js`.
+  - **`game.js`:**
+    - `startGame()` returns `destroy()`: one `AbortController` for its three listeners, plus `cancelAnimationFrame`;
+    - every run starts by setting `start` and rendering its zero transforms;
+    - the end of a run goes through `finish()` → `onEnd`;
+    - after the end, keys are left alone, so Space and Enter activate the buttons.
+  - **`main.js`:** `replay()` = `destroy()`, `hide()`, then a new run on the start screen (user's choice). A single `visibilitychange` listener pauses and resumes `gsap.globalTimeline`.
+  - **Entrances:**
+    - fail: backdrop, bubble pop, sad poo dropping with `bounce.out`, bacteria popping in with a stagger, headline, then CTA and replay (1.9 s);
+    - win: the same frame with the confetti layer bursting and the happy poo dropping (1.75 s);
+    - only `autoAlpha`, `y`, `scale` and `rotation` are animated, every tween eased, all with `gsap.from` towards the static layout;
+    - full-frame layers scale around the centre of their bounding box from the audit.
+- **Decisions:** D-012 (loading GSAP), D-013 (endcards and replay).
+- **Deviation from plan:** the plan built each entrance in a per-run `gsap.context()` and reverted it on replay. The timelines are now built once at startup and rewound on replay. Missing markup fails at load instead of at the first fail, and the replay still leaves no active tween.
+- **Findings:**
+  - **The audit's "pixel-identical rebuild" only holds for the graphic layers.**
+    - Composited at 2x, the graphics match the mockups (fail 53.5 dB, win 40.3 dB).
+    - The headline bands score 10.4 / 10.3 dB and the button bands 21.6 / 19.8 dB.
+    - The button PNGs match the mockup only with mean abs diff ≈ 9 at the best position: text spacing and emoji placement differ, and the edges are 1–2 px @2x apart.
+    - As with the headlines, the assets are kept. Added to audit §2.3 and `questions.md` ([ai-log #13](../ai-log.md)).
+  - With `?debug=1`, the stage is revealed before `debug.js` has loaded, so a tap in that moment does not start the game. This existed before A5, affects the debug mode only, and is listed for A7 ([ai-log #14](../ai-log.md)).
+- **Verification:** Playwright MCP against `npx serve`.
+
+  | Check | Result |
+  |---|---|
+  | Start screen unchanged | ✅ 96.1 dB vs the A2 screenshot; 26.26 dB vs `01-start.png` (A2: 26.3) |
+  | Fail endcard, final state vs own layer composite | ✅ 40.2 dB whole; bubble band 53.1, headline 51.1, buttons 32.8 (half-pixel button positions) |
+  | Fail endcard vs `02-fail-endcard.png` | 18.6 dB whole: graphics match, headline and button typesetting differ (see Findings) |
+  | Win via the real game (Playwright-routed `level.js` with obstacles moved off the playfield, hover bot) | ✅ `win` after 14.99 s, track at −2166 px; 41.7 dB vs own composite, graphics 53.3 |
+  | Entrance frames | ✅ [filmstrip](../img/a5-entrance.png): fail top, win bottom, at 0.15, 0.4, 0.7, 1.0, 1.3 and 1.9 s; end states in [a5-endcards.png](../img/a5-endcards.png) |
+  | Replay ×3 (real clicks) | ✅ each time `start`, gesture visible, endcards hidden, transforms 0, 0 active tweens |
+  | Listeners after 3 replays (CDP `getEventListeners`) | ✅ unchanged: `#ad` pointerdown 1, document keydown 1, visibilitychange 2 (run + GSAP) |
+  | No doubled loop | ✅ tap → fail in 1034, 1040, 1037, 1041 ms over 4 runs; jump height 48–51 px in every run |
+  | clickTag | ✅ fallback `https://example.com/landing` with `_blank`; a `window.clickTag` set after load is used on the next click; replay and taps elsewhere open nothing |
+  | Keyboard | ✅ Tab focuses CTA then replay with a visible ring; Enter on CTA clicks out; Space on replay replays; the next Space starts the run |
+  | Reduced motion | ✅ hidden until the 0.6 s hold ends, then the final state at once (72.2 dB vs the animated end) |
+  | Hidden tab | ✅ during the hold: nothing starts while hidden, the remaining hold continues after; mid-entrance: frozen at 0.404 s, +0.104 s 100 ms after resuming |
+  | 320×568, 390×844, 430×932 | ✅ whole endcard visible; bottom strip `#0A1E49` with uniform seam rows; top strip white (one row at 253–254/255) |
+  | Console and network | ✅ no messages; only files under `variant-a-game/`; `gsap.min.js` local; no request for `design/`; `?debug=1` keeps drawing after a replay |
+  | Weight | ✅ 2.019 MB shipped (67% of 3 MB), of which GSAP 72.9 KB |
+  | `node tools/audit/level-check.mjs` | ✅ all D-010 rules pass with the changed `game.js` |
+- **Manual check left for the user:** the hold and entrance timing on a real phone, and tapping the buttons with a thumb.
+- **Standards checklist:** all items passed. The vendored `gsap.min.js` has trailing whitespace in its licence header and is deliberately kept byte-identical to the release.
+- **AI:** ai-log #13 and #14.

@@ -37,11 +37,13 @@ body {
   transform: translate(-50%, -50%) scale(var(--stage-scale, 1));
 }
 
-/* Caps continue the stage's top and bottom edge colours into the spare strips.
-   They overlap the stage by 1px so its anti-aliased edge never lets the
-   layers underneath show through as a hairline. */
+/* Caps continue the top and bottom edge colours of the stage, and of an endcard
+   while it is shown, into the spare strips. They overlap the edge by 1px so its
+   anti-aliasing never lets the layers underneath show through as a hairline. */
 .stage::before,
-.stage::after {
+.stage::after,
+.endcard::before,
+.endcard::after {
   content: '';
   position: absolute;
   left: 0;
@@ -50,12 +52,14 @@ body {
   height: 500px;
 }
 
-.stage::before {
+.stage::before,
+.endcard::before {
   bottom: calc(100% - 1px);
   background: var(--bleed-top);
 }
 
-.stage::after {
+.stage::after,
+.endcard::after {
   top: calc(100% - 1px);
   background: var(--bleed-bottom);
 }
@@ -130,6 +134,73 @@ body {
 .ad:not([data-state="start"]) .gesture {
   visibility: hidden;
 }
+
+/* An endcard covers the whole stage and its caps, and brings its own logo bar.
+   It stays hidden until js/endcards.js plays its entrance. */
+.endcard {
+  --bleed-bottom: var(--navy);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  width: 360px;
+  height: 640px;
+  background: var(--navy);
+  visibility: hidden;
+}
+
+/* Button positions and sizes: docs/asset-audit.md, section 2.3 */
+.endcard-button {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  cursor: pointer;
+}
+
+.endcard-button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.endcard-button:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 3px;
+}
+
+.fail-cta {
+  left: 37px;
+  top: 482.5px;
+  width: 186px;
+  height: 38.5px;
+}
+
+.fail-replay {
+  left: 37.5px;
+  top: 538.5px;
+  width: 185.5px;
+  height: 40.5px;
+}
+
+.win-cta {
+  left: 28px;
+  top: 560px;
+  width: 214px;
+  height: 45.5px;
+}
+
+/* Full-frame layers scale and rotate around the centre of their artwork:
+   content bounding boxes from docs/asset-audit.md, section 2.3. */
+.fail-bubble { transform-origin: 179.5px 235px; }
+.fail-bac1 { transform-origin: 144.25px 133.5px; }
+.fail-bac2 { transform-origin: 258px 215px; }
+.fail-bac3 { transform-origin: 86.75px 230.75px; }
+.fail-bac4 { transform-origin: 94.25px 147.75px; }
+.fail-bac5 { transform-origin: 221.25px 155px; }
+.win-bubble { transform-origin: 179.5px 245px; }
+.confetti { transform-origin: 129px 227px; }
 
 .design-overlay {
   z-index: 2;

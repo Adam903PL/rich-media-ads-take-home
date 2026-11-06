@@ -92,8 +92,18 @@ Most endcard layers are **full-frame 360×640 PNGs with the position baked in**.
 | `cta.png` (cropped) | "Jetzt mehr erfahren" | 214×45.5 at (28, 560) |
 
 **Rebuild check:**
-- Graphic layers composited back together are pixel-identical with `02-fail-endcard.png` and `03-win-endcard.png`.
+- The graphic layers (bubble, bacteria, poo, confetti) composited back together match `02-fail-endcard.png` and `03-win-endcard.png`.
 - The headline PNGs are typeset ~2% wider than the mockups (e.g. fail line 3 ends at x 344 vs ~337.5 in the mockup), so the asset — not the mockup — is the source of truth for copy.
+- The button PNGs are typeset differently from the mockup's buttons too: the text spacing and the emoji placement differ, and the edges are 1–2 px @2x apart. At the positions above, `tools/audit/match.mjs` scores a mean abs diff of ≈ 9 (fail CTA 9.17, replay 8.81, win CTA 9.34). The positions are the best match; the assets are kept.
+- Measured in A5: all endcard layers composited at 2x at the positions above, compared with the mockup band by band (PSNR):
+
+  | Band | Fail | Win |
+  |---|---|---|
+  | Graphics (below the logo bar, above the headline) | 53.5 dB | 40.3 dB |
+  | Headline | 10.4 dB | 10.3 dB |
+  | Buttons | 21.6 dB | 19.8 dB |
+
+  A whole-frame comparison with the mockups is therefore capped at ~18.6 dB, however exact the build is. Builds are checked against a composite of the delivered layers instead.
 
 ### 2.4 Design vs assets — open points
 

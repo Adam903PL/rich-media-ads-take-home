@@ -26,9 +26,12 @@ function easeInOutCubic(progress) {
   return progress < 0.5 ? 4 * progress ** 3 : 1 - (-2 * progress + 2) ** 3 / 2;
 }
 
-// `obstacles` are sorted by x; `onFrame` (debug mode only) receives the frame's view.
-export function startGame({ root, track, player, playerMask, obstacles, onFrame }) {
+// Starts one run on the start screen. `obstacles` are sorted by x; `onEnd` receives
+// 'fail' or 'win'; `onFrame` (debug mode only) receives the frame's view.
+// The returned `destroy()` removes everything the run registered.
+export function startGame({ root, track, player, playerMask, obstacles, onEnd, onFrame }) {
   const playerWidth = playerMask.width / 2;
+  const listeners = new AbortController();
   const run = {
     state: 'start',
     scroll: 0,
@@ -48,6 +51,15 @@ export function startGame({ root, track, player, playerMask, obstacles, onFrame 
 
   function isRunning() {
     return run.state === 'ready' || run.state === 'playing';
+  }
+
+  function hasEnded() {
+    return run.state === 'fail' || run.state === 'win';
+  }
+
+  function finish(state) {
+    setState(state);
+    onEnd(state);
   }
 
   function updateReady(seconds) {
@@ -83,7 +95,7 @@ export function startGame({ root, track, player, playerMask, obstacles, onFrame 
 
   function fail(cause) {
     run.failCause = cause;
-    setState('fail');
+    finish('fail');
   }
 
   function updatePlaying(seconds) {
@@ -101,7 +113,7 @@ export function startGame({ root, track, player, playerMask, obstacles, onFrame 
     if (obstacle) {
       fail(obstacle.id);
     } else if (run.scroll === SCROLL_END && run.passedCount === obstacles.length) {
-      setState('win');
+      finish('win');
     }
   }
 
@@ -151,15 +163,19 @@ export function startGame({ root, track, player, playerMask, obstacles, onFrame 
     }
   }
 
-  root.addEventListener('pointerdown', handleInput);
+  const { signal } = listeners;
 
+  root.addEventListener('pointerdown', handleInput, { signal });
+
+  // After the run ends the keys are left alone, so Space and Enter keep
+  // activating the endcard buttons.
   document.addEventListener('keydown', (event) => {
-    if (!JUMP_KEYS.has(event.code) || event.repeat) {
+    if (hasEnded() || !JUMP_KEYS.has(event.code) || event.repeat) {
       return;
     }
     event.preventDefault();
     handleInput();
-  });
+  }, { signal });
 
   document.addEventListener('visibilitychange', () => {
     if (!isRunning()) {
@@ -170,7 +186,16 @@ export function startGame({ root, track, player, playerMask, obstacles, onFrame 
     } else {
       startLoop();
     }
-  });
+  }, { signal });
 
-  notifyFrame();
+  // A new run resets the state and the transforms a previous run left behind.
+  setState('start');
+  render();
+
+  return {
+    destroy() {
+      listeners.abort();
+      cancelAnimationFrame(run.frameRequest);
+    },
+  };
 }
