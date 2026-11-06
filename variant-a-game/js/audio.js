@@ -6,10 +6,10 @@ const AUDIO_DIR = 'assets/music/';
 // effects at −14 LUFS, the music and the applause bed under the cheer at −18 LUFS.
 const SOUNDS = {
   music: { file: 'background_music/Funny Game Loop.mp3', gainDb: -6.1 },
-  crash: { file: 'crash/Cartoon Crash Boing.mp3', gainDb: -4.8 },
-  fail: { file: 'endcard_fail/Fail.mp3', gainDb: -6.3 },
-  cheer: { file: 'endcard_win/Celebrative Happy Woohoo Cheer 2.mp3', gainDb: -4.3 },
-  applause: { file: 'endcard_win/applause.mp3', gainDb: 0.6 },
+  crash: { file: 'crash/Cartoon Crash Boing.mp3', gainDb: -4.4 },
+  fail: { file: 'endcard_fail/Fail.mp3', gainDb: -5.9 },
+  cheer: { file: 'endcard_win/Celebrative Happy Woohoo Cheer 2.mp3', gainDb: -3.9 },
+  applause: { file: 'endcard_win/applause.mp3', gainDb: 1.0 },
 };
 // The music is 36 bars at 150 BPM; the file adds silence before and after them.
 const LOOP_SECONDS = 57.6;

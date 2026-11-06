@@ -10,7 +10,7 @@ Measured on 2026-11-04, before writing any ad code. Tools: `ffprobe`/`ffmpeg` (d
 
 | Folder | Size | Notes |
 |---|---|---|
-| `variant-a-game/assets` | 2.02 MB | audio is 1.37 MB of it |
+| `variant-a-game/assets` | 2.02 MB | audio is 1.37 MB of it; 0.81 MB after the A8 re-encode (D-018) |
 | `variant-a-game/design` | 0.59 MB | reference only, not shipped |
 | `variant-b-fireplace/assets` | 3.64 MB | includes both background options; a build ships only one |
 | `variant-b-fireplace/design` | 1.77 MB | reference only, not shipped |
@@ -159,6 +159,17 @@ All files are 44.1 kHz stereo.
 | applause | −18.6 LUFS | −4.0 dBFS | 0.03–14.94 s | | +0.6 dB → −18 LUFS, a bed under the cheer |
 
 After these gains every true peak is at or below −3.4 dBFS.
+
+**Re-encoded in A8 (D-018).** The stereo width (side/mid energy) decided mono or stereo: music −10.6 dB, crash −20.4 dB, fail +1.9 dB, cheer −30.6 dB, applause −14.7 dB. The music is unchanged. Loudness was measured on the new files, decoded to stereo as Web Audio plays them:
+
+| File | Encoding | Size | Integrated | True peak | Gain in `audio.js` |
+|---|---|---|---|---|---|
+| crash | mono 96 kbps | 85 608 → 26 376 B | −9.2 → −9.6 LUFS | +1.6 dBFS | −4.8 → −4.4 dB |
+| fail | stereo 128 kbps | 168 229 → 68 171 B | −7.7 → −8.1 LUFS | −0.1 dBFS | −6.3 → −5.9 dB |
+| cheer | mono 96 kbps | 51 200 → 16 031 B | −9.7 → −10.1 LUFS | −0.4 dBFS | −4.3 → −3.9 dB |
+| applause | stereo 128 kbps | 601 861 → 241 624 B | −18.6 → −19.0 LUFS | −4.3 dBFS | +0.6 → +1.0 dB |
+
+Durations are unchanged in Chromium's decoder (2.14, 4.21, 1.28 and 15.05 s). After the new gains the highest true peak is the crash at −2.8 dBFS. The mono files also halve their decoded memory.
 
 **The music loop:**
 - **Tempo:** the autocorrelation of the onset envelope peaks at 0.4, 0.8 and 1.6 s, i.e. 150 BPM in 1.6 s bars. **57.6 s is exactly 36 bars.** The content above −60 dBFS lasts 57.627 s; the extra 27 ms is the last note's decay.

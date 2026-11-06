@@ -28,7 +28,7 @@
   - It starts at the first frame above −60 dBFS and lasts 57.6 s (36 bars at 150 BPM).
   - Its end moves to the quietest frame within ±2 ms, so the seam does not click: the step at the seam is 0.0136 instead of 0.147.
   - One looping `AudioBufferSourceNode` plays it.
-- **Levels:** one gain per sound from the measured loudness: effects at −14 LUFS, the music and the applause bed at −18 LUFS. All peaks stay at or below −3.4 dBFS. A master gain carries mute.
+- **Levels:** one gain per sound from the measured loudness: effects at −14 LUFS, the music and the applause bed at −18 LUFS. All peaks stay at or below −3.4 dBFS; after the A8 re-encode the gains moved by up to 0.4 dB and the highest peak is −2.8 dBFS (D-018). A master gain carries mute.
 - **Timing:**
   - Music: from the first tap of a run; fades out over 0.3 s when the run ends.
   - Crash: at the hit.

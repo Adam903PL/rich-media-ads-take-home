@@ -54,7 +54,7 @@ Not applicable. Static ads, no backend or persistence.
 - `package.json` appears only when Playwright is added, for dev tooling. Nothing in the shipped ads depends on it.
 
 ## Asset pipeline
-- `ffmpeg` / `ffprobe` (present): audio analysis now, audio re-encoding at A8.
+- `ffmpeg` / `ffprobe` (present): audio analysis, and the A8 re-encode of the Variant A sound effects with `libmp3lame` (D-018).
 - A scripted, lossless `tRNS` fix for the four Variant B palette PNGs that lost transparency (planned, B1).
 - The PNG/JPEG optimiser is chosen at A8/B7. Originals stay in history and optimised files replace them in separate commits.
 
