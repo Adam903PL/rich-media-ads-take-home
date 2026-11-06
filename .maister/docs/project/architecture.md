@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1); its documents and animation are **planned**. Update this document as each stage lands.
+> Status: Variant A is **complete** (A1–A8: stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio, compressed assets). Variant B has its background crops (B1) and its three static part documents (B2); the preview page and the animation are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -81,12 +81,26 @@ The repository holds two independent deliverables. Each variant folder (minus it
 
   | File | Size (CSS px) | Role |
   |---|---|---|
-  | `top.html` | 1032×250 | standalone ad |
-  | `left.html` | 320×975 | standalone ad |
-  | `right.html` | 320×975 | standalone ad |
-  | `preview.html` | 1680×975 | places the three parts in iframes |
+  | `top.html` | 1032×250 | standalone ad (present, B2) |
+  | `left.html` | 320×975 | standalone ad (present, B2) |
+  | `right.html` | 320×975 | standalone ad (present, B2) |
+  | `preview.html` | 1680×975 | places the three parts in iframes (planned, B3) |
 
   Each part has its own layers, its own GSAP timeline and a clickout on its whole area.
+- **Part documents (present, B2, D-022):**
+  - One `#stage` per document with `data-part="top|left|right"`, rendered 1:1 at the slot size: the ad server's iframe has exactly that size, so there is no scaling. `overflow: hidden` clips the background crop's extra moss.
+  - Layers, bottom → top, all `<img>` at 50% of their 2x size:
+    - left / right: `bg` crop, `logo.png`, `box.png` as `.panel` at opacity 0.9, `hl.png` as `.copy`, `cta.png` at (73.75, 838.5) with 7 px corners (D-023);
+    - top: `bg` crop, `hl.png` as `.headline`.
+  - The three documents share `css/style.css` and `js/main.js`; per-part values are keyed on `data-part`.
+  - The static markup is the end state of the intro, so B4 animates towards it with `gsap.from`.
+- **Startup (present, B2):** `js/main.js` checks `#stage` and its part, decodes every `<img>` (a failed file throws `Fireplace <part>: failed to load <src>` and the stage stays hidden), loads `js/debug.js` only for `?overlay=1`, then adds `.is-ready`, which reveals the stage.
+- **Modules:**
+
+  | Module | Responsibility |
+  |---|---|
+  | `main.js` | shared entry of the three parts: part check, image preload, overlay flag, reveal (present) |
+  | `debug.js` | `?overlay=1`: `design/layout.png` at 50% over the part, scaled by 1 / 0.973 and shifted by the part's position in the fireplace (present) |
 - **Shared coordinate system:**
   - The full fireplace is 1680×975. The parts sit at x 0, 324 and 1360, with 4 px gaps.
   - Background crops and zoom `transform-origin` are expressed in these global coordinates, so the moss stays continuous across parts during the zoom.
@@ -117,9 +131,8 @@ The repository holds two independent deliverables. Each variant folder (minus it
 - No network APIs.
 
 ## Configuration
-- `?debug=1`:
-  - Variant A: draws hitboxes.
-  - Variant B: overlays the design at 50%.
+- `?overlay=1`: lays the design over the ad at 50% (Variant A: the start screen; Variant B: `layout.png`, per part). `npx serve` redirects `*.html` URLs to their clean form and drops the query, so the flag goes on the clean URL, e.g. `/variant-b-fireplace/left?overlay=1`.
+- `?debug=1`: Variant A draws hitboxes.
 - `window.clickTag`.
 
 ## Deployment Architecture

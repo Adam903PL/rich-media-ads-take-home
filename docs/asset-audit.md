@@ -198,6 +198,9 @@ Durations are unchanged in Chromium's decoder (2.14, 4.21, 1.28 and 15.05 s). Af
 - Positions in the fireplace: left x 0, top x 324, right x 1360, all at y 0.
 - Seam check on `bg-big` at those offsets (mean luma of 20 px strips either side of each gap): 103.2 | 103.6 and 72.0 | 69.1 → continuous.
 - `layout.png` is **not 1:1**. It is a ≈0.972-scale screenshot with labels; content boxes are left (28, 50) 311×949, top (345, 50) 1003×244, right (1351, 50) 311×949. A debug overlay has to rescale per part.
+- **Refined in B2** by matching each part's original `bg.jpg` in the moss areas of `layout.png` (scales 0.966–0.980, offsets ±6 px): the scale is **0.973** for all three, and the parts' backgrounds start at **(28, 50), (343, 50) and (1351, 50)** layout px. This fits the fireplace geometry: (343 − 28) / 0.973 = 323.7 ≈ 324 and (1351 − 28) / 0.973 = 1359.7 ≈ 1360. The 345 above is the frame around the top banner, not its content.
+  - So a fireplace point (x, y) sits at (28 + 0.973 x, 50 + 0.973 y) in `layout.png`. The overlay scales the layout by 1 / 0.973 = 1.02775 (1730.73 × 1046.25 px) and shifts it by (−28.78 − part x, −51.39).
+  - The integer-size resampling of the match limits this to about ±0.5 layout px.
 
 ### 3.2 Skyscraper layers (320×975, left and right)
 
@@ -208,6 +211,9 @@ Durations are unchanged in Chromium's decoder (2.14, 4.21, 1.28 and 15.05 s). Af
 | `left/hl.png`, `right/hl.png` | copy, white | y 771.5–816 (right: lines 771.5–788 and 794.5–816) |
 | `left/logo.png`, `right/logo.png` | logo (identical files, byte for byte) | x 66.5–254, y 60–190 |
 | `cta.png` (shared, cropped) | "Jetzt entdecken" | 172.5×46.5 at (73.75, 838.5) — centred |
+
+- **CTA corners (B2):** the transparent pixels in each corner of `cta.png` (after D-021) run 10, 8, 6, 5, 4, 3, 2, 2, 1, 1 per row, identically in all four corners, and fit a circle of radius 13.75 px @2x, i.e. **≈ 7 px** CSS.
+- **CTA position re-measured (B2)** with the refined layout scale (§3.1): y 838.5 confirmed in both skyscrapers; the best x is 73.5 (left) and 73 (right), at a mean abs. diff of ≈ 28 per channel, because the button colours differ (P5). The centred 73.75 stays.
 
 ### 3.3 Top banner layers (1032×250)
 

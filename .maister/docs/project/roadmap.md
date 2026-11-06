@@ -28,7 +28,7 @@ Effort: planned hours / actual hours.
 ## Stage B — Variant B, Fireplace (~5–6 h) · in progress · [log](../../../docs/stages/B-fireplace.md)
 
 - [x] **B1 Background & asset prep** — crops of `bg-big.jpg` with room for a zoom around one point (D-020), `tRNS` fix (D-021) `[1 h / ~1 h]`
-- [ ] **B2 Static parts** — `top`/`left`/`right.html` matching the measured layout, debug overlay `[1.5 h]`
+- [x] **B2 Static parts** — `top`/`left`/`right.html` matching the measured layout (D-022, D-023), `?overlay=1` design overlay `[1.5 h / ~1 h]`
 - [ ] **B3 Preview page** — three iframes with 4 px gaps `[0.5 h]`
 - [ ] **B4 Intro timelines** — 3–6 s, shared-origin zoom, line-by-line headline, CTA last `[1.5 h]`
 - [ ] **B5 Sync** — `postMessage` start plus standalone autostart `[0.5 h]`

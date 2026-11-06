@@ -20,6 +20,7 @@ Then open `http://localhost:3000/variant-a-game/` or `http://localhost:3000/vari
 | Flag | Effect |
 |---|---|
 | `?overlay=1` | Variant A: lays the start-screen design over the stage at 50% opacity, to check alignment (needs the `design/` folder, which is not shipped) |
+| `?overlay=1` | Variant B: lays `design/layout.png` over a part at 50% opacity, rescaled to the part. Use the clean URL, e.g. `/variant-b-fireplace/left?overlay=1`: `serve` redirects `left.html` to `left` and drops the query |
 | `?debug=1` | Variant A: draws the collision masks (the player's after the 2 px erosion), their boxes and the player's cloud limits; whatever ended the run turns red |
 
 ## Repository layout

@@ -39,3 +39,37 @@
   The browser rendering is checked in B2, when the parts exist.
 - **Standards checklist:** all items passed.
 - **AI:** ai-log #20.
+
+## B2 Static parts
+- **Status:** ✅ done
+- **Commit:** `feat: build variant B static parts`
+- **Time:** 1.5 h planned / ~1 h actual
+- **What was done:**
+  - `top.html`, `left.html`, `right.html`: one `#stage` each with `data-part`, rendered 1:1 at the slot size, layers as `<img>` at 50% of their 2x size in the audit's order (D-022).
+  - `css/style.css`, shared: the background crops at their §3.5 positions; the panel at opacity 0.9; the CTA centred at (73.75, 838.5) with 7 px corners (D-023).
+  - `js/main.js`, shared:
+    - fails fast on a missing `#stage` or an unknown part;
+    - decodes every layer and keeps the stage hidden until then; a failed file throws `Fireplace <part>: failed to load <src>`;
+    - reveals the stage afterwards.
+  - `js/debug.js`: `?overlay=1` lays `design/layout.png` over the part at 50%, scaled by 1 / 0.973 and shifted to the part.
+  - The markup is the end state of the intro, ready for `gsap.from` in B4. No GSAP, animation or clickout yet.
+- **Decisions:** D-022 (part documents), D-023 (panel opacity and CTA corners, the default of Q2).
+- **Findings:**
+  - **The layout's scale is 0.973, not 0.972.** The top banner's content starts at x 343 in `layout.png`; the audit's 345 was its frame. Both are measured in audit §3.1. The re-measured CTA position stays at the centred 73.75 (§3.2).
+  - **`npx serve` drops the query string** when it redirects `left.html` to `left`, so `?overlay=1` only works on the clean URL ([ai-log #21](../ai-log.md)). This matters for B3, if the preview ever passes flags to the iframes.
+- **Verification:** Playwright MCP against `npx serve`.
+
+  | Check | Result |
+  |---|---|
+  | Geometry (DOM) | ✅ stages 320×975 / 1032×250; every image at exactly 50% of its natural size; backgrounds at (0, 0), (−4, 0), (−48, 0); CTA at (73.75, 838.5) 172.5×46.5 with a 7 px radius; panel opacity 0.9 |
+  | Pixel position against a composite of the same layers (luma, 1 px offset search) | ✅ the exact position scores 35.2 (left, DPR 2), 36.6 (right, DPR 2) and 36.2 dB (top, DPR 1); every 1 px shift ≤ 24.5 dB |
+  | Absolute PSNR against that composite | ~30 dB: Chrome colour-manages the screenshot (+1 to +4 levels even on the PNG logo) and decodes and downscales the moss JPEG differently, so this number cannot prove the build ([ai-log #22](../ai-log.md)) |
+  | Design overlay | ✅ logo, panel, copy and CTA coincide in both skyscrapers; the packshots and moss double, as expected from `bg-big.jpg` (D-020, P3); the top headline differs as in P2 ([overlay](../img/b2-overlay.jpg)) |
+  | CTA corners at DPR 2 | ✅ smooth anti-aliased curve, no steps and no black |
+  | Preload failure (routed 404 on `left/logo.png`) | ✅ `Fireplace left: failed to load assets/left/logo.png`; the stage stays `visibility: hidden` |
+  | Console and network | ✅ no messages; only files under `variant-b-fireplace/`; no request for `debug.js` or `design/` without the flag |
+  | Weight (`variant-b-fireplace` without `design/`) | ✅ 1 473 443 B (1.41 MB, 49% of 3 MB): assets 1 468 146 B, HTML / CSS / JS 5 297 B |
+
+  The three parts side by side: [b2-parts.jpg](../img/b2-parts.jpg).
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #21 and #22.
