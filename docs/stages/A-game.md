@@ -281,3 +281,37 @@
 - **Verification:**
   - A real win (routed `level.js`, hover bot): `.win-poo` and `.party-cone` at −31.5 px, the confetti layer at 0.
   - Against the chosen preview: 41.9 dB in the graphics band; the poo area looks identical, but scores 31.6 dB because of half-pixel resampling at 1x.
+
+## A7 Polish
+- **Status:** ✅ done
+- **Commit:** `feat: add variant A start screen intro`
+- **Time:** 0.5–1 h planned / ~0.5 h actual
+- **What was done:**
+  - **`js/intro.js`:**
+    - one paused timeline built at startup, only `gsap.from` towards the A2 layout, 1.25 s:
+      - the gut and texture (`.scene`) fade in under the clouds;
+      - the headline rises 14 px;
+      - the poo pops in (`back.out`);
+      - the hand with "tab to run" rises 16 px.
+    - **Hand loop:** when the intro completes, the hand taps (`y` 0 ↔ 6, `sine.inOut`, yoyo, 62 half-cycles). It ends at rest 27.9 s later, ~29.2 s after the screen appeared.
+    - **`play()`** runs on every `start` (also after replay); reduced motion jumps to the end with no loop.
+    - **`finish()`** runs on the first tap: it jumps to the end without firing callbacks, kills the loop and resets the hand.
+    - `opacity` instead of `autoAlpha`, so no inline `visibility` overrides the CSS that hides the hand outside `start`.
+  - **`.player-wrap`:** the poo's pop scales a wrapper at the measured position. The game keeps moving `.player` inside it, so no element has two owners of its transform.
+  - **`js/motion.js` and `js/dom.js`:** the GSAP check, the reduced-motion query and `find` / `findAll` were duplicated in `endcards.js` and would have been again in `intro.js`; both now import them.
+  - **`main.js`:** `start` plays the intro, `ready` finishes it. The stage is revealed after `startRun()`, so the game already listens (ai-log #14).
+- **Decisions:** D-017 (intro; the speed ramp cut because the D-010 layout already ramps and a speed change would invalidate its proof).
+- **Verification:** Playwright MCP against `npx serve`.
+
+  | Check | Result |
+  |---|---|
+  | Intro frames | ✅ [filmstrip](../img/a7-intro.png) at 0, 0.3, 0.6, 0.9, 1.25 s |
+  | End state = A2 layout | ✅ geometry: hand (147.5, 452, 86.5×96), wrapper and player (55.5, 258.5, 42×41). Pixels outside the hand: 74 dB / identical vs the A6 start. In the hand box 53.7 dB, only at anti-aliased edges, even with the transforms cleared: the opacity animation rasterises the hand on its own compositor layer |
+  | Tap 0.3 s into the intro | ✅ `ready` at once; wrapper `scale` 1, opacity 1; scene opacity 1; hand hidden; no hand loop; 0 active tweens during the run; tap → fail 996 ms |
+  | Replay ×3 | ✅ the intro plays again (scene at ~0.5 opacity after 150 ms); after it, exactly 1 active tween (the hand loop); after the next tap 0 |
+  | Reduced motion | ✅ final layout at once, 0 active tweens, no loop 1.6 s later |
+  | Hidden tab during the intro | ✅ frozen at 0.322 s while hidden, +0.105 s 100 ms after resuming |
+  | `?debug=1`, tap right at the reveal | ✅ `ready`; the ai-log #14 gap is closed |
+  | Regression | ✅ music loop, crash and fail sounds; fail endcard; `level-check.mjs` passes; console clean; only local requests; 2.031 MB |
+- **Standards checklist:** all items passed.
+- **AI:** ai-log #17; #14 resolved.

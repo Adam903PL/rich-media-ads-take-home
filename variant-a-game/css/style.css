@@ -117,9 +117,17 @@ body {
   pointer-events: none;
 }
 
-.player {
+/* The intro scales the wrapper and the game moves the player inside it, so each
+   element has a single owner of its transform. */
+.player-wrap {
   left: 55.5px;
   top: 258.5px;
+  width: 42px;
+  height: 41px;
+}
+
+.player {
+  display: block;
   width: 42px;
   height: 41px;
 }

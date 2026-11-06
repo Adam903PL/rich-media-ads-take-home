@@ -2,7 +2,9 @@ import { loadSounds, setupAudio } from './audio.js';
 import { createMask, erodeMask } from './collision.js';
 import { setupEndcards } from './endcards.js';
 import { COLLISION_TOLERANCE, startGame } from './game.js';
+import { setupIntro } from './intro.js';
 import { OBSTACLES, obstacleSource } from './level.js';
+import { gsap } from './motion.js';
 
 const STAGE_WIDTH = 360;
 const STAGE_HEIGHT = 640;
@@ -88,7 +90,7 @@ const endcards = setupEndcards(stage, {
   onReplay: replay,
   onCue: (outcome) => ENDCARD_SOUNDS[outcome].forEach((name) => audio.play(name)),
 });
-stage.classList.add('is-ready');
+const intro = setupIntro(stage);
 
 const params = new URLSearchParams(location.search);
 const debug = params.has('debug') || params.has('overlay') ? await import('./debug.js') : null;
@@ -100,7 +102,10 @@ const onFrame = params.get('debug') === '1' ? debug.showHitboxes(stage, { obstac
 let game = null;
 
 function handleStateChange(state) {
-  if (state === 'ready') {
+  if (state === 'start') {
+    intro.play();
+  } else if (state === 'ready') {
+    intro.finish();
     audio.startMusic();
   } else if (state === 'fail' || state === 'win') {
     audio.stopMusic();
@@ -121,7 +126,7 @@ function replay() {
   startRun();
 }
 
-// `gsap` is the global from vendor/gsap.min.js (D-012). Animations and sound pause with the page.
+// Animations and sound pause with the page.
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) {
     gsap.globalTimeline.pause();
@@ -133,3 +138,5 @@ document.addEventListener('visibilitychange', () => {
 });
 
 startRun();
+// Revealed only now: the game already listens for taps and the intro waits at its first frame.
+stage.classList.add('is-ready');

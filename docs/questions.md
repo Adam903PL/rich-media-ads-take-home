@@ -28,7 +28,7 @@ These were dropped from the email because the brief already answers them, or bec
 | Q4 | Are the cloud bands walls? | Game rules are our design | clouds are walls, exact limits from alpha masks — **decided, D-008** | A3 ✅ |
 | Q5 | Obstacles on the start screen | The brief lists the start screen contents (logo bar, headline, tutorial); obstacles are not on that list | start screen without obstacles; they arrive after "get ready" — **decided, D-007** | A2 ✅, A7 |
 | Q7 | Landscape orientation | The brief says "portrait mobile" and lists only portrait viewports | portrait layout, letterboxed with navy sides in landscape | A1 |
-| — | "Get ready" moment without an asset | Nice-to-have; no new copy needed | short pause with the animated tutorial hand | A7 |
+| — | "Get ready" moment without an asset | Nice-to-have; no new copy needed | the 0.6 s glide to the playfield centre (D-009), with the tutorial hand tapping on the start screen (D-017) — **done** | A3 ✅, A7 ✅ |
 | — | `win/konfetti.png` holds pieces both in front of the happy poo (the party cone) and behind it (the streamer), so no layer order matches the mockup (audit §2.3) | The mockup shows the intended stacking, and it can be rebuilt without editing the asset | a second, CSS-clipped copy of the layer for the cone — **decided, D-015** | A5 fix ✅ |
 | — | Endcard headline and button PNGs are typeset differently from the mockups (same copy; audit §2.3) | The brief says to use the provided assets and not to redraw them, and the wording is identical | build with the assets as delivered, at the best-matching measured positions | A5 ✅ |
 

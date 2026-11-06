@@ -3,7 +3,7 @@
 ## Overview
 The repository holds two independent deliverables. Each variant folder (minus its `design/` reference files) is a self-contained, shippable ad with its own assets and vendored libraries. Everything outside the variant folders is documentation or tooling.
 
-> Status: Variant A is **present** up to A6 (stage, start screen, game loop, obstacles, collision, endcards, replay, audio). Polish (A7), compression (A8) and all of Variant B are **planned**. Update this document as each stage lands.
+> Status: Variant A is **present** up to A7 (stage, start screen with intro, game loop, obstacles, collision, endcards, replay, audio). Compression (A8) and all of Variant B are **planned**. Update this document as each stage lands.
 
 ## Architecture Pattern
 **Pattern:** static documents plus a few small native ES modules. No shared runtime between the variants.
@@ -26,7 +26,7 @@ The repository holds two independent deliverables. Each variant folder (minus it
        - `.gut` (`gameplay.png`, 2528×640)
        - the 15 `.obstacle` images, created from `level.js` before the preload and placed on the gut's tubes (D-010)
   3. `border.png`, `tut.png` (headline), `logo.png`, full frame.
-  4. `.player` at (55.5, 258.5), above the clouds so it is always visible. Moves with `translateY` from A3.
+  4. `.player-wrap` at (55.5, 258.5), above the clouds so the player is always visible. It holds `.player` at 0,0. The intro scales the wrapper (A7); the game moves `.player` with `translateY` (A3). Each element has one owner of its transform.
   5. `.gesture` at (147.5, 452).
   6. `.endcard` sections `#endcard-fail` and `#endcard-win` (present, A5, D-013), hidden until shown:
      - z-index 2, so they cover the stage and its caps;
@@ -40,9 +40,10 @@ The repository holds two independent deliverables. Each variant folder (minus it
   2. It awaits `preloadImages()` and `loadSounds()` together: every `<img>` must decode and every sound must load and decode, otherwise it throws with the file names.
   3. It sizes the obstacles from their images and builds the collision masks: the player's eroded by 2 px (D-011).
   4. It sets up the audio (`setupAudio()`, which finds the music loop and registers the gesture unlock) and builds the endcard timelines with `setupEndcards()`. Missing markup or a missing GSAP stops the start here.
-  5. It adds `.is-ready`, which reveals the stage.
+  5. It builds the intro timeline with `setupIntro()`.
   6. It loads `debug.js` only for `?overlay=1` / `?debug=1`.
-  7. It starts the first run with `startGame()`.
+  7. It starts the first run with `startGame()`; the `start` state plays the intro from its first frame.
+  8. Only then does it add `.is-ready`, which reveals the stage: the game already listens for taps (A7, the gap from ai-log #14).
 - **Planned modules:**
 
   | Module | Responsibility |
@@ -51,6 +52,9 @@ The repository holds two independent deliverables. Each variant folder (minus it
   | `game.js` | one run per `startGame()`: state machine `start → ready → playing → fail \| win` mirrored to `data-state` on `#ad`, physics, input, pause, `onStateChange`, `destroy()` (present) |
   | `level.js` | obstacle layout `{ id, x, y }`, every obstacle exactly once; checked by `tools/audit/level-check.mjs` (present) |
   | `collision.js` | `createMask`, `erodeMask`, `masksOverlap` on the 2x pixel grid; also used by `tools/audit/cloud-limits.mjs` (present) |
+  | `intro.js` | start-screen intro timeline (built once, played on every `start`, jumped to its end on the first tap) and the tapping-hand loop that ends before 30 s (present, A7, D-017) |
+  | `motion.js` | the vendored global `gsap`, checked once, and the `prefers-reduced-motion` query, shared by `endcards.js`, `intro.js` and `main.js` (present) |
+  | `dom.js` | `find` / `findAll` lookups that throw with the missing selector (present) |
   | `audio.js` | Web Audio (D-014): decoding during the preload, the context unlock on the first activating gesture, the music loop found in the buffer, per-sound gains, mute, suspend / resume, stopping every source on replay (present) |
   | `endcards.js` | fail and win entrance timelines (built once, rewound on replay), hold before the entrance, reduced motion, clickTag, replay button (present) |
   | `debug.js` | dev aids loaded on demand: `?overlay=1` design overlay, `?debug=1` collision masks, boxes and cloud limits drawn through `startGame({ onFrame })` (present) |

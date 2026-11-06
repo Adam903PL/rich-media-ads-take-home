@@ -1,29 +1,14 @@
 // Fail and win endcards: entrance timelines, clickout and replay.
-const { gsap } = window;
-if (!gsap) {
-  throw new Error('Gut Run: GSAP (vendor/gsap.min.js) is not loaded');
-}
+import { find, findAll } from './dom.js';
+import { gsap, reducedMotion } from './motion.js';
 
 // The crash or the finish stays visible this long before the endcard comes in.
 const HOLD_SECONDS = { fail: 0.6, win: 0.4 };
 const POO_DROP = { autoAlpha: 0, y: -60, duration: 0.8, ease: 'bounce.out' };
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 function openClickTag() {
   const clickTag = window.clickTag || 'https://example.com/landing';
   window.open(clickTag, '_blank');
-}
-
-function findAll(parent, selector) {
-  const elements = [...parent.querySelectorAll(selector)];
-  if (elements.length === 0) {
-    throw new Error(`Gut Run: ${selector} is missing from index.html`);
-  }
-  return elements;
-}
-
-function find(parent, selector) {
-  return findAll(parent, selector)[0];
 }
 
 // Both entrances share one frame: the endcard fades in over the frozen game and its
