@@ -269,3 +269,15 @@
 
 - **A5's finding corrected:** the win graphics did not match the mockup at 40.3 dB; with the cone in front they do (50.5 dB as a 2x composite, audit §2.3).
 - **AI:** ai-log #16.
+
+### Change after A6: happy poo inside the bubble (D-016)
+- **Commit:** `feat: lift the win endcard poo into the bubble`
+- **Why:**
+  - After the cone fix, the user's screenshot matched the mockup.
+  - The user still read the poo as misplaced, because in the design it hangs over the bubble's lower edge (8.8% of it lies outside).
+  - The user chose to deviate from the design, knowing the brief's rule to match positions.
+- **Options measured on the alpha masks:** a lift of 12, 21 or 31.5 px puts the poo inside the bubble with a 0, 4 or 8 px margin. Previews of 21 and 31.5 were shown side by side with the mockup; the user chose 31.5.
+- **Change:** `.win-poo` and `.party-cone` get `top: -31.5px`, so the cone stays on the poo's head. The drop animation still ends at the new position. A short piece of the streamer now shows below the poo.
+- **Verification:**
+  - A real win (routed `level.js`, hover bot): `.win-poo` and `.party-cone` at −31.5 px, the confetti layer at 0.
+  - Against the chosen preview: 41.9 dB in the graphics band; the poo area looks identical, but scores 31.6 dB because of half-pixel resampling at 1x.

@@ -210,6 +210,14 @@ body {
   clip-path: inset(331px 188.5px 285px 155px);
 }
 
+/* The happy poo sits 31.5px higher than in the design: fully inside the bubble with an
+   8px margin instead of hanging over its lower edge (D-016, measured on the alpha masks).
+   The party cone moves with it. */
+.win-poo,
+.party-cone {
+  top: -31.5px;
+}
+
 /* Mute toggle on the white logo bar, centred on the logo's height (logo content
    y 17–42.5, docs/asset-audit.md, section 2.1). It stays above the endcards.
    No asset was provided for it (docs/questions.md, N2). */
