@@ -1,5 +1,6 @@
 import { loadSounds, setupAudio } from './audio.js';
 import { createMask, erodeMask } from './collision.js';
+import { find } from './dom.js';
 import { setupEndcards } from './endcards.js';
 import { COLLISION_TOLERANCE, startGame } from './game.js';
 import { setupIntro } from './intro.js';
@@ -68,15 +69,11 @@ function prepareObstacles(obstacles) {
 
 const ENDCARD_SOUNDS = { fail: ['fail'], win: ['cheer', 'applause'] };
 
-const root = document.getElementById('ad');
-const stage = document.getElementById('stage');
-const track = stage?.querySelector('.track');
-const player = stage?.querySelector('.player');
-const muteButton = stage?.querySelector('.mute');
-
-if (!root || !stage || !track || !player || !muteButton) {
-  throw new Error('Gut Run: #ad, #stage, .track, .player or .mute is missing from index.html');
-}
+const root = find(document, '#ad');
+const stage = find(document, '#stage');
+const track = find(stage, '.track');
+const player = find(stage, '.player');
+const muteButton = find(stage, '.mute');
 
 fitStageToViewport(root, stage);
 const obstacleImages = addObstacleImages(track);
@@ -93,11 +90,13 @@ const endcards = setupEndcards(stage, {
 const intro = setupIntro(stage);
 
 const params = new URLSearchParams(location.search);
-const debug = params.has('debug') || params.has('overlay') ? await import('./debug.js') : null;
-if (params.get('overlay') === '1') {
+const wantsOverlay = params.get('overlay') === '1';
+const wantsHitboxes = params.get('debug') === '1';
+const debug = wantsOverlay || wantsHitboxes ? await import('./debug.js') : null;
+if (wantsOverlay) {
   debug.showDesignOverlay(stage);
 }
-const onFrame = params.get('debug') === '1' ? debug.showHitboxes(stage, { obstacles, playerMask }) : undefined;
+const onFrame = wantsHitboxes ? debug.showHitboxes(stage, { obstacles, playerMask }) : undefined;
 
 let game = null;
 

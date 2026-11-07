@@ -4,7 +4,7 @@ import { masksOverlap } from './collision.js';
 // D-008, D-009, D-011. Exported for tools/audit/level-check.mjs.
 // Positions mirror .player and .track in style.css.
 export const PLAYER_LEFT = 55.5;
-export const PLAYER_START_TOP = 258.5;
+const PLAYER_START_TOP = 258.5;
 export const TRACK_LEFT = -2;
 // Highest and lowest player top that does not touch the clouds with the 2 px collision
 // tolerance (tools/audit/cloud-limits.mjs --tolerance=2).

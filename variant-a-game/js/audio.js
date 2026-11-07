@@ -53,7 +53,7 @@ export async function loadSounds() {
 // The loop starts at the first audible frame and lasts LOOP_SECONDS. Its end moves to the
 // quietest frame within ±2 ms, so the jump back to the start does not click. It is found
 // in the decoded buffer because decoders trim the MP3's encoder delay differently.
-export function findLoop(buffer) {
+function findLoop(buffer) {
   const channels = Array.from({ length: buffer.numberOfChannels }, (_, index) => buffer.getChannelData(index));
   const level = (frame) => Math.max(...channels.map((samples) => Math.abs(samples[frame])));
 
