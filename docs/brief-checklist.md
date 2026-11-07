@@ -2,7 +2,7 @@
 
 Every requirement of the [task brief](task-brief.md), checked against the build on 2026-11-06 (roadmap step F1). The README, DECISIONS and AI note rows were updated when F3 completed them (2026-11-07).
 - The brief was updated upstream on 2026-11-05 (`2e8cc9a`). Only two sentences changed: the time estimate per variant was removed, and README item 2 now reads "what you would do next with more time". No requirement changed. [task-brief.md](task-brief.md) follows it since F3.
-- Variant A has not changed since A8 (`git diff bb376cc -- variant-a-game` is empty), so its stage verifications still hold. Both variants were also smoke-tested live for this list ([F1 log](stages/F-final.md#f1-brief-checklist)).
+- Variant A has changed since A8 only by the F5 clean-up (unused exports, element lookups and debug flags, no change in gameplay). It was re-verified by the F5 smoke test, so its stage verifications still hold. Both variants were also smoke-tested live for this list ([F1 log](stages/F-final.md#f1-brief-checklist)).
 
 **Status:** ✅ met · ⚠️ met with a deliberate deviation (see [Deviations](#deviations)) · ⏳ open, assigned to a Stage F step.
 
@@ -14,7 +14,7 @@ Every requirement of the [task brief](task-brief.md), checked against the build 
 | G2 | GSAP only; Variant A on Phaser, canvas or DOM; a local server is enough | ✅ | `*/vendor/gsap.min.js` | GSAP 3.15.0 vendored per variant (D-012); Variant A renders with DOM + `transform` (D-006); `npx serve .` |
 | G3 | Use the provided 2x assets at 50%, don't redraw or replace them; positions measured, not by eye | ⚠️ | `docs/asset-audit.md`, `tools/audit/` | Every image at 50% ([A2](stages/A-game.md#a2-static-start-screen), [B2](stages/B-fireplace.md#b2-static-parts)); positions from measurements. Assets processed only by lossless repair, crops and re-encodes (D-018, D-019, D-020, D-021, D-028). Deviations: D-016, Q1, Q3 |
 | G4 | Every CTA opens the landing page in a new window through `clickTag` | ✅ | `variant-a-game/js/endcards.js`, `variant-b-fireplace/js/clickout.js` | `window.clickTag` read at click time, fallback `https://example.com/landing`, `_blank` ([A5](stages/A-game.md#a5-endcards), [B6](stages/B-fireplace.md#b6-idle--a11y), F1 smoke test) |
-| G5 | Total ad under 3 MB; compress if needed and say what was done | ✅ | — | A 1 509 240 B (1.44 MB); B 1 726 322 B (1.65 MB) as three packages (D-029). Compression: D-018, D-019, D-020, D-028, summarised in the [README](../README.md#compression) |
+| G5 | Total ad under 3 MB; compress if needed and say what was done | ✅ | — | A 1 509 115 B (1.44 MB); B 1 726 568 B (1.65 MB) as three packages (D-029), measured after F5. Compression: D-018, D-019, D-020, D-028, summarised in the [README](../README.md#compression) |
 | G6 | AI note: tools, use, one example of a wrong output that was fixed | ✅ | `README.md` | [AI note](../README.md#ai-note): Claude Code with Maister, Playwright through MCP; the example is ai-log #16 (the hidden party cone); the full [ai-log.md](ai-log.md) is linked |
 | G7 | Assets used only for this task | ✅ | — | Used only here. The repository stays private until F6, then public as the deliverables require |
 

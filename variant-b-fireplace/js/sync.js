@@ -16,7 +16,7 @@ export function sharedNow() {
 
 // Resolves with the shared start time, or with undefined when the part starts on its own:
 // at once as a top-level page, or after SOLO_START_MS in a frame nobody answers from.
-export function waitForStart(part) {
+export function waitForStart() {
   if (window.parent === window) {
     return Promise.resolve(undefined);
   }
@@ -39,6 +39,6 @@ export function waitForStart(part) {
     }, { signal: listening.signal });
 
     // The ad server's origin is not known in advance, and the message carries no data.
-    window.parent.postMessage({ type: MESSAGE.ready, part }, '*');
+    window.parent.postMessage({ type: MESSAGE.ready }, '*');
   });
 }

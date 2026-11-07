@@ -34,16 +34,16 @@ Requires Node 18+; any static server works. There is no build step.
 |---|---|---|
 | A | Sound effects re-encoded with LAME: mono 96 kbps where the file is practically mono, stereo 128 kbps otherwise; gains corrected so the loudness targets still hold. The music stays as delivered (already 64 kbps) ([D-018](DECISIONS.md#variant-a)) | audio 1 369 577 → 814 881 B |
 | A | PNGs recompressed losslessly with `ffmpeg`; a file is replaced only if it gets smaller and its decoded pixels hash the same ([D-019](DECISIONS.md#variant-a)) | 640 055 → 574 516 B |
-| | **Variant A shipped** (the folder without `design/`) | **2 129 475 → 1 509 240 B (1.44 MB, 48% of 3 MB)** |
+| | **Variant A shipped** (the folder without `design/`) | **2 129 475 → 1 509 115 B (1.44 MB, 48% of 3 MB)** |
 | B | One continuous background: each part ships its own crop of `bg-big.jpg`, re-encoded at high quality; the per-part `bg.jpg` files and `bg-big.jpg` are not shipped ([D-020](docs/decisions/D-020-background-source.md)) | backgrounds 3 406 018 → 1 235 592 B |
 | B | PNGs recompressed losslessly with the same method ([D-028](DECISIONS.md#variant-b)) | 220 634 → 216 667 B |
-| | **Variant B shipped** as three separate packages, each with its own copy of the shared code and GSAP ([D-029](DECISIONS.md#variant-b)) | **1 726 322 B (1.65 MB, 55% of 3 MB)**; 1 553 059 B with every file counted once |
+| | **Variant B shipped** as three separate packages, each with its own copy of the shared code and GSAP ([D-029](DECISIONS.md#variant-b)) | **1 726 568 B (1.65 MB, 55% of 3 MB)**; 1 553 141 B with every file counted once |
 
 Four of Variant B's PNGs had also lost their transparency in export; a lossless one-chunk repair makes their black background transparent again ([D-021](DECISIONS.md#variant-b)). To reproduce Variant B's numbers: `node tools/audit/weight.mjs variant-b-fireplace/top.html variant-b-fireplace/left.html variant-b-fireplace/right.html`.
 
 ## How it was checked
 
-- **In the browser:** every step was verified with Playwright (Chromium) against `npx serve`. The checks covered phone viewports from 320×568 to 430×932, landscape and a live toolbar resize; replay three times with no leftover timers, listeners or doubled speed; a hidden tab; reduced motion; `clickTag` with `window.open` stubbed; a clean console and only local requests. The results are in the stage logs ([A](docs/stages/A-game.md), [B](docs/stages/B-fireplace.md), [F](docs/stages/F-final.md)).
+- **In the browser:** every step was verified with Playwright (Chromium) against `npx serve`, and the final regression check ran in Firefox as well. The checks covered phone viewports from 320×568 to 430×932, landscape and a live toolbar resize; replay three times with no leftover timers, listeners or doubled speed; a hidden tab; reduced motion; `clickTag` with `window.open` stubbed; a clean console and only local requests. The results are in the stage logs ([A](docs/stages/A-game.md), [B](docs/stages/B-fireplace.md), [F](docs/stages/F-final.md)).
 - **Variant A's level** is checked by `tools/audit/level-check.mjs` (every obstacle reachable at a human tapping rate), and a planning bot won every run.
 - **Variant B's performance** was traced in Chrome at normal and 4× slower CPU: no layout or paint while elements move, only `transform` and `opacity`.
 - **Not yet checked on real devices:** iOS Safari and Android Chrome for Variant A (toolbars, the audio unlock, how the collision feels), and a real laptop screen for Variant B.

@@ -41,7 +41,7 @@ Effort: planned hours / actual hours.
 - [ ] **F2 Real-device test** — iOS Safari (autoplay, toolbars), Android Chrome
 - [x] **F3 Docs** — README (run, compression, checks, known issues, next steps, AI note), an at-a-glance summary on top of DECISIONS, `task-brief.md` following `2e8cc9a` `[~0.75 h]`
 - [ ] **F4 Recording** — under 1 minute, stored in the repo
-- [ ] **F5 Review** — full code read-through, `/maister:reviews-pragmatic`, fixes
+- [x] **F5 Review** — full code read-through, `/maister:reviews-pragmatic`, fixes: unused exports and parameters removed, one lookup style and one debug-flag rule in Variant A; re-verified in Chromium and Firefox `[~1 h]`
 - [ ] **F6 Submit** — switch the repository to public, then reply to the task email with the repo link
 
 ## Day plan

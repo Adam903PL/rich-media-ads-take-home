@@ -65,5 +65,5 @@ if (reducedMotion.matches) {
   stage.classList.add('is-ready');
 } else {
   stage.classList.add('is-ready');
-  playAt(timeline, await waitForStart(part));
+  playAt(timeline, await waitForStart());
 }

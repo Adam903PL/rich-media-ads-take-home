@@ -11,16 +11,17 @@ const CTA_PULSE = { scale: 1.05, duration: 0.6 };
 // Seconds after the intro's end.
 const CTA_PULSE_OFFSETS = [1.5, 6, 10.5, 15, 19.5];
 
-const settleBack = { ease: 'sine.inOut', yoyo: true, repeat: 1 };
+const SETTLE_BACK = { ease: 'sine.inOut', yoyo: true, repeat: 1 };
 
 export function addIdle(timeline, stage, part) {
+  // The same in every part: the 3.5 s background settle is the longest tween of each intro.
   const idleStart = timeline.duration();
-  timeline.to(find(stage, '.bg'), { ...BREATH, ...settleBack }, idleStart);
+  timeline.to(find(stage, '.bg'), { ...BREATH, ...SETTLE_BACK }, idleStart);
 
   if (part === 'top') return;
 
   const cta = find(stage, '.cta');
   CTA_PULSE_OFFSETS.forEach((offset) => {
-    timeline.to(cta, { ...CTA_PULSE, ...settleBack }, idleStart + offset);
+    timeline.to(cta, { ...CTA_PULSE, ...SETTLE_BACK }, idleStart + offset);
   });
 }

@@ -112,7 +112,7 @@ The repository holds two independent deliverables. Each variant folder (minus it
   | `dom.js` | `find` / `findAll` lookups that throw with the missing selector (present, B4) |
   | `debug.js` | `?overlay=1`: `design/layout.png` at 50% over the part, scaled by 1 / 0.973 and shifted by the part's position in the fireplace (present); also used by the preview for the whole fireplace |
   | `preview.js` | preview page only: fits the fireplace to the window, starts the parts together and handles its `?overlay=1` (present, B3, B5) |
-  | `sync.js` | shared start (D-026): message types, the shared clock, `waitForStart(part)`; used by the parts and the preview, without GSAP (present, B5) |
+  | `sync.js` | shared start (D-026): message types, the shared clock, `waitForStart()`; used by the parts and the preview, without GSAP (present, B5) |
 - **Preview (present, B3, D-024):**
   - `#fireplace` (1680×975) holds three iframes at x 0, 324 and 1360 on the layout's background `#282828`; the website area in the middle stays empty.
   - `preview.js` scales `#fireplace` as a whole with `min(1, W / 1680, H / 975)` from a `ResizeObserver` on the root, with whole-pixel offsets, so at full size the parts render exactly as on their own.
