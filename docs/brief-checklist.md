@@ -1,7 +1,7 @@
 # Brief checklist
 
-Every requirement of the [task brief](task-brief.md), checked against the build on 2026-11-06 (roadmap step F1).
-- The brief was updated upstream on 2026-11-05 (`2e8cc9a`). Only two sentences changed: the time estimate per variant was removed, and README item 2 now reads "what you would do next with more time". No requirement changed.
+Every requirement of the [task brief](task-brief.md), checked against the build on 2026-11-06 (roadmap step F1). The README, DECISIONS and AI note rows were updated when F3 completed them (2026-11-07).
+- The brief was updated upstream on 2026-11-05 (`2e8cc9a`). Only two sentences changed: the time estimate per variant was removed, and README item 2 now reads "what you would do next with more time". No requirement changed. [task-brief.md](task-brief.md) follows it since F3.
 - Variant A has not changed since A8 (`git diff bb376cc -- variant-a-game` is empty), so its stage verifications still hold. Both variants were also smoke-tested live for this list ([F1 log](stages/F-final.md#f1-brief-checklist)).
 
 **Status:** ✅ met · ⚠️ met with a deliberate deviation (see [Deviations](#deviations)) · ⏳ open, assigned to a Stage F step.
@@ -14,8 +14,8 @@ Every requirement of the [task brief](task-brief.md), checked against the build 
 | G2 | GSAP only; Variant A on Phaser, canvas or DOM; a local server is enough | ✅ | `*/vendor/gsap.min.js` | GSAP 3.15.0 vendored per variant (D-012); Variant A renders with DOM + `transform` (D-006); `npx serve .` |
 | G3 | Use the provided 2x assets at 50%, don't redraw or replace them; positions measured, not by eye | ⚠️ | `docs/asset-audit.md`, `tools/audit/` | Every image at 50% ([A2](stages/A-game.md#a2-static-start-screen), [B2](stages/B-fireplace.md#b2-static-parts)); positions from measurements. Assets processed only by lossless repair, crops and re-encodes (D-018, D-019, D-020, D-021, D-028). Deviations: D-016, Q1, Q3 |
 | G4 | Every CTA opens the landing page in a new window through `clickTag` | ✅ | `variant-a-game/js/endcards.js`, `variant-b-fireplace/js/clickout.js` | `window.clickTag` read at click time, fallback `https://example.com/landing`, `_blank` ([A5](stages/A-game.md#a5-endcards), [B6](stages/B-fireplace.md#b6-idle--a11y), F1 smoke test) |
-| G5 | Total ad under 3 MB; compress if needed and say what was done | ✅ | — | A 1 509 240 B (1.44 MB); B 1 726 322 B (1.65 MB) as three packages (D-029). Compression: D-018, D-019, D-020, D-028. The README summary is F3 |
-| G6 | AI note: tools, use, one example of a wrong output that was fixed | ⏳ F3 | `README.md` | Source: [ai-log.md](ai-log.md), 27 entries |
+| G5 | Total ad under 3 MB; compress if needed and say what was done | ✅ | — | A 1 509 240 B (1.44 MB); B 1 726 322 B (1.65 MB) as three packages (D-029). Compression: D-018, D-019, D-020, D-028, summarised in the [README](../README.md#compression) |
+| G6 | AI note: tools, use, one example of a wrong output that was fixed | ✅ | `README.md` | [AI note](../README.md#ai-note): Claude Code with Maister, Playwright through MCP; the example is ai-log #16 (the hidden party cone); the full [ai-log.md](ai-log.md) is linked |
 | G7 | Assets used only for this task | ✅ | — | Used only here. The repository stays private until F6, then public as the deliverables require |
 
 ## Variant A — Game Ad "Gut Run"
@@ -44,7 +44,7 @@ Every requirement of the [task brief](task-brief.md), checked against the build 
 
 | # | Requirement | Status | Where | Evidence |
 |---|---|---|---|---|
-| B-F | Top 1032×250 and left / right 320×975; each part its own HTML; `preview.html` places them like `layout.png`, empty middle | ✅ | `top.html`, `left.html`, `right.html`, `preview.html` | D-022, D-024, [B2](stages/B-fireplace.md#b2-static-parts), [B3](stages/B-fireplace.md#b3-preview-page). Fixed slot sizes, so no responsive layout |
+| B-F | Top 1032×250 and left / right 320×975; each part its own HTML; `preview.html` places them like `layout.png`, empty middle | ✅ | `top.html`, `left.html`, `right.html`, `preview.html` | D-022, D-024, [B2](stages/B-fireplace.md#b2-static-parts), [B3](stages/B-fireplace.md#b3-preview-page). Fixed slot sizes, so no responsive layout; the [README](../README.md) says so |
 | B1 | Pixel-accurate layout: logo, product, text panel, copy, CTA; three-line top headline | ⚠️ | `css/style.css` | DOM geometry and 1 px offset search in [B2](stages/B-fireplace.md#b2-static-parts), overlay [b2-overlay.jpg](img/b2-overlay.jpg). Headline copy as delivered (Q1); packshots as in `bg-big.jpg` (Q3); asset colours, panel opacity 0.9 and CTA corners (Q2, D-023) |
 | B2 | One continuous moss surface, seams line up; choose `bg-big.jpg` or the per-part files and explain | ✅ | `assets/*/bg-crop.jpg` | D-020, seams in [B1](stages/B-fireplace.md#b1-background--asset-prep), shared zoom in [B4](stages/B-fireplace.md#b4-intro-timelines) |
 | B3 | Intro of 3–6 s, coordinated across the parts (zoom, logos, product, panel and copy, headline line by line, CTA last) | ⚠️ | `js/intro.js` | D-025, 3.5 s, filmstrip [b4-intro.jpg](img/b4-intro.jpg). The product cannot slide in (P4); the background settles in the intro and zooms in during the idle phase |
@@ -59,16 +59,16 @@ Every requirement of the [task brief](task-brief.md), checked against the build 
 | # | Requirement | Status | Where | Evidence |
 |---|---|---|---|---|
 | D1 | A new public GitHub repository, not a fork; commit as you go; the link in a reply to the task email | ⏳ F6 | GitHub | Created from scratch, private until F6; 31 commits before F1, one per step |
-| D2 | README: run locally in one or two commands; what next with more time; known issues and shortcuts | ⏳ F3 | `README.md` | `npx serve .` is there; the other two sections are F3 |
-| D3 | DECISIONS.md: a short decision log | ✅ (⏳ F3) | `DECISIONS.md` | D-001–D-029 cover every example the brief gives: scaling (D-005), collision (D-011), background (D-020), audio (D-014), canvas vs DOM (D-006), compression (D-018, D-019, D-020, D-028). It has grown long for "short": F3 adds a short summary on top |
-| D4 | AI note | ⏳ F3 | `README.md` | See G6 |
+| D2 | README: run locally in one or two commands; what next with more time; known issues and shortcuts | ✅ | `README.md` | [Run locally](../README.md#run-locally) in one command, [next steps](../README.md#what-i-would-do-next-with-more-time), [known issues and shortcuts](../README.md#known-issues-and-shortcuts) |
+| D3 | DECISIONS.md: a short decision log | ✅ | `DECISIONS.md` | D-001–D-029 cover every example the brief gives: scaling (D-005), collision (D-011), background (D-020), audio (D-014), canvas vs DOM (D-006), compression (D-018, D-019, D-020, D-028). It has grown long for "short", so an [at-a-glance summary](../DECISIONS.md#at-a-glance) on top answers the brief's examples in one bullet each |
+| D4 | AI note | ✅ | `README.md` | See G6 |
 | D5 | Optional: a screen recording under 1 minute, stored in the repository | ⏳ F4 | — | — |
 | — | Everything submitted is stored in the repository | ✅ | — | Assets, code, docs, measurements and screenshots are committed |
 | — | Questions go to the task email | ✅ | [questions.md](questions.md) | Sent 2026-11-04; no answer as of 2026-11-06 |
 
 ## Deviations
 
-Places where the build knowingly differs from the brief's wording or the design. Each was decided with the evidence at hand and is listed for the README's known issues (F3).
+Places where the build knowingly differs from the brief's wording or the design. Each was decided with the evidence at hand and is listed in the [README's known issues](../README.md#known-issues-and-shortcuts).
 
 | What | Why | Where |
 |---|---|---|
@@ -77,7 +77,7 @@ Places where the build knowingly differs from the brief's wording or the design.
 | The clouds are the playfield's top and bottom | The playfield edge is not defined; the clouds are what the player sees as walls | D-008 |
 | No speed ramp | The obstacle layout already ramps; a speed change would break the layout's proof | D-017 |
 | "tab to run" on the tutorial hand | The typo is baked into `gesture.png`; assets are not edited | N1 |
-| Pause only on `visibilitychange` | Variant A is fullscreen; Variant B's parts usually stay in view. An `IntersectionObserver` is listed as a next step (F3) | A8, B lifecycle |
+| Pause only on `visibilitychange` | Variant A is fullscreen; Variant B's parts usually stay in view. An `IntersectionObserver` is listed as a next step in the README | A8, B lifecycle |
 | Top headline "STARK BEI …" instead of the layout's "NATÜRLICH STARK …" | Copy is the client's call; the asset is built as delivered | Q1 (open) |
 | Copy edges harder than in the layout; panel at 0.9 opacity; CTA corners clipped | The PNGs lost their transparency in export; only index 0 could be restored losslessly | Q2 (open), D-021, D-023 |
 | Packshots as in `bg-big.jpg`, not as in the layout | `bg-big.jpg` is the only background whose seams line up | Q3 (open), D-020 |
@@ -89,10 +89,10 @@ Places where the build knowingly differs from the brief's wording or the design.
 
 | Gap | Brief item | Step |
 |---|---|---|
-| README: next steps with more time, known issues and shortcuts (from the deviations above), AI note, compression summary, final run instructions, status line | D2, D4, G5, G6 | F3 |
-| A short summary on top of `DECISIONS.md` | D3 | F3 |
-| `docs/task-brief.md` follows the updated upstream brief (`2e8cc9a`) | — | F3 |
-| A sentence that Variant B is fixed-size by design | B-F | F3 |
+| README: next steps with more time, known issues and shortcuts (from the deviations above), AI note, compression summary, final run instructions, status line | D2, D4, G5, G6 | F3 ✅ |
+| A short summary on top of `DECISIONS.md` | D3 | F3 ✅ |
+| `docs/task-brief.md` follows the updated upstream brief (`2e8cc9a`) | — | F3 ✅ |
+| A sentence that Variant B is fixed-size by design | B-F | F3 ✅ |
 | Real devices: iOS Safari and Android Chrome (toolbars, audio unlock, collision feel); a real laptop for Variant B (intro and idle feel, the bottom-edge row seen in headless B3, the moss after the scale animation in B4) | A-F, A3, A6, B4, B6 | F2 |
 | Recording under 1 minute, in the repository | D5 | F4 |
 | Full read-through and pragmatic review | — | F5 |

@@ -39,3 +39,32 @@
   - **F5:** read-through and pragmatic review.
   - **F6:** public repository and the reply with the link.
 - **AI:** ai-log #28.
+
+## F3 Docs
+- **Status:** ✅ done
+- **Commits:** `docs: sync the task brief with upstream 2e8cc9a`, `docs: add an at-a-glance summary to the decision log`, `docs: complete the README for submission`
+- **Time:** ~0.75 h
+- **What was done:**
+  - **[README.md](../../README.md)**, assembled from `docs/`:
+    - status line;
+    - run instructions (one command) and dev flags;
+    - a compression table per variant with before / after bytes;
+    - how the build was checked, including what real devices still have to show (F2);
+    - known issues and shortcuts: the open client questions, every deviation from the [checklist](../brief-checklist.md#deviations), and the limitations;
+    - next steps with more time;
+    - the AI note, with ai-log #16 as its example.
+
+    It also says that Variant B is fixed-size by design.
+  - **[DECISIONS.md](../../DECISIONS.md#at-a-glance):** an at-a-glance summary on top that answers the brief's example questions (scaling, canvas vs DOM, collision, background, audio, compression) in one bullet each and points to the entries.
+  - **[task-brief.md](../task-brief.md):** follows `2e8cc9a`. Below its header it matches the upstream file byte for byte (`diff` against the raw file from GitHub); only the two known sentences changed.
+  - **[brief-checklist.md](../brief-checklist.md):** G6, D2, D3 and D4 are met, and the F3 gaps are closed.
+- **Result:** 40 rows: 30 met (5 of them with a follow-up in F2), 8 met with a deliberate deviation, 2 open (F4 recording, F6 public repository). Counted with a script.
+- **Verification:**
+
+  | Check | Result |
+  |---|---|
+  | Weights quoted in the README | ✅ re-measured: A 1 509 240 B (folder without `design/`); B 1 726 322 / 1 553 059 B (`weight.mjs`) |
+  | Every fact in the README and the summary | ✅ checked against its source (DECISIONS, stage logs, questions, AI log) |
+  | Links and anchors in the changed files | ✅ all resolve (script) |
+  | Line endings | ✅ LF only |
+- **AI:** ai-log #29.
