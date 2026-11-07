@@ -1,4 +1,4 @@
-> Original task description from We The Folks, copied verbatim for reference. Source: `wethefolks/recruitment-sf-fe-01-bam`, commit d232791 (2026-11-04).
+> Original task description from We The Folks, copied verbatim for reference. Source: `wethefolks/recruitment-sf-fe-01-bam`, commit 2e8cc9a (2026-11-05). It replaced d232791 (2026-11-04), from which only two sentences changed: the "4 to 6 hours per variant" estimate became the "Scope" line, and README item 2 asks for "more time" instead of "another 2 to 4 hours".
 
 # Take-home task: Junior Frontend Engineer (SF-FE-01-BAM)
 
@@ -11,7 +11,7 @@ This task is a small version of what you would do in your first weeks with us: t
 - **Variant A: Game Ad** (a mobile tap-to-jump mini game)
 - **Variant B: Fireplace Ad** (a three-part animated desktop skin)
 
-**Time:** plan for about 4 to 6 hours of focused work per variant. A smaller, finished and polished ad beats a bigger, half-done one.
+**Scope:** a smaller, finished and polished ad beats a bigger, half-done one.
 **Deadline:** 4 days from the moment you receive the email with this task.
 **Questions:** reply to the email with this task at any time. Asking a good question is a plus, not a minus.
 
@@ -94,7 +94,7 @@ Build each part as its own HTML file (`top.html`, `left.html`, `right.html`) bec
 1. **A new public GitHub repository.** Do not fork this repository: create your own and copy the files you need. Send us the link in a reply to the email with this task. We read the commit history, so commit as you go rather than one big final commit.
 2. **README.md** with:
    - how to run it locally (one or two commands at most),
-   - what you would do next with another 2 to 4 hours,
+   - what you would do next with more time,
    - any known issues or shortcuts you took.
 3. **DECISIONS.md:** a short decision log (bullet points are fine). Examples: how you scaled the ad to the viewport, how you did collision / how you aligned the background, how you handled audio, why you picked canvas vs DOM, what you compressed.
 4. **AI note** (a few sentences, in the README is fine): which tools you used, for what, and one example where the output was wrong and you fixed it.
