@@ -4,6 +4,18 @@ Short entries, newest at the bottom. Bigger decisions link to a detailed record 
 
 Format: **D-XXX Topic:** decision — why ([details](docs/decisions/D-XXX-topic.md))
 
+## At a glance
+
+The brief's example questions, answered in short, with the entries below that explain them:
+
+- **Scaling to the viewport:** the game's 360×640 stage is contain-fitted to the visible `100dvh` area, so the whole design is always visible and never distorted; the spare strips take the stage's edge colours (D-005). The fireplace parts are fixed ad slots rendered 1:1 and do not scale (D-022); only the review page fits the whole fireplace to the window (D-024).
+- **Canvas vs DOM:** DOM `<img>` layers moved with `transform`. The static and moving layers share one scaling model and stay crisp at every pixel ratio (D-006).
+- **Collision:** pixel masks from the images' alpha channel, a box test first, and the player's mask eroded by 2 px for a forgiving hit; the clouds are the walls (D-008, D-011). The obstacle layout is designed and checked for reachability by a script (D-010).
+- **Background alignment:** each fireplace part is a crop of `bg-big.jpg`, the only source whose seams line up, with spare moss so all three can zoom around one point (D-020). Its packshots differ from the layout, which is an open question to the client (Q3).
+- **Audio:** Web Audio, unlocked by the first gesture. The music loop is cut from the decoded buffer, which removes the file's 208 ms gap, the sounds are levelled by measured loudness, and the mute toggle drives a master gain (D-014).
+- **What was compressed:** the sound effects were re-encoded (D-018), the PNGs were recompressed losslessly, kept only where smaller and with identical pixels (D-019, D-028), and the fireplace backgrounds were cropped and re-encoded (D-020). Variant A ships at 1.44 MB; Variant B at 1.65 MB for all three packages (D-029). Both are under 3 MB.
+- **Where the build departs from the design:** the win endcard's poo sits inside its bubble (D-016), the start screen has no obstacles (D-007), the obstacle layout ramps instead of the speed (D-017), and the copy edges and panel are as close as the damaged PNGs allow (D-021, D-023). All of them are listed in the README's known issues.
+
 ## Setup
 
 - **D-001 Tooling:** no bundler, plain HTML/CSS/ES modules served by `npx serve` — the brief allows it and it keeps the shipped ad free of build artefacts.
