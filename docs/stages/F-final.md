@@ -85,6 +85,30 @@
   | Line endings | ✅ LF only |
 - **AI:** ai-log #29.
 
+## F4 Recording
+- **Status:** ✅ done
+- **Commit:** `docs: add a screen recording`
+- **Time:** ~1.5 h
+- **What was done:**
+  - **[docs/recording.mp4](../recording.mp4):** 36.9 s, 1920×1080, 30 fps, H.264 with AAC sound, 6 472 494 B. Variant A takes 28.0 s and Variant B 8.9 s, each with a short caption that says how it was made.
+  - **Capture:** headless Chromium 148 rendering on the RTX 3050 (ANGLE, Direct3D 11), recorded through the CDP screencast as JPEG frames with timestamps, and assembled with `ffmpeg` at each frame's real duration. Variant A runs in a 780×1688 viewport, the picture of a 390×844 phone at 2×; Variant B is the preview at 1680×975.
+  - **The winning run:** a script in the page reads only the DOM (the obstacles' positions, the player's and the track's transforms) and presses Space. It keeps the player between the obstacles on the winning sides of D-010 (above `bac5`), looking ahead because climbing is slower than falling. With GPU rendering it won 4 runs out of 4, with 31 presses each.
+  - **Sound:** headless capture records no audio, so the track is the ad's own files at the gains in `audio.js`, placed at the logged game events: the music from its first audible frame at each `ready` until `fail` / `win` with the 0.3 s fade, the crash at `fail`, the fail sound 1.05 s later (0.6 s hold + the cue at 0.45 s), and the cheer and the applause 0.75 s after `win`. True peak −2.9 dBFS.
+  - The recording scripts are not in the repository: they load Playwright from the local `npx` cache, and the project has no `package.json` (D-001).
+- **Findings that changed the plan:**
+  - The screencast delivers CSS pixels, so 390×844 at 2× came out at 390×844; the 780×1688 viewport gives the same picture with twice the pixels.
+  - Software rendering at that size dropped to ~23 fps, and the game's frame clamp then slows it down: the bot lost, and the recording would have shown the game in slow motion. GPU rendering holds 59–60 fps, and the bot now measures game time from the scroll (ai-log #32).
+  - `ffmpeg` 8 draws a line break in a caption file as a missing glyph, so each caption line is its own `drawtext`.
+- **Verification:**
+
+  | Check | Result |
+  |---|---|
+  | Frame clock vs game events | ✅ the first frame after `reveal` shows the stage; the frame after `fail` shows the poo on the floor clouds |
+  | Real-time speed | ✅ the winning run reaches `win` 14.95 s after its tap, as the physics give (2166 px at 145 px/s) |
+  | Content | ✅ checked frames: the intro, the fail endcard, the run through Stress and Tabu, the win endcard, the fireplace intro and its end state |
+  | Length and format | ✅ 36.85 s (under 1 minute), 1920×1080, H.264 and AAC |
+- **AI:** ai-log #32.
+
 ## F5 Review
 - **Status:** ✅ done
 - **Commits:** `refactor: tidy variant A exports, lookups and debug flags`, `refactor: drop the unused part field from the fireplace ready message`

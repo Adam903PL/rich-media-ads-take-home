@@ -62,7 +62,7 @@ Every requirement of the [task brief](task-brief.md), checked against the build 
 | D2 | README: run locally in one or two commands; what next with more time; known issues and shortcuts | ✅ | `README.md` | [Run locally](../README.md#run-locally) in one command, [next steps](../README.md#what-i-would-do-next-with-more-time), [known issues and shortcuts](../README.md#known-issues-and-shortcuts) |
 | D3 | DECISIONS.md: a short decision log | ✅ | `DECISIONS.md` | D-001–D-029 cover every example the brief gives: scaling (D-005), collision (D-011), background (D-020), audio (D-014), canvas vs DOM (D-006), compression (D-018, D-019, D-020, D-028). It has grown long for "short", so an [at-a-glance summary](../DECISIONS.md#at-a-glance) on top answers the brief's examples in one bullet each |
 | D4 | AI note | ✅ | `README.md` | See G6 |
-| D5 | Optional: a screen recording under 1 minute, stored in the repository | ⏳ F4 | — | — |
+| D5 | Optional: a screen recording under 1 minute, stored in the repository | ✅ | `docs/recording.mp4` | 37 s: a fail and a replay, a full winning run, the fireplace intro; how it was made is in the [README](../README.md#recording) and the [F4 log](stages/F-final.md#f4-recording) |
 | — | Everything submitted is stored in the repository | ✅ | — | Assets, code, docs, measurements and screenshots are committed |
 | — | Questions go to the task email | ✅ | [questions.md](questions.md) | Sent 2026-11-04; no answer as of 2026-11-06 |
 
@@ -94,6 +94,6 @@ Places where the build knowingly differs from the brief's wording or the design.
 | `docs/task-brief.md` follows the updated upstream brief (`2e8cc9a`) | — | F3 ✅ |
 | A sentence that Variant B is fixed-size by design | B-F | F3 ✅ |
 | Real devices: iOS Safari and Android Chrome (toolbars, audio unlock, collision feel); a real laptop for Variant B (intro and idle feel, the bottom-edge row seen in headless B3, the moss after the scale animation in B4) | A-F, A3, A6, B4, B6 | F2 ✅ (iOS Safari not tested: no device) |
-| Recording under 1 minute, in the repository | D5 | F4 |
+| Recording under 1 minute, in the repository | D5 | F4 ✅ |
 | Full read-through and pragmatic review | — | F5 |
 | Repository public, then the reply with the link | D1 | F6 |

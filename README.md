@@ -28,6 +28,15 @@ Requires Node 18+; any static server works. There is no build step.
 | `?overlay=1` | Variant A: lays the start-screen design over the stage at 50% opacity (needs the `design/` folder, which is not shipped) |
 | `?overlay=1` | Variant B: lays `design/layout.png` at 50% opacity over a part, or over the whole fireplace on the preview page. Use the clean URL, e.g. `/variant-b-fireplace/preview?overlay=1`: `serve` redirects `preview.html` to `preview` and drops the query |
 
+## Recording
+
+[docs/recording.mp4](docs/recording.mp4): 37 s, 1920×1080, with sound (6.2 MB).
+
+- **Variant A:** the start screen intro, one tap and a crash into the floor, the fail endcard and a replay, then a full run through all 15 obstacles to the win endcard.
+- **Variant B:** the preview's intro and the start of the idle phase.
+
+How it was made: headless Chromium on the laptop's GPU, captured frame by frame through the browser's screencast. The winning run is played by a script that only presses Space (31 presses). Headless capture records no audio, so the sound track is the ad's own files at the ad's levels, placed at the moments the game logged.
+
 ## Compression
 
 | Variant | What was done | Before → after |
@@ -96,7 +105,7 @@ I built this with **Claude Code** (Opus) as a pair programmer, with the Maister 
 |---|---|
 | `variant-a-game/`, `variant-b-fireplace/` | the ads; only these folders are shipped, without their `design/` subfolders |
 | `DECISIONS.md` | decision log, with a short summary on top |
-| `docs/` | working documentation: brief, [brief checklist](docs/brief-checklist.md), [asset audit](docs/asset-audit.md), [questions](docs/questions.md), stage logs, detailed decisions, AI log |
+| `docs/` | the [recording](docs/recording.mp4) and the working documentation: brief, [brief checklist](docs/brief-checklist.md), [asset audit](docs/asset-audit.md), [questions](docs/questions.md), stage logs, detailed decisions, AI log |
 | `tools/audit/` | read-only Node scripts that measured the assets, check the level and report the weight ([README](tools/audit/README.md)) |
 | `.maister/docs/` | project docs, coding standards and the [roadmap](.maister/docs/project/roadmap.md) used while building |
 

@@ -40,7 +40,7 @@ Effort: planned hours / actual hours.
 - [x] **F1 Brief checklist** — every requirement of both variants checked: [brief-checklist.md](../../../docs/brief-checklist.md), open items assigned to F2–F6 `[~0.5 h]`
 - [x] **F2 Real-device test** — Android Chrome for A (all checks passed), a laptop for B (by eye, plus edge and moss rendering in Edge); iOS Safari not tested, no device `[~0.75 h]`
 - [x] **F3 Docs** — README (run, compression, checks, known issues, next steps, AI note), an at-a-glance summary on top of DECISIONS, `task-brief.md` following `2e8cc9a` `[~0.75 h]`
-- [ ] **F4 Recording** — under 1 minute, stored in the repo
+- [x] **F4 Recording** — `docs/recording.mp4`, 37 s with sound: a fail and a replay, a full winning run played by a script, the fireplace intro `[~1.5 h]`
 - [x] **F5 Review** — full code read-through, `/maister:reviews-pragmatic`, fixes: unused exports and parameters removed, one lookup style and one debug-flag rule in Variant A; re-verified in Chromium and Firefox `[~1 h]`
 - [ ] **F6 Submit** — switch the repository to public, then reply to the task email with the repo link
 
