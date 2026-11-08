@@ -35,14 +35,14 @@ Effort: planned hours / actual hours.
 - [x] **B6 Idle & a11y** — moss breath to 1.025 and five CTA pulses, all at rest at 25.5 s; whole-part button clickout with keyboard and label (D-027) `[0.5 h / ~0.5 h]`
 - [x] **B7 Compression & performance** — PNGs recompressed losslessly (D-028); 1.65 MB as three packages, 1.48 MB counted once (D-029); trace: no layout or paint per frame `[0.5 h / ~0.75 h]`
 
-## Stage F — Final (~2 h) · in progress · [log](../../../docs/stages/F-final.md)
+## Stage F — Final (~2 h) · done · [log](../../../docs/stages/F-final.md)
 
 - [x] **F1 Brief checklist** — every requirement of both variants checked: [brief-checklist.md](../../../docs/brief-checklist.md), open items assigned to F2–F6 `[~0.5 h]`
 - [x] **F2 Real-device test** — Android Chrome for A (all checks passed), a laptop for B (by eye, plus edge and moss rendering in Edge); iOS Safari not tested, no device `[~0.75 h]`
 - [x] **F3 Docs** — README (run, compression, checks, known issues, next steps, AI note), an at-a-glance summary on top of DECISIONS, `task-brief.md` following `2e8cc9a` `[~0.75 h]`
 - [x] **F4 Recording** — `docs/recording.mp4`, 37 s with sound: a fail and a replay, a full winning run played by a script, the fireplace intro `[~1.5 h]`
 - [x] **F5 Review** — full code read-through, `/maister:reviews-pragmatic`, fixes: unused exports and parameters removed, one lookup style and one debug-flag rule in Variant A; re-verified in Chromium and Firefox `[~1 h]`
-- [ ] **F6 Submit** — switch the repository to public, then reply to the task email with the repo link
+- [x] **F6 Submit** — repository public on 2026-11-08 at 12:14 CET, then the reply to the task email with the link `[~0.25 h]`
 
 ## Day plan
 

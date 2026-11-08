@@ -140,3 +140,13 @@
   | Console and network | ✅ no messages except the Firefox warning above; only local requests |
   | Weight | ✅ A 1 509 115 B (−125 B); B 1 726 568 B as three packages (+82 B in each package, mostly the new comment), 1 553 141 B once; still 1.44 / 1.65 / 1.48 MB. README and checklist updated; D-019 and D-029 keep the numbers measured when they were decided |
 - **AI:** ai-log #30.
+
+## F6 Submit
+- **Status:** ✅ done; the reply with the link is sent by the user from the task thread
+- **Commit:** `docs: log the submission`
+- **Time:** ~0.25 h
+- **What was done:**
+  - The repository was switched to public on 2026-11-08 at 12:14 CET (`gh repo edit --visibility public`).
+  - What became visible was checked first: only `main`, with 39 commits before this one, a single author and no AI co-author trailers. No tags, and the local backup branch was never pushed.
+  - Checked without login: the raw `README.md` on `main` answers 200, and `gh repo view` reports `PUBLIC`. The github.com pages were answering slowly at the time (503 and timeouts), so the link is to be opened once in a private window before the reply goes out.
+- **Result:** every row of the [brief checklist](../brief-checklist.md) is met, 8 of them with a deliberate deviation; iOS Safari is the one device left untested.

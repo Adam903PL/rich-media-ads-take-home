@@ -16,7 +16,7 @@ Every requirement of the [task brief](task-brief.md), checked against the build 
 | G4 | Every CTA opens the landing page in a new window through `clickTag` | ✅ | `variant-a-game/js/endcards.js`, `variant-b-fireplace/js/clickout.js` | `window.clickTag` read at click time, fallback `https://example.com/landing`, `_blank` ([A5](stages/A-game.md#a5-endcards), [B6](stages/B-fireplace.md#b6-idle--a11y), F1 smoke test) |
 | G5 | Total ad under 3 MB; compress if needed and say what was done | ✅ | — | A 1 509 115 B (1.44 MB); B 1 726 568 B (1.65 MB) as three packages (D-029), measured after F5. Compression: D-018, D-019, D-020, D-028, summarised in the [README](../README.md#compression) |
 | G6 | AI note: tools, use, one example of a wrong output that was fixed | ✅ | `README.md` | [AI note](../README.md#ai-note): Claude Code with Maister, Playwright through MCP; the example is ai-log #16 (the hidden party cone); the full [ai-log.md](ai-log.md) is linked |
-| G7 | Assets used only for this task | ✅ | — | Used only here. The repository stays private until F6, then public as the deliverables require |
+| G7 | Assets used only for this task | ✅ | — | Used only here. The repository is public since F6, as the deliverables require |
 
 ## Variant A — Game Ad "Gut Run"
 
@@ -58,7 +58,7 @@ Every requirement of the [task brief](task-brief.md), checked against the build 
 
 | # | Requirement | Status | Where | Evidence |
 |---|---|---|---|---|
-| D1 | A new public GitHub repository, not a fork; commit as you go; the link in a reply to the task email | ⏳ F6 | GitHub | Created from scratch, private until F6; 31 commits before F1, one per step |
+| D1 | A new public GitHub repository, not a fork; commit as you go; the link in a reply to the task email | ✅ | GitHub | Created from scratch and public since 2026-11-08 ([F6](stages/F-final.md#f6-submit)); one commit per step; the link goes in the reply to the task email |
 | D2 | README: run locally in one or two commands; what next with more time; known issues and shortcuts | ✅ | `README.md` | [Run locally](../README.md#run-locally) in one command, [next steps](../README.md#what-i-would-do-next-with-more-time), [known issues and shortcuts](../README.md#known-issues-and-shortcuts) |
 | D3 | DECISIONS.md: a short decision log | ✅ | `DECISIONS.md` | D-001–D-029 cover every example the brief gives: scaling (D-005), collision (D-011), background (D-020), audio (D-014), canvas vs DOM (D-006), compression (D-018, D-019, D-020, D-028). It has grown long for "short", so an [at-a-glance summary](../DECISIONS.md#at-a-glance) on top answers the brief's examples in one bullet each |
 | D4 | AI note | ✅ | `README.md` | See G6 |
@@ -96,4 +96,4 @@ Places where the build knowingly differs from the brief's wording or the design.
 | Real devices: iOS Safari and Android Chrome (toolbars, audio unlock, collision feel); a real laptop for Variant B (intro and idle feel, the bottom-edge row seen in headless B3, the moss after the scale animation in B4) | A-F, A3, A6, B4, B6 | F2 ✅ (iOS Safari not tested: no device) |
 | Recording under 1 minute, in the repository | D5 | F4 ✅ |
 | Full read-through and pragmatic review | — | F5 |
-| Repository public, then the reply with the link | D1 | F6 |
+| Repository public, then the reply with the link | D1 | F6 ✅ |
