@@ -40,6 +40,22 @@
   - **F6:** public repository and the reply with the link.
 - **AI:** ai-log #28.
 
+## F2 Real-device test
+- **Status:** ✅ done; iOS Safari not tested (no device)
+- **Commit:** `docs: log the real-device checks`
+- **Time:** ~0.75 h
+- **Variant A on an Android phone** (Chrome, served over the local network, checked by the user on 2026-11-07):
+  - Screenshots of the game and of both endcards with the toolbar shown: the stage fills the width, the strips above and below it take the edge colours with no hairline, and the win poo sits in its bubble with the party cone in front.
+  - Reported by the user: sound starts on the first tap, mute silences it, the music loop returns without a gap, the effect levels are right, the collision feels fair, two or three replays keep the same speed without doubled sounds, and an app switch or a screen lock pauses the game and the sound, which then resume cleanly.
+  - Variant B's preview on the same phone fits the 1680×975 fireplace to the width (scale ~0.25), undistorted. The fireplace is a desktop format, so this was only a sanity check.
+- **Variant B on this laptop** (1536×864 at 125%, Intel UHD and RTX 3050):
+  - By eye, by the user on 2026-11-08: the intro is smooth, and the idle phase is calm and not distracting.
+  - Bottom edge of the top banner (`top` with reduced motion, rows around y 250): only page background below the banner in headless Chromium 148 at 1×, in Microsoft Edge at 1×, and in Edge at 1.25×, where the edge at 312.5 device px is drawn whole (row 312 moss, row 313 background). The partial row seen in B3 came from that headless browser's device pixel ratio of 1.0000000149, not from the ad.
+  - Moss after the scale animation (each part at its end after 27 s, against reduced motion): identical (PSNR ∞) in all three parts at 1× and 1.25× in headless Chromium 148, so B4's 57–59 dB is not reproduced. The same comparison does detect the moss mid-zoom (41.7 dB).
+  - Not measured: frame timing on the visible screen. Browser windows started from the automated session open minimized and are throttled, so those numbers were discarded (ai-log #31); B7's trace stands.
+- **Result:** the F2 follow-ups of A-F, A3, A6, B4 and B6 in the [brief checklist](../brief-checklist.md) are closed. iOS Safari stays untested and is listed in the README's known issues.
+- **AI:** ai-log #31.
+
 ## F3 Docs
 - **Status:** ✅ done
 - **Commits:** `docs: sync the task brief with upstream 2e8cc9a`, `docs: add an at-a-glance summary to the decision log`, `docs: complete the README for submission`

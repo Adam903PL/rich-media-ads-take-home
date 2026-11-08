@@ -5,7 +5,7 @@ Two animated rich media ads built from a designer's layout and exported assets (
 - **Variant A — Game Ad "Gut Run"** (`variant-a-game/`): a mobile fullscreen tap-to-jump mini game. Fair pixel-mask collision, each of the 15 obstacles once per run, fail and win endcards with a clean replay, music and effects with a mute toggle.
 - **Variant B — Fireplace Ad** (`variant-b-fireplace/`): a top banner and two skyscrapers on one continuous moss background. A 3.5 s intro started in sync across the three parts, a calm idle phase that comes to rest at 25.5 s, and a clickout on the whole of each part. The parts are fixed-size ad slots (1032×250 and 320×975) rendered 1:1, so they do not scale by design; only the preview page fits the whole fireplace to the window.
 
-> **Status:** both variants are complete. Every requirement of the brief is checked row by row in the [brief checklist](docs/brief-checklist.md), and each ad is under 3 MB (A 1.44 MB, B 1.65 MB). Real-device checks on iOS Safari and Android Chrome are still to come (see [How it was checked](#how-it-was-checked)).
+> **Status:** both variants are complete. Every requirement of the brief is checked row by row in the [brief checklist](docs/brief-checklist.md), and each ad is under 3 MB (A 1.44 MB, B 1.65 MB). Variant A was checked on a real Android phone and Variant B on a laptop; iOS Safari was not available (see [How it was checked](#how-it-was-checked)).
 
 ## Run locally
 
@@ -46,7 +46,9 @@ Four of Variant B's PNGs had also lost their transparency in export; a lossless 
 - **In the browser:** every step was verified with Playwright (Chromium) against `npx serve`, and the final regression check ran in Firefox as well. The checks covered phone viewports from 320×568 to 430×932, landscape and a live toolbar resize; replay three times with no leftover timers, listeners or doubled speed; a hidden tab; reduced motion; `clickTag` with `window.open` stubbed; a clean console and only local requests. The results are in the stage logs ([A](docs/stages/A-game.md), [B](docs/stages/B-fireplace.md), [F](docs/stages/F-final.md)).
 - **Variant A's level** is checked by `tools/audit/level-check.mjs` (every obstacle reachable at a human tapping rate), and a planning bot won every run.
 - **Variant B's performance** was traced in Chrome at normal and 4× slower CPU: no layout or paint while elements move, only `transform` and `opacity`.
-- **Not yet checked on real devices:** iOS Safari and Android Chrome for Variant A (toolbars, the audio unlock, how the collision feels), and a real laptop screen for Variant B.
+- **Variant A on a real phone** (Android, Chrome): the stage fills the visible area with the toolbar shown, sound starts on the first tap, mute works, the music loops without a gap, the effect levels are right, the collision feels fair, replays are clean, and the game and sound pause on an app switch or screen lock.
+- **Variant B on a laptop** (1536×864 at 125%): the intro looks smooth and the idle phase calm by eye. In Microsoft Edge the top banner's bottom edge is clean at 1× and 1.25×, and the moss after the intro's scale animation is identical to a never-scaled one.
+- **Not tested on iOS Safari:** no device was available.
 
 ## Known issues and shortcuts
 
@@ -71,7 +73,7 @@ Four of Variant B's PNGs had also lost their transparency in export; a lossless 
 - In landscape, Variant A is letterboxed with navy sides; the brief asks for portrait only.
 - A fireplace part in an ad server's frame waits 300 ms for a partner before it starts on its own ([D-026](DECISIONS.md#variant-b)).
 - There is no committed automated test suite. The browser checks above were run interactively and recorded in the stage logs; `level-check.mjs` and `weight.mjs` are the scripted checks.
-- After the intro's scale animation, headless Chrome draws the moss from a different decoded size than a never-scaled background: 57–59 dB against the static build, only in the moss texture, with every element in place. Whether it shows on a real screen is part of the real-device check.
+- Variant A was not tested on iOS Safari (no device available). The audio unlock and the viewport scaling were built with iOS in mind (D-005, D-014), but they have not been seen on an iPhone.
 
 ## What I would do next with more time
 

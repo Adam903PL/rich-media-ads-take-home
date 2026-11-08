@@ -38,7 +38,7 @@ Effort: planned hours / actual hours.
 ## Stage F — Final (~2 h) · in progress · [log](../../../docs/stages/F-final.md)
 
 - [x] **F1 Brief checklist** — every requirement of both variants checked: [brief-checklist.md](../../../docs/brief-checklist.md), open items assigned to F2–F6 `[~0.5 h]`
-- [ ] **F2 Real-device test** — iOS Safari (autoplay, toolbars), Android Chrome
+- [x] **F2 Real-device test** — Android Chrome for A (all checks passed), a laptop for B (by eye, plus edge and moss rendering in Edge); iOS Safari not tested, no device `[~0.75 h]`
 - [x] **F3 Docs** — README (run, compression, checks, known issues, next steps, AI note), an at-a-glance summary on top of DECISIONS, `task-brief.md` following `2e8cc9a` `[~0.75 h]`
 - [ ] **F4 Recording** — under 1 minute, stored in the repo
 - [x] **F5 Review** — full code read-through, `/maister:reviews-pragmatic`, fixes: unused exports and parameters removed, one lookup style and one debug-flag rule in Variant A; re-verified in Chromium and Firefox `[~1 h]`
